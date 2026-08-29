@@ -1,9 +1,11 @@
 import React from 'react';
-import { Clock, TrendingDown, MessageSquareOff, ShieldAlert, AlertTriangle, CheckCircle2, ArrowRight, Zap } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { ShieldAlert, Star } from 'lucide-react';
+import { slideLeft, slideRight } from '../lib/animations';
 
 export default function ProblemSection() {
   return (
-    <section className="relative py-32 px-4 sm:px-6 bg-[#07070b] border-t border-white/[0.05] overflow-hidden fade-in-section">
+    <section className="relative py-32 px-4 sm:px-6 bg-[#07070b] border-t border-white/[0.05] overflow-hidden">
       
       {/* Background ambient lighting */}
       <div 
@@ -17,7 +19,13 @@ export default function ProblemSection() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
           
           {/* Left Editorial Anchor (5 Cols) */}
-          <div className="lg:col-span-5 lg:sticky lg:top-28">
+          <motion.div 
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-80px" }}
+            variants={slideLeft}
+            className="lg:col-span-5 lg:sticky lg:top-28"
+          >
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-500/10 border border-rose-500/20 text-xs font-mono font-semibold text-rose-400 mb-6">
               <ShieldAlert className="w-3.5 h-3.5" />
               <span>THE SILENT ATTRITION MODEL</span>
@@ -32,7 +40,7 @@ export default function ProblemSection() {
             </p>
 
             {/* Micro Arithmetic Breakdown */}
-            <div className="mt-8 p-4 rounded-xl bg-black/60 border border-white/[0.08] space-y-3 font-mono text-xs">
+            <div className="mt-8 p-4 rounded-xl bg-black/60 border border-white/[0.08] space-y-3 font-mono text-xs shadow-inner">
               <div className="flex items-center justify-between pb-2 border-b border-white/[0.05]">
                 <span className="text-slate-400">Industry Avg Response Delay:</span>
                 <span className="text-rose-400 font-bold">48 - 72 Hours</span>
@@ -46,13 +54,21 @@ export default function ProblemSection() {
                 <span className="text-rose-400 font-bold">-₹42,000 / Review</span>
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Right: Comparative Incident Pathway (7 Cols) */}
           <div className="lg:col-span-7 space-y-6">
             
             {/* Pathway 1: The Traditional Unattended Decay */}
-            <div className="hairline-card p-6 sm:p-7 rounded-2xl border-l-[3px] border-l-rose-500/80 bg-[#0c0c14]/80">
+            <motion.div 
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-80px" }}
+              variants={slideRight}
+              custom={0}
+              whileHover={{ y: -3, transition: { duration: 0.25 } }}
+              className="hairline-card p-6 sm:p-7 rounded-2xl border-l-[3px] border-l-rose-500/80 bg-[#0c0c14]/80 shadow-lg"
+            >
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-rose-500" />
@@ -85,10 +101,18 @@ export default function ProblemSection() {
                   </p>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
             {/* Pathway 2: The RepuAI Autonomous Resolution Intercept */}
-            <div className="hairline-card p-6 sm:p-7 rounded-2xl border-l-[3px] border-l-emerald-500 bg-gradient-to-b from-indigo-950/20 to-black/60">
+            <motion.div 
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-80px" }}
+              variants={slideRight}
+              custom={1}
+              whileHover={{ y: -3, transition: { duration: 0.25 } }}
+              className="hairline-card p-6 sm:p-7 rounded-2xl border-l-[3px] border-l-emerald-500 bg-gradient-to-b from-violet-950/20 to-black/60 shadow-xl"
+            >
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
@@ -121,7 +145,7 @@ export default function ProblemSection() {
                   </p>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
           </div>
 

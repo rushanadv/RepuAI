@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Sparkles, 
   Star, 
@@ -9,13 +10,10 @@ import {
   RotateCw, 
   Loader2, 
   ArrowRight,
-  Terminal,
-  Cpu,
-  Layers,
-  Zap,
-  CheckCircle2
+  Terminal
 } from 'lucide-react';
 import { sampleReviews } from '../data/sampleReviews';
+import { fadeUp, slideRight } from '../lib/animations';
 
 export default function DemoSection() {
   const [selectedCategory, setSelectedCategory] = useState('restaurant');
@@ -202,26 +200,26 @@ export default function DemoSection() {
   };
 
   return (
-    <section id="demo" className="relative py-32 px-4 sm:px-6 bg-[#040407] overflow-hidden fade-in-section border-t border-white/[0.05]">
+    <section id="demo" className="relative py-32 px-4 sm:px-6 bg-[#040407] overflow-hidden border-t border-white/[0.05]">
       
       {/* Ambient lighting */}
       <div 
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[850px] h-[420px] rounded-full pointer-events-none blur-[180px]"
-        style={{ background: 'radial-gradient(circle, rgba(99, 102, 241, 0.09) 0%, transparent 70%)' }}
+        style={{ background: 'radial-gradient(circle, rgba(124, 58, 237, 0.09) 0%, transparent 70%)' }}
       />
 
       <div className="max-w-6xl mx-auto relative z-10">
         
         {/* Section Header */}
         <div className="max-w-3xl mb-14">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-xs font-mono font-semibold text-indigo-400 mb-6">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-xs font-mono font-semibold text-violet-400 mb-6">
             <Terminal className="w-3.5 h-3.5" />
             <span>AI WORKSPACE // STREAMING_CONSOLE</span>
           </div>
 
           <h2 className="text-4xl sm:text-5xl lg:text-6xl font-display font-extrabold text-white tracking-[-0.04em] leading-[0.95]">
             Run live inference <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-indigo-300">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-violet-300">
               on any customer review.
             </span>
           </h2>
@@ -236,7 +234,7 @@ export default function DemoSection() {
           {/* Pro Toolbar */}
           <div className="flex flex-wrap items-center justify-between gap-4 pb-5 mb-6 border-b border-white/[0.08] font-mono text-xs">
             <div className="flex items-center gap-2.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-indigo-400 animate-pulse" />
+              <span className="w-2.5 h-2.5 rounded-full bg-violet-400 animate-pulse" />
               <span className="text-slate-200 font-bold">MODEL // nvidia/nemotron-3-ultra-550b</span>
             </div>
 
@@ -251,8 +249,14 @@ export default function DemoSection() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
 
             {/* ================= LEFT CONSOLE: Review Input & Presets (5 Cols) ================= */}
-            <div className="lg:col-span-5 flex flex-col justify-between space-y-6">
-              
+            <motion.div 
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-80px" }}
+              variants={fadeUp}
+              custom={0}
+              className="lg:col-span-5 flex flex-col justify-between space-y-6"
+            >
               <div className="space-y-5">
                 {/* 1. Industry Switcher */}
                 <div>
@@ -286,7 +290,7 @@ export default function DemoSection() {
                     <label className="text-[11px] font-mono uppercase tracking-wider text-slate-400">
                       02 // Real Sample Preset
                     </label>
-                    <span className="text-[11px] font-mono text-indigo-400">Click to populate</span>
+                    <span className="text-[11px] font-mono text-violet-400">Click to populate</span>
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {sampleReviews[selectedCategory]?.map((sample, idx) => {
@@ -297,7 +301,7 @@ export default function DemoSection() {
                           onClick={() => handleSelectSample(sample.text)}
                           className={`p-2.5 rounded-xl cursor-pointer text-left transition-all border ${
                             isCurrent
-                              ? 'bg-indigo-600/20 border-indigo-500/60 shadow-md'
+                              ? 'bg-violet-600/20 border-violet-500/60 shadow-md'
                               : 'bg-black/40 border-white/[0.05] hover:bg-black/60 hover:border-white/15'
                           }`}
                         >
@@ -345,7 +349,7 @@ export default function DemoSection() {
                     }}
                     placeholder="Paste any custom customer review here..."
                     rows={4}
-                    className="w-full bg-black/70 border border-white/[0.08] rounded-xl p-3.5 text-xs sm:text-sm text-slate-100 placeholder-slate-500 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 focus:outline-none transition-all resize-none font-normal leading-relaxed shadow-inner"
+                    className="w-full bg-black/70 border border-white/[0.08] rounded-xl p-3.5 text-xs sm:text-sm text-slate-100 placeholder-slate-500 focus:border-violet-500 focus:ring-1 focus:ring-violet-500 focus:outline-none transition-all resize-none font-normal leading-relaxed shadow-inner"
                   />
                   {validationWarning && (
                     <p className="mt-1.5 text-xs text-rose-400 font-medium flex items-center gap-1 font-mono">
@@ -356,15 +360,17 @@ export default function DemoSection() {
                 </div>
               </div>
 
-              {/* 4. Action Button */}
+              {/* 4. Action Button with Framer Hover Glow */}
               <div className="pt-3 border-t border-white/[0.06]">
-                <button
+                <motion.button
                   type="button"
                   onClick={handleAnalyze}
                   disabled={loading || isStreaming}
+                  whileHover={{ scale: 1.02, boxShadow: "0 0 30px rgba(124,58,237,0.5)" }}
+                  whileTap={{ scale: 0.97 }}
                   className={`w-full py-3.5 px-6 rounded-xl font-semibold text-white flex items-center justify-center gap-2.5 transition-all text-sm shadow-xl ${
                     loading || isStreaming
-                      ? 'bg-indigo-900/60 cursor-not-allowed opacity-80' 
+                      ? 'bg-violet-950/60 cursor-not-allowed opacity-80' 
                       : 'btn-primary cursor-pointer'
                   }`}
                 >
@@ -386,14 +392,21 @@ export default function DemoSection() {
                       <span>Execute Neural Analysis</span>
                     </>
                   )}
-                </button>
+                </motion.button>
               </div>
 
-            </div>
+            </motion.div>
 
 
             {/* ================= RIGHT CONSOLE: Workspace Inspector & Token Stream (7 Cols) ================= */}
-            <div className="lg:col-span-7 bg-black/60 rounded-xl p-5 sm:p-6 border border-white/[0.07] flex flex-col justify-center min-h-[460px] shadow-inner relative">
+            <motion.div 
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-80px" }}
+              variants={slideRight}
+              custom={0.2}
+              className="lg:col-span-7 bg-black/60 rounded-xl p-5 sm:p-6 border border-white/[0.07] flex flex-col justify-center min-h-[460px] shadow-inner relative"
+            >
               
               {/* DEFAULT STATE */}
               {!loading && !isStreaming && !analysisResult && !error && (
@@ -404,7 +417,7 @@ export default function DemoSection() {
                   <h4 className="text-sm font-bold text-slate-200 mb-1 font-mono">
                     READY FOR EXECUTION
                   </h4>
-                  <p className="text-xs text-slate-400 max-w-sm mb-5 leading-relaxed">
+                  <p className="text-xs text-slate-400 max-w-sm mb-5 leading-relaxed font-normal">
                     Select a domain preset on the left or paste your own review, then click <strong>Execute Neural Analysis</strong> to begin live inference.
                   </p>
                   <button
@@ -441,7 +454,7 @@ export default function DemoSection() {
                     <div className="h-16 w-full skeleton-box mb-3" />
                     <div className="h-8 w-28 skeleton-box" />
                   </div>
-                  <p className="text-xs text-center text-indigo-300/70 animate-pulse font-mono pt-1">
+                  <p className="text-xs text-center text-violet-300/70 animate-pulse font-mono pt-1">
                     Establishing SSE socket connection...
                   </p>
                 </div>
@@ -449,11 +462,11 @@ export default function DemoSection() {
 
               {/* STREAMING STATE: Live Token Terminal */}
               {isStreaming && (
-                <div className="w-full h-full flex flex-col justify-between bg-black/80 rounded-xl p-4 border-l-2 border-indigo-500">
+                <div className="w-full h-full flex flex-col justify-between bg-black/80 rounded-xl p-4 border-l-2 border-violet-500">
                   <div>
                     <div className="flex items-center justify-between mb-2.5 pb-2 border-b border-white/[0.06] font-mono">
-                      <div className="flex items-center gap-2 text-xs font-semibold text-indigo-300">
-                        <span className="w-2 h-2 rounded-full bg-indigo-500 animate-ping" />
+                      <div className="flex items-center gap-2 text-xs font-semibold text-violet-300">
+                        <span className="w-2 h-2 rounded-full bg-violet-500 animate-ping" />
                         <span>Live Neural Token Stream</span>
                       </div>
                       <span className="text-[10px] text-cyan-300">nvidia/nemotron-3-550b</span>
@@ -461,16 +474,16 @@ export default function DemoSection() {
                     
                     <div 
                       ref={streamEndRef}
-                      className="font-mono text-xs text-indigo-200 leading-relaxed max-h-56 overflow-y-auto bg-black/90 p-3 rounded-lg border border-white/[0.05] whitespace-pre-wrap break-all shadow-inner"
+                      className="font-mono text-xs text-violet-200 leading-relaxed max-h-56 overflow-y-auto bg-black/90 p-3 rounded-lg border border-white/[0.05] whitespace-pre-wrap break-all shadow-inner"
                     >
                       {streamingText || "Initiating stream handshake..."}
-                      <span className="inline-block w-1.5 h-3.5 bg-indigo-400 ml-1 animate-pulse align-middle" />
+                      <span className="inline-block w-1.5 h-3.5 bg-violet-400 ml-1 animate-pulse align-middle" />
                     </div>
                   </div>
 
                   <div className="mt-3 pt-2 border-t border-white/[0.06] flex items-center justify-between font-mono text-[11px]">
                     <p className="text-slate-400 italic">Validating structured JSON schema...</p>
-                    <Loader2 className="w-3.5 h-3.5 text-indigo-400 animate-spin" />
+                    <Loader2 className="w-3.5 h-3.5 text-violet-400 animate-spin" />
                   </div>
                 </div>
               )}
@@ -498,144 +511,184 @@ export default function DemoSection() {
                 </div>
               )}
 
-              {/* RESULT STATE */}
-              {!loading && !isStreaming && analysisResult && (
-                <div className="space-y-3 w-full">
-                  
-                  {/* CARD 1: SENTIMENT & SCORE */}
-                  <div className="p-3.5 rounded-xl bg-black/60 border border-white/[0.08] flex items-center justify-between animate-fade-in-up">
-                    <div>
-                      <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 block">
-                        Sentiment Diagnostic
-                      </span>
-                      <span className="text-xs text-slate-300 font-mono">
-                        Polarity Score: <strong className="text-white font-bold">{analysisResult.sentimentScore || '—'} / 10</strong>
-                      </span>
-                    </div>
-                    <div>
-                      {analysisResult.sentiment?.toLowerCase() === 'positive' && (
-                        <span className="px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-xs font-bold font-mono flex items-center gap-1.5">
-                          <span>😊 Positive</span>
-                        </span>
-                      )}
-                      {analysisResult.sentiment?.toLowerCase() === 'neutral' && (
-                        <span className="px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-400 text-xs font-bold font-mono flex items-center gap-1.5">
-                          <span>😐 Neutral</span>
-                        </span>
-                      )}
-                      {analysisResult.sentiment?.toLowerCase() === 'negative' && (
-                        <span className="px-3 py-1 rounded-full bg-rose-500/15 border border-rose-500/30 text-rose-400 text-xs font-bold font-mono flex items-center gap-1.5">
-                          <span>😤 Negative</span>
-                        </span>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* CARD 2: EXTRACTED ISSUES */}
-                  <div className="p-3.5 rounded-xl bg-black/60 border border-white/[0.08] animate-fade-in-up delay-100">
-                    <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 block mb-2">
-                      Extracted Root Failure Modes
-                    </span>
-                    <div className="flex flex-wrap gap-1.5">
-                      {Array.isArray(analysisResult.issues) && analysisResult.issues.length > 0 ? (
-                        analysisResult.issues.map((issue, idx) => (
-                          <span
-                            key={idx}
-                            className="px-2.5 py-0.5 rounded-md bg-indigo-500/15 border border-indigo-500/30 text-indigo-300 text-xs font-medium font-mono flex items-center gap-1"
-                          >
-                            <span>{getIssueEmoji(issue)}</span>
-                            <span>{issue}</span>
-                          </span>
-                        ))
-                      ) : (
-                        <span className="text-xs text-slate-400 italic">No specific defect identified</span>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* CARD 3: URGENCY LEVEL */}
-                  <div className="p-3.5 rounded-xl bg-black/60 border border-white/[0.08] animate-fade-in-up delay-200">
-                    <div className="flex items-center justify-between mb-1">
-                      <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400">
-                        Triage Severity
-                      </span>
+              {/* RESULT STATE: AnimatePresence Staggered Cards */}
+              <AnimatePresence>
+                {!loading && !isStreaming && analysisResult && (
+                  <div className="space-y-3 w-full">
+                    
+                    {/* CARD 1: SENTIMENT & SCORE */}
+                    <motion.div 
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                      className="p-3.5 rounded-xl bg-black/60 border border-white/[0.08] flex items-center justify-between"
+                    >
                       <div>
-                        {analysisResult.urgency?.toLowerCase() === 'high' && (
-                          <span className="px-2.5 py-0.5 rounded-md bg-rose-500/20 border border-rose-500/35 text-rose-400 text-xs font-bold font-mono">
-                            🔴 High Priority
-                          </span>
+                        <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 block">
+                          Sentiment Diagnostic
+                        </span>
+                        <span className="text-xs text-slate-300 font-mono">
+                          Polarity Score: <strong className="text-white font-bold">{analysisResult.sentimentScore || '—'} / 10</strong>
+                        </span>
+                      </div>
+                      <div>
+                        {analysisResult.sentiment?.toLowerCase() === 'positive' && (
+                          <motion.span 
+                            initial={{ scale: 0.5, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            transition={{ type: "spring", stiffness: 300, damping: 20, delay: 0.1 }}
+                            className="px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-xs font-bold font-mono flex items-center gap-1.5"
+                          >
+                            <span>😊 Positive</span>
+                          </motion.span>
                         )}
-                        {analysisResult.urgency?.toLowerCase() === 'medium' && (
-                          <span className="px-2.5 py-0.5 rounded-md bg-amber-500/20 border border-amber-500/35 text-amber-400 text-xs font-bold font-mono">
-                            🟡 Medium
-                          </span>
+                        {analysisResult.sentiment?.toLowerCase() === 'neutral' && (
+                          <motion.span 
+                            initial={{ scale: 0.5, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            transition={{ type: "spring", stiffness: 300, damping: 20, delay: 0.1 }}
+                            className="px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-400 text-xs font-bold font-mono flex items-center gap-1.5"
+                          >
+                            <span>😐 Neutral</span>
+                          </motion.span>
                         )}
-                        {analysisResult.urgency?.toLowerCase() === 'low' && (
-                          <span className="px-2.5 py-0.5 rounded-md bg-emerald-500/20 border border-emerald-500/35 text-emerald-400 text-xs font-bold font-mono">
-                            🟢 Low
-                          </span>
+                        {analysisResult.sentiment?.toLowerCase() === 'negative' && (
+                          <motion.span 
+                            initial={{ scale: 0.5, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            transition={{ type: "spring", stiffness: 300, damping: 20, delay: 0.1 }}
+                            className="px-3 py-1 rounded-full bg-rose-500/15 border border-rose-500/30 text-rose-400 text-xs font-bold font-mono flex items-center gap-1.5"
+                          >
+                            <span>😤 Negative</span>
+                          </motion.span>
                         )}
                       </div>
-                    </div>
-                    {analysisResult.urgencyReason && (
-                      <p className="text-xs text-slate-400 italic mt-1 font-mono">
-                        Rationale: {analysisResult.urgencyReason}
-                      </p>
-                    )}
-                  </div>
+                    </motion.div>
 
-                  {/* CARD 4: DRAFTED EMPATHETIC RESOLUTION */}
-                  <div className="p-4 rounded-xl bg-gradient-to-b from-indigo-950/30 to-black/70 border border-indigo-500/35 animate-fade-in-up delay-300">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-xs font-bold text-white flex items-center gap-1.5">
-                        <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
-                        Synthesized Owner Response
+                    {/* CARD 2: EXTRACTED ISSUES */}
+                    <motion.div 
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.12, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                      className="p-3.5 rounded-xl bg-black/60 border border-white/[0.08]"
+                    >
+                      <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 block mb-2">
+                        Extracted Root Failure Modes
                       </span>
-                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 font-semibold">
-                        Empathetic Owner Tone
-                      </span>
-                    </div>
-                    
-                    <div className="p-3 bg-black/70 rounded-lg border border-white/[0.06] mb-3">
-                      <p className="text-xs sm:text-sm text-slate-200 italic leading-relaxed font-normal">
-                        "{analysisResult.draftedResponse}"
-                      </p>
-                    </div>
-
-                    <div className="flex items-center gap-2">
-                      <button
-                        type="button"
-                        onClick={handleCopy}
-                        className="px-3.5 py-1.5 rounded-lg bg-indigo-600/30 border border-indigo-500/50 hover:bg-indigo-600/50 text-indigo-200 text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer shadow-sm font-mono"
-                      >
-                        {copied ? (
-                          <>
-                            <Check className="w-3.5 h-3.5 text-emerald-400" />
-                            <span className="text-emerald-400 font-bold">Copied!</span>
-                          </>
+                      <div className="flex flex-wrap gap-1.5">
+                        {Array.isArray(analysisResult.issues) && analysisResult.issues.length > 0 ? (
+                          analysisResult.issues.map((issue, idx) => (
+                            <motion.span
+                              key={idx}
+                              initial={{ opacity: 0, scale: 0.8 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              transition={{ delay: 0.2 + idx * 0.05 }}
+                              className="px-2.5 py-0.5 rounded-md bg-violet-500/15 border border-violet-500/30 text-violet-300 text-xs font-medium font-mono flex items-center gap-1"
+                            >
+                              <span>{getIssueEmoji(issue)}</span>
+                              <span>{issue}</span>
+                            </motion.span>
+                          ))
                         ) : (
-                          <>
-                            <Copy className="w-3.5 h-3.5 text-indigo-400" />
-                            <span>Copy Response</span>
-                          </>
+                          <span className="text-xs text-slate-400 italic">No specific defect identified</span>
                         )}
-                      </button>
+                      </div>
+                    </motion.div>
 
-                      <button
-                        type="button"
-                        onClick={handleAnalyze}
-                        className="px-3 py-1.5 rounded-lg text-slate-400 hover:text-slate-200 text-xs font-medium flex items-center gap-1 transition-all cursor-pointer font-mono"
-                      >
-                        <RotateCw className="w-3 h-3" />
-                        <span>Regenerate</span>
-                      </button>
-                    </div>
+                    {/* CARD 3: URGENCY LEVEL */}
+                    <motion.div 
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.24, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                      className="p-3.5 rounded-xl bg-black/60 border border-white/[0.08]"
+                    >
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400">
+                          Triage Severity
+                        </span>
+                        <div>
+                          {analysisResult.urgency?.toLowerCase() === 'high' && (
+                            <span className="px-2.5 py-0.5 rounded-md bg-rose-500/20 border border-rose-500/35 text-rose-400 text-xs font-bold font-mono">
+                              🔴 High Priority
+                            </span>
+                          )}
+                          {analysisResult.urgency?.toLowerCase() === 'medium' && (
+                            <span className="px-2.5 py-0.5 rounded-md bg-amber-500/20 border border-amber-500/35 text-amber-400 text-xs font-bold font-mono">
+                              🟡 Medium
+                            </span>
+                          )}
+                          {analysisResult.urgency?.toLowerCase() === 'low' && (
+                            <span className="px-2.5 py-0.5 rounded-md bg-emerald-500/20 border border-emerald-500/35 text-emerald-400 text-xs font-bold font-mono">
+                              🟢 Low
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                      {analysisResult.urgencyReason && (
+                        <p className="text-xs text-slate-400 italic mt-1 font-mono">
+                          Rationale: {analysisResult.urgencyReason}
+                        </p>
+                      )}
+                    </motion.div>
+
+                    {/* CARD 4: DRAFTED EMPATHETIC RESOLUTION */}
+                    <motion.div 
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.36, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                      className="p-4 rounded-xl bg-gradient-to-b from-violet-950/30 to-black/70 border border-violet-500/35"
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-xs font-bold text-white flex items-center gap-1.5">
+                          <Sparkles className="w-3.5 h-3.5 text-violet-400" />
+                          Synthesized Owner Response
+                        </span>
+                        <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-violet-500/20 text-violet-300 font-semibold">
+                          Empathetic Owner Tone
+                        </span>
+                      </div>
+                      
+                      <div className="p-3 bg-black/70 rounded-lg border border-white/[0.06] mb-3">
+                        <p className="text-xs sm:text-sm text-slate-200 italic leading-relaxed font-normal">
+                          "{analysisResult.draftedResponse}"
+                        </p>
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={handleCopy}
+                          className="px-3.5 py-1.5 rounded-lg bg-violet-600/30 border border-violet-500/50 hover:bg-violet-600/50 text-violet-200 text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer shadow-sm font-mono"
+                        >
+                          {copied ? (
+                            <>
+                              <Check className="w-3.5 h-3.5 text-emerald-400" />
+                              <span className="text-emerald-400 font-bold">Copied!</span>
+                            </>
+                          ) : (
+                            <>
+                              <Copy className="w-3.5 h-3.5 text-violet-400" />
+                              <span>Copy Response</span>
+                            </>
+                          )}
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={handleAnalyze}
+                          className="px-3 py-1.5 rounded-lg text-slate-400 hover:text-slate-200 text-xs font-medium flex items-center gap-1 transition-all cursor-pointer font-mono"
+                        >
+                          <RotateCw className="w-3 h-3" />
+                          <span>Regenerate</span>
+                        </button>
+                      </div>
+                    </motion.div>
+
                   </div>
+                )}
+              </AnimatePresence>
 
-                </div>
-              )}
-
-            </div>
+            </motion.div>
 
           </div>
 

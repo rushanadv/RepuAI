@@ -1,26 +1,35 @@
 import React from 'react';
-import { Sparkles, ArrowUpRight } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Sparkles } from 'lucide-react';
+import { fadeUp } from '../lib/animations';
 
 export default function Footer() {
   return (
-    <footer className="bg-[#040407] border-t border-white/[0.06] pt-20 pb-12 px-4 sm:px-6">
+    <footer className="bg-[#040407] border-t border-white/[0.06] pt-28 pb-14 px-4 sm:px-6 overflow-hidden">
       <div className="max-w-6xl mx-auto">
         
-        {/* Top Grid */}
+        {/* Top Grid with Column-by-Column FadeUp */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12 pb-16 border-b border-white/[0.05]">
           
           {/* Brand Column (5 cols) */}
-          <div className="md:col-span-5 max-w-sm">
+          <motion.div 
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-80px" }}
+            variants={fadeUp}
+            custom={0}
+            className="md:col-span-5 max-w-sm"
+          >
             <div className="flex items-center gap-2.5 mb-4">
-              <div className="w-7 h-7 rounded-full bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center text-indigo-400">
-                <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
+              <div className="w-7 h-7 rounded-full bg-violet-500/10 border border-violet-500/30 flex items-center justify-center text-violet-400">
+                <Sparkles className="w-3.5 h-3.5 text-violet-400" />
               </div>
               <span className="text-lg font-bold tracking-tight text-white">
-                Repu<span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 to-cyan-300 ml-0.5 font-black">AI</span>
+                Repu<span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-300 to-cyan-300 ml-0.5 font-black">AI</span>
               </span>
             </div>
             
-            <p className="text-xs text-slate-400 leading-relaxed">
+            <p className="text-xs text-slate-400 leading-relaxed font-normal">
               The autonomous review response & operational defect intelligence platform for customer-centric businesses.
             </p>
 
@@ -28,13 +37,19 @@ export default function Footer() {
               <span className="w-2 h-2 rounded-full bg-emerald-400 inline-block" />
               <span>All Systems Operational • 99.98% SLA</span>
             </div>
-          </div>
+          </motion.div>
 
           {/* Links Grid (7 cols) */}
           <div className="md:col-span-7 grid grid-cols-2 sm:grid-cols-3 gap-8">
             
-            {/* Architecture */}
-            <div>
+            {/* Architecture Column */}
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-80px" }}
+              variants={fadeUp}
+              custom={0.1}
+            >
               <h4 className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-300 mb-4">
                 Architecture
               </h4>
@@ -44,10 +59,16 @@ export default function Footer() {
                 <li><a href="#demo" className="hover:text-white transition-colors">Live Workspace</a></li>
                 <li><a href="#analytics" className="hover:text-white transition-colors">Telemetry Engine</a></li>
               </ul>
-            </div>
+            </motion.div>
 
-            {/* Channels */}
-            <div>
+            {/* Channels Column */}
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-80px" }}
+              variants={fadeUp}
+              custom={0.2}
+            >
               <h4 className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-300 mb-4">
                 Channels
               </h4>
@@ -65,10 +86,16 @@ export default function Footer() {
                   <span>Apple App Store</span>
                 </li>
               </ul>
-            </div>
+            </motion.div>
 
-            {/* Platform */}
-            <div>
+            {/* Platform Column */}
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-80px" }}
+              variants={fadeUp}
+              custom={0.3}
+            >
               <h4 className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-300 mb-4">
                 Platform
               </h4>
@@ -78,7 +105,7 @@ export default function Footer() {
                 <li className="hover:text-white cursor-pointer transition-colors">Privacy Policy</li>
                 <li className="hover:text-white cursor-pointer transition-colors">Terms of Service</li>
               </ul>
-            </div>
+            </motion.div>
 
           </div>
 
@@ -88,7 +115,7 @@ export default function Footer() {
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
           <p>© 2026 RepuAI Technologies Inc. All rights reserved.</p>
           <p className="font-mono text-[11px]">
-            Designed with precision by Team RepuAI
+            Engineered with precision for Awwwards Site of the Day
           </p>
         </div>
 
