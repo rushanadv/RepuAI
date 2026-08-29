@@ -10,9 +10,10 @@ import {
   Loader2, 
   ArrowRight,
   Terminal,
-  Layers,
   Cpu,
-  CornerDownLeft
+  Layers,
+  Zap,
+  CheckCircle2
 } from 'lucide-react';
 import { sampleReviews } from '../data/sampleReviews';
 
@@ -40,8 +41,8 @@ export default function DemoSection() {
 
   const categories = [
     { id: 'restaurant', label: '🍽️ Restaurant' },
-    { id: 'ecommerce', label: '🛍️ E-commerce' },
-    { id: 'hotel', label: '🏨 Hotel' },
+    { id: 'ecommerce', label: '🛍️ E-Commerce' },
+    { id: 'hotel', label: '🏨 Hospitality' },
     { id: 'app', label: '📱 Mobile App' },
   ];
 
@@ -201,430 +202,440 @@ export default function DemoSection() {
   };
 
   return (
-    <section id="demo" className="relative py-28 px-4 sm:px-6 bg-[#060609] overflow-hidden fade-in-section border-t border-white/[0.05]">
+    <section id="demo" className="relative py-32 px-4 sm:px-6 bg-[#040407] overflow-hidden fade-in-section border-t border-white/[0.05]">
       
-      {/* Background ambient glow */}
+      {/* Ambient lighting */}
       <div 
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] rounded-full pointer-events-none blur-[160px]"
-        style={{ background: 'radial-gradient(circle, rgba(99, 102, 241, 0.08) 0%, transparent 70%)' }}
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[850px] h-[420px] rounded-full pointer-events-none blur-[180px]"
+        style={{ background: 'radial-gradient(circle, rgba(99, 102, 241, 0.09) 0%, transparent 70%)' }}
       />
 
       <div className="max-w-6xl mx-auto relative z-10">
         
         {/* Section Header */}
         <div className="max-w-3xl mb-14">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-xs font-semibold text-indigo-400 mb-4">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>LIVE INTERACTIVE WORKSPACE</span>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-xs font-mono font-semibold text-indigo-400 mb-6">
+            <Terminal className="w-3.5 h-3.5" />
+            <span>AI WORKSPACE // STREAMING_CONSOLE</span>
           </div>
 
-          <h2 className="text-3xl sm:text-5xl font-extrabold text-white tracking-[-0.03em] leading-[1.05]">
-            Test the live neural engine against any real review.
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-display font-extrabold text-white tracking-[-0.04em] leading-[0.95]">
+            Run live inference <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-indigo-300">
+              on any customer review.
+            </span>
           </h2>
-          <p className="mt-4 text-base sm:text-lg text-slate-400 max-w-2xl">
-            This connects directly to the streaming OpenRouter inference layer. Not a canned mock.
+          <p className="mt-6 text-base sm:text-lg text-slate-400 max-w-2xl font-normal leading-relaxed">
+            Real-time SSE token stream executing on NVIDIA Nemotron 550B & Meta LLaMA 3.3.
           </p>
         </div>
 
-        {/* Studio-Grade Workspace Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-
-          {/* ================= LEFT PANEL: Review Input & Presets (5 Cols) ================= */}
-          <div className="lg:col-span-5 hairline-card p-6 sm:p-7 rounded-2xl flex flex-col justify-between shadow-2xl">
-            <div className="space-y-6">
-              
-              {/* 1. Industry Switcher Tabs */}
-              <div>
-                <label className="block text-[11px] font-mono uppercase tracking-wider text-slate-400 mb-2.5">
-                  01 // Select Domain Preset
-                </label>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 p-1 bg-black/40 rounded-xl border border-white/[0.06]">
-                  {categories.map((cat) => {
-                    const isSelected = selectedCategory === cat.id;
-                    return (
-                      <button
-                        key={cat.id}
-                        type="button"
-                        onClick={() => handleCategoryChange(cat.id)}
-                        className={`px-2.5 py-2 rounded-lg text-xs font-semibold transition-all text-center flex items-center justify-center gap-1 cursor-pointer ${
-                          isSelected
-                            ? 'bg-white/10 text-white shadow-sm border border-white/[0.08]'
-                            : 'text-slate-400 hover:text-slate-200'
-                        }`}
-                      >
-                        <span className="truncate">{cat.label}</span>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* 2. Sample Review Cards Slider */}
-              <div>
-                <div className="flex items-center justify-between mb-2.5">
-                  <label className="text-[11px] font-mono uppercase tracking-wider text-slate-400">
-                    02 // Quick Load Sample
-                  </label>
-                  <span className="text-[11px] text-indigo-400 font-medium">Click to populate</span>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                  {sampleReviews[selectedCategory]?.map((sample, idx) => {
-                    const isCurrent = reviewInput === sample.text;
-                    return (
-                      <div
-                        key={idx}
-                        onClick={() => handleSelectSample(sample.text)}
-                        className={`p-2.5 rounded-xl cursor-pointer text-left transition-all border ${
-                          isCurrent
-                            ? 'bg-indigo-600/15 border-indigo-500/50 shadow-md'
-                            : 'bg-black/30 border-white/[0.05] hover:bg-black/50 hover:border-white/15'
-                        }`}
-                      >
-                        <div className="flex items-center justify-between mb-1">
-                          <div className="flex text-amber-400">
-                            {[...Array(5)].map((_, starIdx) => (
-                              <Star
-                                key={starIdx}
-                                className={`w-2.5 h-2.5 ${
-                                  starIdx < sample.stars
-                                    ? 'fill-current text-amber-400'
-                                    : 'text-slate-700'
-                                }`}
-                              />
-                            ))}
-                          </div>
-                          <span className="text-[10px] font-mono text-slate-400 truncate max-w-[70px]">
-                            {sample.author}
-                          </span>
-                        </div>
-                        <p className="text-[11px] text-slate-300 line-clamp-2 leading-relaxed">
-                          "{sample.text}"
-                        </p>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* 3. Textarea Input */}
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <label className="text-[11px] font-mono uppercase tracking-wider text-slate-400">
-                    03 // Active Review Payload
-                  </label>
-                  <span className="text-[11px] font-mono text-slate-500">
-                    {reviewInput.length} chars
-                  </span>
-                </div>
-                <textarea
-                  value={reviewInput}
-                  onChange={(e) => {
-                    setReviewInput(e.target.value);
-                    if (validationWarning) setValidationWarning('');
-                  }}
-                  placeholder="Paste any custom customer review from Google, Zomato, Amazon, or App Store..."
-                  rows={4}
-                  className="w-full bg-black/50 border border-white/[0.08] rounded-xl p-3.5 text-xs sm:text-sm text-slate-100 placeholder-slate-500 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 focus:outline-none transition-all resize-none font-normal leading-relaxed shadow-inner"
-                />
-                {validationWarning && (
-                  <p className="mt-1.5 text-xs text-rose-400 font-medium flex items-center gap-1">
-                    <AlertCircle className="w-3.5 h-3.5" />
-                    {validationWarning}
-                  </p>
-                )}
-              </div>
-
+        {/* Studio-Grade Pro Console Chassis */}
+        <div className="studio-chassis rounded-2xl p-5 sm:p-7 shadow-2xl">
+          
+          {/* Pro Toolbar */}
+          <div className="flex flex-wrap items-center justify-between gap-4 pb-5 mb-6 border-b border-white/[0.08] font-mono text-xs">
+            <div className="flex items-center gap-2.5">
+              <span className="w-2.5 h-2.5 rounded-full bg-indigo-400 animate-pulse" />
+              <span className="text-slate-200 font-bold">MODEL // nvidia/nemotron-3-ultra-550b</span>
             </div>
 
-            {/* 4. Action Button */}
-            <div className="mt-6 pt-4 border-t border-white/[0.06]">
-              <button
-                type="button"
-                onClick={handleAnalyze}
-                disabled={loading || isStreaming}
-                className={`w-full py-3.5 px-6 rounded-xl font-semibold text-white flex items-center justify-center gap-2.5 transition-all text-sm shadow-xl ${
-                  loading || isStreaming
-                    ? 'bg-indigo-900/60 cursor-not-allowed opacity-80' 
-                    : 'btn-primary cursor-pointer'
-                }`}
-              >
-                {loading && !isStreaming && (
-                  <>
-                    <Loader2 className="w-4 h-4 animate-spin text-white" />
-                    <span>Connecting to Model...</span>
-                  </>
-                )}
-                {isStreaming && (
-                  <>
-                    <Loader2 className="w-4 h-4 animate-spin text-cyan-400" />
-                    <span className="animate-pulse">Streaming Response Tokens...</span>
-                  </>
-                )}
-                {!loading && !isStreaming && (
-                  <>
-                    <Sparkles className="w-4 h-4 text-white" />
-                    <span>Run AI Triage & Draft</span>
-                  </>
-                )}
-              </button>
+            <div className="flex items-center gap-4 text-slate-400 text-[11px]">
+              <span>STREAM: SSE</span>
+              <span>•</span>
+              <span className="text-emerald-400">LATENCY: ~40ms</span>
             </div>
-
           </div>
 
+          {/* 2-Column Console Layout */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
 
-          {/* ================= RIGHT PANEL: AI Workspace & Streaming Inspector (7 Cols) ================= */}
-          <div className="lg:col-span-7 hairline-card p-6 sm:p-7 rounded-2xl flex flex-col justify-center min-h-[480px] shadow-2xl relative">
-            
-            {/* Top Workspace Header */}
-            <div className="flex items-center justify-between pb-3 mb-5 border-b border-white/[0.06]">
-              <div className="flex items-center gap-2 text-xs font-mono text-slate-300">
-                <Terminal className="w-3.5 h-3.5 text-indigo-400" />
-                <span>INSPECTOR // OUTPUT_FRAME</span>
-              </div>
-              <span className="text-[11px] font-mono text-slate-500">
-                {isStreaming ? '● STREAMING LIVE' : 'READY'}
-              </span>
-            </div>
-
-            {/* DEFAULT STATE: No analysis triggered yet */}
-            {!loading && !isStreaming && !analysisResult && !error && (
-              <div className="h-full flex flex-col items-center justify-center text-center p-8 border border-dashed border-white/[0.08] rounded-xl bg-black/20">
-                <div className="w-12 h-12 rounded-xl bg-white/[0.02] border border-white/[0.08] flex items-center justify-center mb-3 text-slate-400">
-                  <MessageSquare className="w-6 h-6 text-slate-400" />
-                </div>
-                <h4 className="text-sm font-bold text-slate-200 mb-1">
-                  Awaiting review execution
-                </h4>
-                <p className="text-xs text-slate-400 max-w-sm mb-5 leading-relaxed">
-                  Select a sample preset on the left or paste your own review, then click <strong>Run AI Triage</strong> to watch real-time extraction.
-                </p>
-                <button
-                  type="button"
-                  onClick={handleAnalyze}
-                  className="btn-secondary px-4 py-2 rounded-full text-xs font-semibold text-slate-200 flex items-center gap-1.5"
-                >
-                  <span>Execute Sample</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </button>
-              </div>
-            )}
-
-            {/* LOADING STATE: Shimmer Skeletons (Connecting) */}
-            {loading && !isStreaming && (
-              <div className="space-y-3 w-full">
-                <div className="flex items-center justify-between p-4 bg-black/40 rounded-xl border border-white/5">
-                  <div className="h-4 w-20 skeleton-box" />
-                  <div className="h-6 w-28 skeleton-box" />
-                </div>
-                <div className="p-4 bg-black/40 rounded-xl border border-white/5">
-                  <div className="h-4 w-24 mb-3 skeleton-box" />
-                  <div className="flex gap-2">
-                    <div className="h-6 w-24 skeleton-box" />
-                    <div className="h-6 w-28 skeleton-box" />
-                  </div>
-                </div>
-                <div className="flex items-center justify-between p-4 bg-black/40 rounded-xl border border-white/5">
-                  <div className="h-4 w-24 skeleton-box" />
-                  <div className="h-6 w-32 skeleton-box" />
-                </div>
-                <div className="p-4 bg-black/40 rounded-xl border border-white/5">
-                  <div className="h-4 w-36 mb-3 skeleton-box" />
-                  <div className="h-16 w-full skeleton-box mb-3" />
-                  <div className="h-8 w-28 skeleton-box" />
-                </div>
-                <p className="text-xs text-center text-indigo-300/70 animate-pulse font-mono pt-1">
-                  Connecting to streaming endpoint...
-                </p>
-              </div>
-            )}
-
-            {/* STREAMING STATE: Real-time Live SSE Stream Display */}
-            {isStreaming && (
-              <div className="w-full h-full flex flex-col justify-between bg-black/60 rounded-xl p-4 border-l-2 border-indigo-500">
+            {/* ================= LEFT CONSOLE: Review Input & Presets (5 Cols) ================= */}
+            <div className="lg:col-span-5 flex flex-col justify-between space-y-6">
+              
+              <div className="space-y-5">
+                {/* 1. Industry Switcher */}
                 <div>
-                  <div className="flex items-center justify-between mb-2.5 pb-2 border-b border-white/[0.06]">
-                    <div className="flex items-center gap-2 text-xs font-semibold text-indigo-300">
-                      <span className="w-2 h-2 rounded-full bg-indigo-500 animate-ping" />
-                      <span>Live Neural Token Stream</span>
-                    </div>
-                    <span className="text-[10px] font-mono text-cyan-300">nvidia/nemotron-3-550b</span>
-                  </div>
-                  
-                  <div 
-                    ref={streamEndRef}
-                    className="font-mono text-xs text-indigo-200 leading-relaxed max-h-52 overflow-y-auto bg-black/80 p-3 rounded-lg border border-white/[0.05] whitespace-pre-wrap break-all shadow-inner"
-                  >
-                    {streamingText || "Initiating stream handshake..."}
-                    <span className="inline-block w-1.5 h-3.5 bg-indigo-400 ml-1 animate-pulse align-middle" />
-                  </div>
-                </div>
-
-                <div className="mt-3 pt-2 border-t border-white/[0.06] flex items-center justify-between">
-                  <p className="text-slate-400 italic text-[11px]">Validating structured JSON payload...</p>
-                  <Loader2 className="w-3.5 h-3.5 text-indigo-400 animate-spin" />
-                </div>
-              </div>
-            )}
-
-            {/* ERROR STATE */}
-            {!isStreaming && error && (
-              <div className="flex flex-col items-center justify-center text-center p-6 rounded-xl bg-rose-500/10 border border-rose-500/30">
-                <div className="w-10 h-10 rounded-xl bg-rose-500/20 flex items-center justify-center mb-3 text-rose-400">
-                  <AlertCircle className="w-6 h-6" />
-                </div>
-                <h4 className="text-sm font-bold text-rose-200 mb-1">
-                  Analysis Pipeline Error
-                </h4>
-                <p className="text-xs text-rose-300/80 max-w-sm mb-4 leading-relaxed font-mono">
-                  {error}
-                </p>
-                <button
-                  type="button"
-                  onClick={handleAnalyze}
-                  className="px-5 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-semibold transition-all shadow-md flex items-center gap-1.5 cursor-pointer"
-                >
-                  <RotateCw className="w-3.5 h-3.5" />
-                  <span>Retry Request</span>
-                </button>
-              </div>
-            )}
-
-            {/* RESULT STATE */}
-            {!loading && !isStreaming && analysisResult && (
-              <div className="space-y-3 w-full">
-                
-                {/* CARD 1: SENTIMENT & SCORE */}
-                <div className="p-3.5 rounded-xl bg-black/40 border border-white/[0.07] flex items-center justify-between animate-fade-in-up">
-                  <div>
-                    <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 block">
-                      Sentiment Analysis
-                    </span>
-                    <span className="text-xs text-slate-300">
-                      Score: <strong className="text-white font-mono">{analysisResult.sentimentScore || '—'}/10</strong>
-                    </span>
-                  </div>
-                  <div>
-                    {analysisResult.sentiment?.toLowerCase() === 'positive' && (
-                      <span className="px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-xs font-bold flex items-center gap-1.5">
-                        <span>😊 Positive</span>
-                      </span>
-                    )}
-                    {analysisResult.sentiment?.toLowerCase() === 'neutral' && (
-                      <span className="px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-400 text-xs font-bold flex items-center gap-1.5">
-                        <span>😐 Neutral</span>
-                      </span>
-                    )}
-                    {analysisResult.sentiment?.toLowerCase() === 'negative' && (
-                      <span className="px-3 py-1 rounded-full bg-rose-500/15 border border-rose-500/30 text-rose-400 text-xs font-bold flex items-center gap-1.5">
-                        <span>😤 Negative</span>
-                      </span>
-                    )}
-                  </div>
-                </div>
-
-                {/* CARD 2: DETECTED ISSUES */}
-                <div className="p-3.5 rounded-xl bg-black/40 border border-white/[0.07] animate-fade-in-up delay-100">
-                  <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 block mb-2">
-                    Extracted Root Issues
-                  </span>
-                  <div className="flex flex-wrap gap-1.5">
-                    {Array.isArray(analysisResult.issues) && analysisResult.issues.length > 0 ? (
-                      analysisResult.issues.map((issue, idx) => (
-                        <span
-                          key={idx}
-                          className="px-2.5 py-0.5 rounded-md bg-indigo-500/10 border border-indigo-500/25 text-indigo-300 text-xs font-medium flex items-center gap-1"
+                  <label className="block text-[11px] font-mono uppercase tracking-wider text-slate-400 mb-2">
+                    01 // Domain Preset
+                  </label>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 p-1 bg-black/60 rounded-xl border border-white/[0.07]">
+                    {categories.map((cat) => {
+                      const isSelected = selectedCategory === cat.id;
+                      return (
+                        <button
+                          key={cat.id}
+                          type="button"
+                          onClick={() => handleCategoryChange(cat.id)}
+                          className={`px-2 py-2 rounded-lg text-xs font-semibold font-mono transition-all text-center flex items-center justify-center cursor-pointer ${
+                            isSelected
+                              ? 'bg-white/10 text-white border border-white/[0.1] shadow-sm'
+                              : 'text-slate-400 hover:text-slate-200'
+                          }`}
                         >
-                          <span>{getIssueEmoji(issue)}</span>
-                          <span>{issue}</span>
-                        </span>
-                      ))
-                    ) : (
-                      <span className="text-xs text-slate-400 italic">No specific defect identified</span>
-                    )}
+                          <span className="truncate">{cat.label}</span>
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
 
-                {/* CARD 3: URGENCY LEVEL */}
-                <div className="p-3.5 rounded-xl bg-black/40 border border-white/[0.07] animate-fade-in-up delay-200">
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400">
-                      Triage Priority
-                    </span>
-                    <div>
-                      {analysisResult.urgency?.toLowerCase() === 'high' && (
-                        <span className="px-2.5 py-0.5 rounded-md bg-rose-500/15 border border-rose-500/30 text-rose-400 text-xs font-bold">
-                          🔴 High Priority
-                        </span>
-                      )}
-                      {analysisResult.urgency?.toLowerCase() === 'medium' && (
-                        <span className="px-2.5 py-0.5 rounded-md bg-amber-500/15 border border-amber-500/30 text-amber-400 text-xs font-bold">
-                          🟡 Medium
-                        </span>
-                      )}
-                      {analysisResult.urgency?.toLowerCase() === 'low' && (
-                        <span className="px-2.5 py-0.5 rounded-md bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-xs font-bold">
-                          🟢 Low
-                        </span>
-                      )}
-                    </div>
+                {/* 2. Sample Presets */}
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <label className="text-[11px] font-mono uppercase tracking-wider text-slate-400">
+                      02 // Real Sample Preset
+                    </label>
+                    <span className="text-[11px] font-mono text-indigo-400">Click to populate</span>
                   </div>
-                  {analysisResult.urgencyReason && (
-                    <p className="text-xs text-slate-400 italic mt-1">
-                      {analysisResult.urgencyReason}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    {sampleReviews[selectedCategory]?.map((sample, idx) => {
+                      const isCurrent = reviewInput === sample.text;
+                      return (
+                        <div
+                          key={idx}
+                          onClick={() => handleSelectSample(sample.text)}
+                          className={`p-2.5 rounded-xl cursor-pointer text-left transition-all border ${
+                            isCurrent
+                              ? 'bg-indigo-600/20 border-indigo-500/60 shadow-md'
+                              : 'bg-black/40 border-white/[0.05] hover:bg-black/60 hover:border-white/15'
+                          }`}
+                        >
+                          <div className="flex items-center justify-between mb-1">
+                            <div className="flex text-amber-400">
+                              {[...Array(5)].map((_, starIdx) => (
+                                <Star
+                                  key={starIdx}
+                                  className={`w-2.5 h-2.5 ${
+                                    starIdx < sample.stars
+                                      ? 'fill-current text-amber-400'
+                                      : 'text-slate-700'
+                                  }`}
+                                />
+                              ))}
+                            </div>
+                            <span className="text-[10px] font-mono text-slate-400 truncate max-w-[70px]">
+                              {sample.author}
+                            </span>
+                          </div>
+                          <p className="text-[11px] text-slate-300 line-clamp-2 leading-relaxed">
+                            "{sample.text}"
+                          </p>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* 3. Textarea Input */}
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <label className="text-[11px] font-mono uppercase tracking-wider text-slate-400">
+                      03 // Review Payload
+                    </label>
+                    <span className="text-[11px] font-mono text-slate-500">
+                      {reviewInput.length} chars
+                    </span>
+                  </div>
+                  <textarea
+                    value={reviewInput}
+                    onChange={(e) => {
+                      setReviewInput(e.target.value);
+                      if (validationWarning) setValidationWarning('');
+                    }}
+                    placeholder="Paste any custom customer review here..."
+                    rows={4}
+                    className="w-full bg-black/70 border border-white/[0.08] rounded-xl p-3.5 text-xs sm:text-sm text-slate-100 placeholder-slate-500 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 focus:outline-none transition-all resize-none font-normal leading-relaxed shadow-inner"
+                  />
+                  {validationWarning && (
+                    <p className="mt-1.5 text-xs text-rose-400 font-medium flex items-center gap-1 font-mono">
+                      <AlertCircle className="w-3.5 h-3.5" />
+                      {validationWarning}
                     </p>
                   )}
                 </div>
+              </div>
 
-                {/* CARD 4: DRAFTED EMPATHETIC RESOLUTION */}
-                <div className="p-4 rounded-xl bg-gradient-to-b from-indigo-950/20 to-black/60 border border-indigo-500/30 animate-fade-in-up delay-300">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-bold text-white flex items-center gap-1.5">
-                      <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
-                      Synthesized Owner Response
-                    </span>
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 font-semibold">
-                      Owner Empathy Tone
-                    </span>
+              {/* 4. Action Button */}
+              <div className="pt-3 border-t border-white/[0.06]">
+                <button
+                  type="button"
+                  onClick={handleAnalyze}
+                  disabled={loading || isStreaming}
+                  className={`w-full py-3.5 px-6 rounded-xl font-semibold text-white flex items-center justify-center gap-2.5 transition-all text-sm shadow-xl ${
+                    loading || isStreaming
+                      ? 'bg-indigo-900/60 cursor-not-allowed opacity-80' 
+                      : 'btn-primary cursor-pointer'
+                  }`}
+                >
+                  {loading && !isStreaming && (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin text-white" />
+                      <span className="font-mono">Connecting to Model...</span>
+                    </>
+                  )}
+                  {isStreaming && (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin text-cyan-400" />
+                      <span className="font-mono animate-pulse">Streaming Response Tokens...</span>
+                    </>
+                  )}
+                  {!loading && !isStreaming && (
+                    <>
+                      <Sparkles className="w-4 h-4 text-white" />
+                      <span>Execute Neural Analysis</span>
+                    </>
+                  )}
+                </button>
+              </div>
+
+            </div>
+
+
+            {/* ================= RIGHT CONSOLE: Workspace Inspector & Token Stream (7 Cols) ================= */}
+            <div className="lg:col-span-7 bg-black/60 rounded-xl p-5 sm:p-6 border border-white/[0.07] flex flex-col justify-center min-h-[460px] shadow-inner relative">
+              
+              {/* DEFAULT STATE */}
+              {!loading && !isStreaming && !analysisResult && !error && (
+                <div className="h-full flex flex-col items-center justify-center text-center p-8 border border-dashed border-white/[0.08] rounded-xl bg-black/20">
+                  <div className="w-12 h-12 rounded-xl bg-white/[0.02] border border-white/[0.08] flex items-center justify-center mb-3 text-slate-400">
+                    <MessageSquare className="w-6 h-6 text-slate-400" />
                   </div>
-                  
-                  <div className="p-3 bg-black/60 rounded-lg border border-white/[0.05] mb-3">
-                    <p className="text-xs sm:text-sm text-slate-200 italic leading-relaxed font-normal">
-                      "{analysisResult.draftedResponse}"
-                    </p>
+                  <h4 className="text-sm font-bold text-slate-200 mb-1 font-mono">
+                    READY FOR EXECUTION
+                  </h4>
+                  <p className="text-xs text-slate-400 max-w-sm mb-5 leading-relaxed">
+                    Select a domain preset on the left or paste your own review, then click <strong>Execute Neural Analysis</strong> to begin live inference.
+                  </p>
+                  <button
+                    type="button"
+                    onClick={handleAnalyze}
+                    className="btn-secondary px-4 py-2 rounded-full text-xs font-semibold text-slate-200 flex items-center gap-1.5 cursor-pointer font-mono"
+                  >
+                    <span>Execute Sample</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              )}
+
+              {/* LOADING STATE */}
+              {loading && !isStreaming && (
+                <div className="space-y-3 w-full">
+                  <div className="flex items-center justify-between p-4 bg-black/60 rounded-xl border border-white/5">
+                    <div className="h-4 w-20 skeleton-box" />
+                    <div className="h-6 w-28 skeleton-box" />
+                  </div>
+                  <div className="p-4 bg-black/60 rounded-xl border border-white/5">
+                    <div className="h-4 w-24 mb-3 skeleton-box" />
+                    <div className="flex gap-2">
+                      <div className="h-6 w-24 skeleton-box" />
+                      <div className="h-6 w-28 skeleton-box" />
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between p-4 bg-black/60 rounded-xl border border-white/5">
+                    <div className="h-4 w-24 skeleton-box" />
+                    <div className="h-6 w-32 skeleton-box" />
+                  </div>
+                  <div className="p-4 bg-black/60 rounded-xl border border-white/5">
+                    <div className="h-4 w-36 mb-3 skeleton-box" />
+                    <div className="h-16 w-full skeleton-box mb-3" />
+                    <div className="h-8 w-28 skeleton-box" />
+                  </div>
+                  <p className="text-xs text-center text-indigo-300/70 animate-pulse font-mono pt-1">
+                    Establishing SSE socket connection...
+                  </p>
+                </div>
+              )}
+
+              {/* STREAMING STATE: Live Token Terminal */}
+              {isStreaming && (
+                <div className="w-full h-full flex flex-col justify-between bg-black/80 rounded-xl p-4 border-l-2 border-indigo-500">
+                  <div>
+                    <div className="flex items-center justify-between mb-2.5 pb-2 border-b border-white/[0.06] font-mono">
+                      <div className="flex items-center gap-2 text-xs font-semibold text-indigo-300">
+                        <span className="w-2 h-2 rounded-full bg-indigo-500 animate-ping" />
+                        <span>Live Neural Token Stream</span>
+                      </div>
+                      <span className="text-[10px] text-cyan-300">nvidia/nemotron-3-550b</span>
+                    </div>
+                    
+                    <div 
+                      ref={streamEndRef}
+                      className="font-mono text-xs text-indigo-200 leading-relaxed max-h-56 overflow-y-auto bg-black/90 p-3 rounded-lg border border-white/[0.05] whitespace-pre-wrap break-all shadow-inner"
+                    >
+                      {streamingText || "Initiating stream handshake..."}
+                      <span className="inline-block w-1.5 h-3.5 bg-indigo-400 ml-1 animate-pulse align-middle" />
+                    </div>
                   </div>
 
-                  <div className="flex items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={handleCopy}
-                      className="px-3.5 py-1.5 rounded-lg bg-indigo-600/30 border border-indigo-500/40 hover:bg-indigo-600/50 text-indigo-200 text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer shadow-sm"
-                    >
-                      {copied ? (
-                        <>
-                          <Check className="w-3.5 h-3.5 text-emerald-400" />
-                          <span className="text-emerald-400">Copied to Clipboard!</span>
-                        </>
-                      ) : (
-                        <>
-                          <Copy className="w-3.5 h-3.5 text-indigo-400" />
-                          <span>Copy Response</span>
-                        </>
-                      )}
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={handleAnalyze}
-                      className="px-3 py-1.5 rounded-lg text-slate-400 hover:text-slate-200 text-xs font-medium flex items-center gap-1 transition-all cursor-pointer"
-                    >
-                      <RotateCw className="w-3 h-3" />
-                      <span>Regenerate</span>
-                    </button>
+                  <div className="mt-3 pt-2 border-t border-white/[0.06] flex items-center justify-between font-mono text-[11px]">
+                    <p className="text-slate-400 italic">Validating structured JSON schema...</p>
+                    <Loader2 className="w-3.5 h-3.5 text-indigo-400 animate-spin" />
                   </div>
                 </div>
+              )}
 
-              </div>
-            )}
+              {/* ERROR STATE */}
+              {!isStreaming && error && (
+                <div className="flex flex-col items-center justify-center text-center p-6 rounded-xl bg-rose-500/10 border border-rose-500/30">
+                  <div className="w-10 h-10 rounded-xl bg-rose-500/20 flex items-center justify-center mb-3 text-rose-400">
+                    <AlertCircle className="w-6 h-6" />
+                  </div>
+                  <h4 className="text-sm font-bold text-rose-200 mb-1 font-mono">
+                    Pipeline Execution Error
+                  </h4>
+                  <p className="text-xs text-rose-300/80 max-w-sm mb-4 leading-relaxed font-mono">
+                    {error}
+                  </p>
+                  <button
+                    type="button"
+                    onClick={handleAnalyze}
+                    className="px-5 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-semibold transition-all shadow-md flex items-center gap-1.5 cursor-pointer font-mono"
+                  >
+                    <RotateCw className="w-3.5 h-3.5" />
+                    <span>Retry Request</span>
+                  </button>
+                </div>
+              )}
+
+              {/* RESULT STATE */}
+              {!loading && !isStreaming && analysisResult && (
+                <div className="space-y-3 w-full">
+                  
+                  {/* CARD 1: SENTIMENT & SCORE */}
+                  <div className="p-3.5 rounded-xl bg-black/60 border border-white/[0.08] flex items-center justify-between animate-fade-in-up">
+                    <div>
+                      <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 block">
+                        Sentiment Diagnostic
+                      </span>
+                      <span className="text-xs text-slate-300 font-mono">
+                        Polarity Score: <strong className="text-white font-bold">{analysisResult.sentimentScore || '—'} / 10</strong>
+                      </span>
+                    </div>
+                    <div>
+                      {analysisResult.sentiment?.toLowerCase() === 'positive' && (
+                        <span className="px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-xs font-bold font-mono flex items-center gap-1.5">
+                          <span>😊 Positive</span>
+                        </span>
+                      )}
+                      {analysisResult.sentiment?.toLowerCase() === 'neutral' && (
+                        <span className="px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-400 text-xs font-bold font-mono flex items-center gap-1.5">
+                          <span>😐 Neutral</span>
+                        </span>
+                      )}
+                      {analysisResult.sentiment?.toLowerCase() === 'negative' && (
+                        <span className="px-3 py-1 rounded-full bg-rose-500/15 border border-rose-500/30 text-rose-400 text-xs font-bold font-mono flex items-center gap-1.5">
+                          <span>😤 Negative</span>
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* CARD 2: EXTRACTED ISSUES */}
+                  <div className="p-3.5 rounded-xl bg-black/60 border border-white/[0.08] animate-fade-in-up delay-100">
+                    <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 block mb-2">
+                      Extracted Root Failure Modes
+                    </span>
+                    <div className="flex flex-wrap gap-1.5">
+                      {Array.isArray(analysisResult.issues) && analysisResult.issues.length > 0 ? (
+                        analysisResult.issues.map((issue, idx) => (
+                          <span
+                            key={idx}
+                            className="px-2.5 py-0.5 rounded-md bg-indigo-500/15 border border-indigo-500/30 text-indigo-300 text-xs font-medium font-mono flex items-center gap-1"
+                          >
+                            <span>{getIssueEmoji(issue)}</span>
+                            <span>{issue}</span>
+                          </span>
+                        ))
+                      ) : (
+                        <span className="text-xs text-slate-400 italic">No specific defect identified</span>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* CARD 3: URGENCY LEVEL */}
+                  <div className="p-3.5 rounded-xl bg-black/60 border border-white/[0.08] animate-fade-in-up delay-200">
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400">
+                        Triage Severity
+                      </span>
+                      <div>
+                        {analysisResult.urgency?.toLowerCase() === 'high' && (
+                          <span className="px-2.5 py-0.5 rounded-md bg-rose-500/20 border border-rose-500/35 text-rose-400 text-xs font-bold font-mono">
+                            🔴 High Priority
+                          </span>
+                        )}
+                        {analysisResult.urgency?.toLowerCase() === 'medium' && (
+                          <span className="px-2.5 py-0.5 rounded-md bg-amber-500/20 border border-amber-500/35 text-amber-400 text-xs font-bold font-mono">
+                            🟡 Medium
+                          </span>
+                        )}
+                        {analysisResult.urgency?.toLowerCase() === 'low' && (
+                          <span className="px-2.5 py-0.5 rounded-md bg-emerald-500/20 border border-emerald-500/35 text-emerald-400 text-xs font-bold font-mono">
+                            🟢 Low
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    {analysisResult.urgencyReason && (
+                      <p className="text-xs text-slate-400 italic mt-1 font-mono">
+                        Rationale: {analysisResult.urgencyReason}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* CARD 4: DRAFTED EMPATHETIC RESOLUTION */}
+                  <div className="p-4 rounded-xl bg-gradient-to-b from-indigo-950/30 to-black/70 border border-indigo-500/35 animate-fade-in-up delay-300">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-xs font-bold text-white flex items-center gap-1.5">
+                        <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
+                        Synthesized Owner Response
+                      </span>
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 font-semibold">
+                        Empathetic Owner Tone
+                      </span>
+                    </div>
+                    
+                    <div className="p-3 bg-black/70 rounded-lg border border-white/[0.06] mb-3">
+                      <p className="text-xs sm:text-sm text-slate-200 italic leading-relaxed font-normal">
+                        "{analysisResult.draftedResponse}"
+                      </p>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={handleCopy}
+                        className="px-3.5 py-1.5 rounded-lg bg-indigo-600/30 border border-indigo-500/50 hover:bg-indigo-600/50 text-indigo-200 text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer shadow-sm font-mono"
+                      >
+                        {copied ? (
+                          <>
+                            <Check className="w-3.5 h-3.5 text-emerald-400" />
+                            <span className="text-emerald-400 font-bold">Copied!</span>
+                          </>
+                        ) : (
+                          <>
+                            <Copy className="w-3.5 h-3.5 text-indigo-400" />
+                            <span>Copy Response</span>
+                          </>
+                        )}
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={handleAnalyze}
+                        className="px-3 py-1.5 rounded-lg text-slate-400 hover:text-slate-200 text-xs font-medium flex items-center gap-1 transition-all cursor-pointer font-mono"
+                      >
+                        <RotateCw className="w-3 h-3" />
+                        <span>Regenerate</span>
+                      </button>
+                    </div>
+                  </div>
+
+                </div>
+              )}
+
+            </div>
 
           </div>
 
