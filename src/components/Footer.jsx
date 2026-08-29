@@ -1,68 +1,82 @@
 import React from 'react';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, ArrowUpRight } from 'lucide-react';
 
 export default function Footer() {
   return (
-    <footer className="bg-[#05050a] border-t border-white/[0.06] pt-16 pb-12 px-4 sm:px-6">
+    <footer className="bg-[#040407] border-t border-white/[0.06] pt-20 pb-12 px-4 sm:px-6">
       <div className="max-w-6xl mx-auto">
         
-        {/* Top Row */}
-        <div className="flex flex-col lg:flex-row justify-between items-start gap-10">
+        {/* Top Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 pb-16 border-b border-white/[0.05]">
           
-          {/* Brand Info */}
-          <div className="max-w-xs">
-            <div className="flex items-center gap-2.5 mb-3">
-              <div className="w-8 h-8 rounded-xl bg-violet-600/20 border border-violet-500/30 flex items-center justify-center text-violet-400">
-                <Sparkles className="w-4 h-4 text-violet-400" />
+          {/* Brand Column (5 cols) */}
+          <div className="md:col-span-5 max-w-sm">
+            <div className="flex items-center gap-2.5 mb-4">
+              <div className="w-7 h-7 rounded-full bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center text-indigo-400">
+                <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
               </div>
-              <span className="text-xl font-bold tracking-tight text-white">
-                Repu<span className="gradient-text font-black ml-0.5">AI</span>
+              <span className="text-lg font-bold tracking-tight text-white">
+                Repu<span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 to-cyan-300 ml-0.5 font-black">AI</span>
               </span>
             </div>
-            <p className="text-sm text-slate-400 leading-relaxed">
-              AI that listens so your customers feel heard. The automated reputation layer for modern businesses.
+            
+            <p className="text-xs text-slate-400 leading-relaxed">
+              The autonomous review response & operational defect intelligence platform for customer-centric businesses.
             </p>
+
+            <div className="mt-6 flex items-center gap-2 text-[11px] font-mono text-slate-500">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 inline-block" />
+              <span>All Systems Operational • 99.98% SLA</span>
+            </div>
           </div>
 
-          {/* 3 Column Links */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-8 sm:gap-12 w-full lg:w-auto">
+          {/* Links Grid (7 cols) */}
+          <div className="md:col-span-7 grid grid-cols-2 sm:grid-cols-3 gap-8">
             
-            {/* Product */}
+            {/* Architecture */}
             <div>
-              <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-200 mb-4">
-                Product
+              <h4 className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-300 mb-4">
+                Architecture
               </h4>
-              <ul className="space-y-2.5 text-sm text-slate-400">
-                <li><a href="#features" className="hover:text-white transition-colors">Features</a></li>
-                <li><a href="#how-it-works" className="hover:text-white transition-colors">How It Works</a></li>
-                <li><a href="#demo" className="hover:text-white transition-colors">Live Demo</a></li>
-                <li><a href="#analytics" className="hover:text-white transition-colors">Analytics</a></li>
+              <ul className="space-y-2.5 text-xs text-slate-400">
+                <li><a href="#features" className="hover:text-white transition-colors">Feature Suite</a></li>
+                <li><a href="#how-it-works" className="hover:text-white transition-colors">Pipeline Flow</a></li>
+                <li><a href="#demo" className="hover:text-white transition-colors">Live Workspace</a></li>
+                <li><a href="#analytics" className="hover:text-white transition-colors">Telemetry Engine</a></li>
               </ul>
             </div>
 
-            {/* Integrations */}
+            {/* Channels */}
             <div>
-              <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-200 mb-4">
-                Integrations
+              <h4 className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-300 mb-4">
+                Channels
               </h4>
-              <ul className="space-y-2.5 text-sm text-slate-400">
-                <li><span className="hover:text-white cursor-pointer transition-colors">Google Reviews</span></li>
-                <li><span className="hover:text-white cursor-pointer transition-colors">Zomato / Swiggy</span></li>
-                <li><span className="hover:text-white cursor-pointer transition-colors">Amazon Store</span></li>
-                <li><span className="hover:text-white cursor-pointer transition-colors">App Store / Play</span></li>
+              <ul className="space-y-2.5 text-xs text-slate-400">
+                <li className="flex items-center gap-1 hover:text-white cursor-pointer transition-colors">
+                  <span>Google Reviews</span>
+                </li>
+                <li className="flex items-center gap-1 hover:text-white cursor-pointer transition-colors">
+                  <span>Zomato & Swiggy</span>
+                </li>
+                <li className="flex items-center gap-1 hover:text-white cursor-pointer transition-colors">
+                  <span>Amazon Store</span>
+                </li>
+                <li className="flex items-center gap-1 hover:text-white cursor-pointer transition-colors">
+                  <span>Apple App Store</span>
+                </li>
               </ul>
             </div>
 
-            {/* Legal */}
+            {/* Platform */}
             <div>
-              <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-200 mb-4">
-                Legal
+              <h4 className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-300 mb-4">
+                Platform
               </h4>
-              <ul className="space-y-2.5 text-sm text-slate-400">
-                <li><span className="hover:text-white cursor-pointer transition-colors">Privacy Policy</span></li>
-                <li><span className="hover:text-white cursor-pointer transition-colors">Terms of Service</span></li>
-                <li><span className="hover:text-white cursor-pointer transition-colors">Security</span></li>
-                <li><span className="hover:text-white cursor-pointer transition-colors">Status</span></li>
+              <ul className="space-y-2.5 text-xs text-slate-400">
+                <li className="hover:text-white cursor-pointer transition-colors">Security & SOC2</li>
+                <li className="hover:text-white cursor-pointer transition-colors">API Documentation</li>
+                <li className="hover:text-white cursor-pointer transition-colors">Privacy Policy</li>
+                <li className="hover:text-white cursor-pointer transition-colors">Terms of Service</li>
               </ul>
             </div>
 
@@ -70,11 +84,11 @@ export default function Footer() {
 
         </div>
 
-        {/* Bottom Row */}
-        <div className="mt-12 pt-8 border-t border-white/[0.04] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
-          <p>© 2026 RepuAI. All rights reserved.</p>
-          <p className="flex items-center gap-1">
-            Built with <span className="text-rose-500">❤️</span> by Team RepuAI
+        {/* Bottom Bar */}
+        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+          <p>© 2026 RepuAI Technologies Inc. All rights reserved.</p>
+          <p className="font-mono text-[11px]">
+            Designed with precision by Team RepuAI
           </p>
         </div>
 
