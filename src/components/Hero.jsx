@@ -14,6 +14,8 @@ import {
 import { useCounter } from '../hooks/useCounter';
 
 export default function Hero() {
+  const [btnHovered, setBtnHovered] = useState(false);
+
   const stat1 = useCounter(2300000);
   const stat2 = useCounter(94);
   const stat3 = useCounter(10);
@@ -35,21 +37,22 @@ export default function Hero() {
   return (
     <section className="relative min-h-screen pt-32 sm:pt-36 pb-20 flex flex-col justify-between items-center overflow-hidden bg-transparent">
       
-      {/* Background Noise & Lighting */}
+      {/* 5. NOISE TEXTURE OVERLAY (First child inside Hero section div) */}
       <div
         style={{
           position: "absolute",
           inset: 0,
           backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
-          opacity: 0.02,
+          opacity: 0.03,
           pointerEvents: "none",
           zIndex: 0,
         }}
       />
+
       <div className="absolute inset-0 bg-grid-pattern opacity-30 pointer-events-none" />
       <div 
         className="absolute -top-32 left-1/2 -translate-x-1/2 w-[850px] h-[450px] rounded-full pointer-events-none blur-[160px]"
-        style={{ background: 'radial-gradient(ellipse at center, rgba(99, 102, 241, 0.18), transparent 70%)' }}
+        style={{ background: 'radial-gradient(ellipse at center, rgba(124, 58, 237, 0.18), transparent 70%)' }}
       />
 
       {/* HERO MAIN HEADER */}
@@ -57,16 +60,16 @@ export default function Hero() {
         
         {/* Editorial Eyebrow */}
         <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/[0.03] border border-white/[0.08] text-xs font-mono text-slate-300 mb-8 shadow-sm">
-          <span className="w-2 h-2 rounded-full bg-indigo-400 animate-pulse" />
+          <span className="w-2 h-2 rounded-full bg-violet-400 animate-pulse" />
           <span className="text-slate-300 uppercase tracking-widest text-[11px]">AUTONOMOUS REVIEW RESOLUTION</span>
           <span className="text-slate-600">/</span>
-          <span className="text-indigo-400 font-mono text-[11px]">v2.4 NEURAL KERNEL</span>
+          <span className="text-violet-400 font-mono text-[11px]">v2.4 NEURAL KERNEL</span>
         </div>
 
         {/* Ultra-Large Display Headline */}
         <h1 className="text-5xl sm:text-7xl lg:text-[5.75rem] font-display font-extrabold text-white leading-[0.9] max-w-5xl">
           Never let a review <br />
-          <span className="text-transparent bg-clip-text bg-gradient-to-b from-white via-slate-200 to-indigo-300">
+          <span className="text-transparent bg-clip-text bg-gradient-to-b from-white via-slate-200 to-violet-300">
             cost you a customer.
           </span>
         </h1>
@@ -82,9 +85,16 @@ export default function Hero() {
           <a
             href="#demo"
             onClick={(e) => handleScrollTo(e, '#demo')}
-            className="btn-primary group px-8 py-3.5 rounded-full font-semibold text-white text-sm flex items-center justify-center gap-2 w-full sm:w-auto cursor-pointer"
+            onMouseEnter={() => setBtnHovered(true)}
+            onMouseLeave={() => setBtnHovered(false)}
+            style={
+              btnHovered
+                ? { boxShadow: "0 0 30px rgba(124, 58, 237, 0.6), 0 0 60px rgba(124, 58, 237, 0.2)" }
+                : {}
+            }
+            className="btn-primary group px-8 py-3.5 rounded-full font-semibold text-white text-sm flex items-center justify-center gap-2 w-full sm:w-auto cursor-pointer transition-all duration-300"
           >
-            <span>Launch Live Demo</span>
+            <span>Try Live Demo</span>
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" />
           </a>
           
@@ -170,9 +180,9 @@ export default function Hero() {
                     <span>🍕 Cold Food</span>
                     <span className="text-amber-400 font-mono text-[10px] font-bold">94%</span>
                   </div>
-                  <div className="px-2.5 py-1.5 rounded-md bg-indigo-500/10 border border-indigo-500/20 text-xs font-medium text-indigo-300 flex items-center justify-between">
+                  <div className="px-2.5 py-1.5 rounded-md bg-violet-500/10 border border-violet-500/20 text-xs font-medium text-violet-300 flex items-center justify-between">
                     <span>💰 Portion Value</span>
-                    <span className="text-indigo-400 font-mono text-[10px] font-bold">81%</span>
+                    <span className="text-violet-400 font-mono text-[10px] font-bold">81%</span>
                   </div>
                 </div>
               </div>
@@ -184,14 +194,14 @@ export default function Hero() {
             </div>
 
             {/* Column 3: Synthesized Empathetic Response (5 cols) */}
-            <div className="md:col-span-5 bg-gradient-to-b from-indigo-950/30 to-black/50 rounded-xl p-4 border border-indigo-500/35 flex flex-col justify-between shadow-inner">
+            <div className="md:col-span-5 bg-gradient-to-b from-violet-950/30 to-black/50 rounded-xl p-4 border border-violet-500/35 flex flex-col justify-between shadow-inner">
               <div>
                 <div className="flex items-center justify-between mb-2.5">
-                  <div className="flex items-center gap-1.5 text-xs font-bold text-indigo-300">
-                    <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
+                  <div className="flex items-center gap-1.5 text-xs font-bold text-violet-300">
+                    <Sparkles className="w-3.5 h-3.5 text-violet-400" />
                     <span>Synthesized Owner Response</span>
                   </div>
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 font-semibold">
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-violet-500/20 text-violet-300 font-semibold">
                     Ready to Post
                   </span>
                 </div>
@@ -225,7 +235,7 @@ export default function Hero() {
         <div className="hidden sm:block h-8 w-[1px] bg-white/[0.08]" />
 
         <div className="flex flex-col">
-          <span ref={stat2.ref} className="text-3xl sm:text-4xl font-extrabold text-indigo-300 font-mono tracking-tight">
+          <span ref={stat2.ref} className="text-3xl sm:text-4xl font-extrabold text-violet-300 font-mono tracking-tight">
             {stat2.count}%
           </span>
           <span className="text-xs text-slate-400 mt-1 font-mono uppercase tracking-wider">Retention Rate</span>
