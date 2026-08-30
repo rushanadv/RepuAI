@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
-import HeroCanvas from './HeroCanvas';
-import MagneticButton from './MagneticButton';
+import ConstellationCanvas from './ConstellationCanvas';
+import DotBorderButton from './ui/DotBorderButton';
 import { useCounter } from '../hooks/useCounter';
 import { EASE } from '../lib/animations';
 
@@ -9,7 +9,7 @@ export default function Hero() {
   const prefersReduced = useReducedMotion();
   const [timeStr, setTimeStr] = useState("");
 
-  // Parallax scroll transforms for cinematic text rise (Fix 8)
+  // Parallax scroll transforms for cinematic text rise
   const { scrollY } = useScroll();
   const headlineY = useTransform(scrollY, [0, 500], [0, -80]);
   const subY = useTransform(scrollY, [0, 500], [0, -40]);
@@ -59,10 +59,10 @@ export default function Hero() {
   return (
     <section className="relative min-h-[100svh] w-full bg-[var(--bg)] flex flex-col justify-center items-center overflow-hidden pt-20 pb-24">
       
-      {/* FIX 1: UPGRADED HERO CANVAS BACKGROUND */}
-      <HeroCanvas />
+      {/* JOB 1: CONSTELLATION CANVAS */}
+      <ConstellationCanvas />
 
-      {/* FIX 5: HERO GRID OVERLAY (Graph paper depth) */}
+      {/* HERO GRID OVERLAY */}
       <div 
         style={{
           position: "absolute",
@@ -74,7 +74,7 @@ export default function Hero() {
         }}
       />
 
-      {/* FIX 5: RADIAL VIGNETTE (Focus attention on center) */}
+      {/* RADIAL VIGNETTE */}
       <div 
         style={{
           position: "absolute",
@@ -130,7 +130,7 @@ export default function Hero() {
       </div>
 
 
-      {/* ================= FIX 9: FLOATING REVIEW CARDS (DESKTOP ONLY) ================= */}
+      {/* FLOATING REVIEW CARDS (DESKTOP ONLY) */}
       {/* Card 1: Positive */}
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
@@ -189,7 +189,7 @@ export default function Hero() {
       </motion.div>
 
 
-      {/* ================= HERO CENTER CONTENT WITH PARALLAX (Fix 8) ================= */}
+      {/* ================= HERO CENTER CONTENT WITH PARALLAX ================= */}
       <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 text-center flex flex-col items-center">
         
         {/* PARALLAX HEADLINE BLOCK */}
@@ -227,7 +227,7 @@ export default function Hero() {
               ))}
             </div>
 
-            {/* Line 2: FIX 2 — "REVIEW" ACCENT WORD DRAMA WITH GLOW HALO */}
+            {/* Line 2: "REVIEW" ACCENT WORD DRAMA WITH GLOW HALO */}
             <div className="block my-1 sm:my-2 relative inline-block">
               {/* Pulsing Glow Halo Behind "REVIEW" */}
               <motion.div
@@ -310,47 +310,39 @@ export default function Hero() {
             initial={{ opacity: 0, y: prefersReduced ? 0 : 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 1.4, ease: EASE }}
-            className="mt-9 flex flex-col sm:flex-row gap-3 justify-center items-center w-full sm:w-auto"
+            className="mt-9 flex flex-col sm:flex-row gap-4 justify-center items-center w-full sm:w-auto"
           >
-            <MagneticButton
-              onClick={(e) => handleScrollTo(e, '#demo')}
-              className="bg-[var(--accent)] hover:bg-violet-600 text-white px-7 py-3.5 rounded-[6px] font-semibold text-sm tracking-[0.02em] shadow-lg flex items-center justify-center gap-2 cursor-pointer w-full sm:w-auto"
-            >
-              <span>Analyze a Review →</span>
-            </MagneticButton>
+            {/* JOB 2: DOT BORDER BUTTON FOR PRIMARY CTA */}
+            <div className="dbb-wrapper flex justify-center">
+              <DotBorderButton onClick={(e) => handleScrollTo(e, '#demo')}>
+                Analyze a Review
+              </DotBorderButton>
+            </div>
 
-            {/* FIX 3: GHOST SECONDARY BUTTON WITH ANIMATED DOWN ARROW */}
+            {/* GHOST SECONDARY BUTTON WITH ANIMATED DOWN ARROW */}
             <a
               href="#how-it-works"
               onClick={(e) => handleScrollTo(e, '#how-it-works')}
               className="group text-[rgba(255,255,255,0.5)] hover:text-[rgba(255,255,255,0.85)] px-7 py-3.5 text-sm tracking-[0.02em] font-medium transition-colors flex items-center gap-2 cursor-pointer w-full sm:w-auto justify-center"
             >
               <span>See How It Works</span>
-              <motion.span 
-                className="inline-block"
-                variants={{
-                  hover: { y: 4 }
-                }}
-                transition={{ duration: 0.2 }}
-              >
-                <span className="inline-block transition-transform duration-200 group-hover:translate-y-1">
-                  ↓
-                </span>
-              </motion.span>
+              <span className="inline-block transition-transform duration-200 group-hover:translate-y-1">
+                ↓
+              </span>
             </a>
           </motion.div>
 
         </motion.div>
 
 
-        {/* ================= FIX 4: STATS ROW WITH INDIVIDUAL ACCENT COLORS ================= */}
+        {/* STATS ROW WITH INDIVIDUAL ACCENT COLORS */}
         <div className="mt-16 sm:mt-20 pt-8 border-t border-[var(--border)] w-full max-w-3xl flex flex-wrap justify-between items-center gap-6">
           
           {/* Stat 1: Authoritative White (#f0f0f0) */}
           <motion.div 
             initial={{ opacity: 0, y: 20, scale: 0.8 }}
             whileInView={{ opacity: 1, y: 0, scale: 1 }}
-            viewport={{ once: true, margin: "-100px" }}
+            viewport={{ once: true, margin: "-90px" }}
             transition={{ duration: 0.6, delay: 0, type: "spring", stiffness: 200, damping: 20 }}
             className="flex flex-col text-left"
           >
@@ -369,7 +361,7 @@ export default function Hero() {
           <motion.div 
             initial={{ opacity: 0, y: 20, scale: 0.8 }}
             whileInView={{ opacity: 1, y: 0, scale: 1 }}
-            viewport={{ once: true, margin: "-100px" }}
+            viewport={{ once: true, margin: "-90px" }}
             transition={{ duration: 0.6, delay: 0.1, type: "spring", stiffness: 200, damping: 20 }}
             className="flex flex-col text-left"
           >
@@ -388,7 +380,7 @@ export default function Hero() {
           <motion.div 
             initial={{ opacity: 0, y: 20, scale: 0.8 }}
             whileInView={{ opacity: 1, y: 0, scale: 1 }}
-            viewport={{ once: true, margin: "-100px" }}
+            viewport={{ once: true, margin: "-90px" }}
             transition={{ duration: 0.6, delay: 0.2, type: "spring", stiffness: 200, damping: 20 }}
             className="flex flex-col text-left"
           >
@@ -407,7 +399,7 @@ export default function Hero() {
           <motion.div 
             initial={{ opacity: 0, y: 20, scale: 0.8 }}
             whileInView={{ opacity: 1, y: 0, scale: 1 }}
-            viewport={{ once: true, margin: "-100px" }}
+            viewport={{ once: true, margin: "-90px" }}
             transition={{ duration: 0.6, delay: 0.3, type: "spring", stiffness: 200, damping: 20 }}
             className="flex flex-col text-left"
           >

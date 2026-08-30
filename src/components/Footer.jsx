@@ -1,6 +1,18 @@
 import React from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { fadeUp, getVariants } from '../lib/animations';
+import { EASE } from '../lib/animations';
+
+const VIEWPORT = { once: true, margin: "-90px" };
+
+const stagger = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.08, delayChildren: 0.05 } }
+};
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: EASE } }
+};
 
 export default function Footer() {
   const prefersReduced = useReducedMotion();
@@ -11,14 +23,14 @@ export default function Footer() {
         
         {/* TOP ROW */}
         <motion.div
+          variants={stagger}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          variants={getVariants(fadeUp, prefersReduced)}
+          viewport={VIEWPORT}
           className="flex flex-col md:flex-row justify-between items-start gap-12"
         >
           {/* Brand Left */}
-          <div className="max-w-sm">
+          <motion.div variants={fadeUp} className="max-w-sm">
             <h3 className="text-[32px] font-display font-bold tracking-[-0.03em] text-[var(--text-1)] mb-2">
               REPU<span className="text-[var(--accent)]">AI</span>
             </h3>
@@ -29,13 +41,13 @@ export default function Footer() {
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
               <span>NODE CLUSTER STATUS: OPERATIONAL</span>
             </div>
-          </div>
+          </motion.div>
 
           {/* 3 Columns Links Right */}
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-10 font-mono text-[10px] tracking-[0.1em] uppercase">
             
             {/* Col 1 */}
-            <div>
+            <motion.div variants={fadeUp}>
               <span className="text-[var(--text-3)] block mb-4">
                 ARCHITECTURE
               </span>
@@ -44,10 +56,10 @@ export default function Footer() {
                 <li><a href="#how-it-works" className="hover:text-[var(--text-1)] transition-colors">SEQUENCE</a></li>
                 <li><a href="#demo" className="hover:text-[var(--text-1)] transition-colors">LIVE STUDIO</a></li>
               </ul>
-            </div>
+            </motion.div>
 
             {/* Col 2 */}
-            <div>
+            <motion.div variants={fadeUp}>
               <span className="text-[var(--text-3)] block mb-4">
                 CHANNELS
               </span>
@@ -56,10 +68,10 @@ export default function Footer() {
                 <li className="hover:text-[var(--text-1)] cursor-pointer transition-colors">ZOMATO / SWIGGY</li>
                 <li className="hover:text-[var(--text-1)] cursor-pointer transition-colors">AMAZON STORE</li>
               </ul>
-            </div>
+            </motion.div>
 
             {/* Col 3 */}
-            <div>
+            <motion.div variants={fadeUp}>
               <span className="text-[var(--text-3)] block mb-4">
                 PLATFORM
               </span>
@@ -68,7 +80,7 @@ export default function Footer() {
                 <li className="hover:text-[var(--text-1)] cursor-pointer transition-colors">API SPECS</li>
                 <li className="hover:text-[var(--text-1)] cursor-pointer transition-colors">PRIVACY TERMS</li>
               </ul>
-            </div>
+            </motion.div>
 
           </div>
         </motion.div>

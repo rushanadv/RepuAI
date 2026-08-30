@@ -1,7 +1,31 @@
 import React from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { ArrowUpRight } from 'lucide-react';
-import { fadeUp, getVariants, EASE } from '../lib/animations';
+import { EASE } from '../lib/animations';
+
+const VIEWPORT = { once: true, margin: "-90px" };
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: EASE } }
+};
+
+const slideLeft = {
+  hidden: { opacity: 0, x: -60 },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.8, ease: EASE } }
+};
+
+const slideRight = {
+  hidden: { opacity: 0, x: 60 },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.8, ease: EASE } }
+};
+
+const clipWipe = {
+  hidden: { clipPath: "inset(0 100% 0 0)" },
+  visible: (i) => ({
+    clipPath: "inset(0 0% 0 0)",
+    transition: { duration: 0.85, delay: i * 0.12, ease: EASE }
+  })
+};
 
 export default function AnalyticsDashboard() {
   const prefersReduced = useReducedMotion();
@@ -44,9 +68,25 @@ export default function AnalyticsDashboard() {
     <section id="analytics" className="relative py-28 sm:py-36 px-6 sm:px-8 bg-[var(--bg)] border-t border-[var(--border)] overflow-hidden">
       <div className="max-w-6xl mx-auto">
         
-        {/* Top Section Label */}
-        <div className="font-mono text-[10px] text-[var(--text-2)] tracking-[0.2em] uppercase mb-16">
-          // 02 — INSIGHTS & TELEMETRY
+        {/* Top Section Label with Accent Border */}
+        <div className="relative pl-3 mb-16">
+          <motion.span
+            initial={{ scaleY: 0 }}
+            whileInView={{ scaleY: 1 }}
+            viewport={VIEWPORT}
+            transition={{ duration: 0.6, ease: EASE }}
+            style={{ transformOrigin: "top" }}
+            className="absolute left-0 top-0 w-[2px] h-full bg-[var(--accent)]"
+          />
+          <motion.p
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={VIEWPORT}
+            className="font-mono text-[10px] text-[var(--text-2)] tracking-[0.2em] uppercase"
+          >
+            02 — INSIGHTS & TELEMETRY
+          </motion.p>
         </div>
 
         {/* ================= PART 1: Full-Width Sentiment Breakdown ================= */}
@@ -71,8 +111,8 @@ export default function AnalyticsDashboard() {
                 <motion.div
                   initial={{ width: "0%" }}
                   whileInView={{ width: "58%" }}
-                  viewport={{ once: true, margin: "-100px" }}
-                  transition={{ duration: prefersReduced ? 0.01 : 1.2, ease: EASE }}
+                  viewport={VIEWPORT}
+                  transition={{ duration: 1.3, ease: EASE, delay: 0 }}
                   className="h-full bg-emerald-400"
                 />
               </div>
@@ -92,8 +132,8 @@ export default function AnalyticsDashboard() {
                 <motion.div
                   initial={{ width: "0%" }}
                   whileInView={{ width: "22%" }}
-                  viewport={{ once: true, margin: "-100px" }}
-                  transition={{ duration: prefersReduced ? 0.01 : 1.2, delay: prefersReduced ? 0 : 0.15, ease: EASE }}
+                  viewport={VIEWPORT}
+                  transition={{ duration: 1.3, delay: 0.15, ease: EASE }}
                   className="h-full bg-amber-400"
                 />
               </div>
@@ -113,8 +153,8 @@ export default function AnalyticsDashboard() {
                 <motion.div
                   initial={{ width: "0%" }}
                   whileInView={{ width: "20%" }}
-                  viewport={{ once: true, margin: "-100px" }}
-                  transition={{ duration: prefersReduced ? 0.01 : 1.2, delay: prefersReduced ? 0 : 0.3, ease: EASE }}
+                  viewport={VIEWPORT}
+                  transition={{ duration: 1.3, delay: 0.3, ease: EASE }}
                   className="h-full bg-rose-500"
                 />
               </div>
@@ -123,18 +163,32 @@ export default function AnalyticsDashboard() {
           </div>
         </div>
 
-        {/* ================= PART 2: 2-Column Split (Defect Ranking & Urgent Queue) ================= */}
+        {/* ================= PART 2: 2-Column Split ================= */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-14 lg:gap-16 items-start border-t border-[var(--border)] pt-16">
           
-          {/* LEFT (7 Cols): Numbered 01-05 Defect Ranking */}
-          <div className="lg:col-span-7">
+          {/* LEFT (7 Cols): Numbered Defect Ranking with slideLeft */}
+          <motion.div 
+            variants={slideLeft}
+            initial="hidden"
+            whileInView="visible"
+            viewport={VIEWPORT}
+            className="lg:col-span-7"
+          >
             <span className="font-mono text-[10px] text-[var(--text-2)] tracking-[0.15em] uppercase block mb-8">
               DEFECT CLUSTERING RANK // TOP OCCURRENCES
             </span>
 
             <div className="divide-y divide-[var(--border)] border-t border-b border-[var(--border)]">
-              {topDefects.map((item) => (
-                <div key={item.num} className="py-4 flex items-center justify-between group">
+              {topDefects.map((item, i) => (
+                <motion.div 
+                  key={item.num}
+                  variants={fadeUp}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={VIEWPORT}
+                  transition={{ delay: i * 0.1 }}
+                  className="py-4 flex items-center justify-between group cursor-default"
+                >
                   <div className="flex items-center gap-5">
                     <span className="font-mono text-[12px] text-[var(--text-3)] font-bold group-hover:text-purple-400 transition-colors">
                       {item.num}
@@ -146,13 +200,19 @@ export default function AnalyticsDashboard() {
                   <span className="font-mono text-[10px] text-[var(--text-3)]">
                     {item.count}
                   </span>
-                </div>
+                </motion.div>
               ))}
             </div>
-          </div>
+          </motion.div>
 
-          {/* RIGHT (5 Cols): Needs Attention Urgent Queue */}
-          <div className="lg:col-span-5">
+          {/* RIGHT (5 Cols): Needs Attention Urgent Queue with slideRight */}
+          <motion.div 
+            variants={slideRight}
+            initial="hidden"
+            whileInView="visible"
+            viewport={VIEWPORT}
+            className="lg:col-span-5"
+          >
             <span className="font-mono text-[10px] text-rose-400 tracking-[0.15em] uppercase flex items-center gap-2 mb-8">
               <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-ping" />
               NEEDS ATTENTION // CRITICAL ESCALATIONS
@@ -160,9 +220,14 @@ export default function AnalyticsDashboard() {
 
             <div className="space-y-4">
               {urgentReviews.map((rev, i) => (
-                <div 
+                <motion.div 
                   key={i}
-                  className="p-4 border border-[var(--border)] rounded-[4px] bg-black/40 flex flex-col gap-2.5"
+                  custom={i}
+                  variants={clipWipe}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={VIEWPORT}
+                  className="p-4 border border-[var(--border)] rounded-[4px] bg-black/40 flex flex-col gap-2.5 hover:border-white/20 transition-all"
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
@@ -189,14 +254,14 @@ export default function AnalyticsDashboard() {
                   <p className="text-[12px] text-[var(--text-2)] leading-relaxed italic line-clamp-2">
                     "{rev.snippet}"
                   </p>
-                </div>
+                </motion.div>
               ))}
             </div>
 
             <p className="font-mono text-[9px] text-[var(--text-3)] uppercase tracking-wider mt-4">
               Auto-escalated based on polarity threshold &lt; 2.0
             </p>
-          </div>
+          </motion.div>
 
         </div>
 

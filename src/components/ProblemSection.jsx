@@ -1,6 +1,23 @@
 import React from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { slideLeft, containerVariants, itemVariants, getVariants } from '../lib/animations';
+import { EASE } from '../lib/animations';
+
+const VIEWPORT = { once: true, margin: "-90px" };
+
+const stagger = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.12, delayChildren: 0.05 } }
+};
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 48 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.75, ease: EASE } }
+};
+
+const slideLeft = {
+  hidden: { opacity: 0, x: -60 },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.8, ease: EASE } }
+};
 
 export default function ProblemSection() {
   const prefersReduced = useReducedMotion();
@@ -26,12 +43,12 @@ export default function ProblemSection() {
         
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
           
-          {/* LEFT COLUMN (60% -> 7 Cols): Giant 01 & Editorial Headline */}
+          {/* LEFT COLUMN: Giant 01 & Editorial Headline */}
           <motion.div 
+            variants={slideLeft}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={getVariants(slideLeft, prefersReduced)}
+            viewport={VIEWPORT}
             className="lg:col-span-7 relative"
           >
             <div className="font-mono text-[100px] sm:text-[130px] font-bold text-[var(--text-3)] leading-[0.8] select-none opacity-40 -ml-1 sm:-ml-2">
@@ -47,18 +64,18 @@ export default function ProblemSection() {
             </p>
           </motion.div>
 
-          {/* RIGHT COLUMN (40% -> 5 Cols): 3 Stacked Problem Statements with Stagger */}
+          {/* RIGHT COLUMN: 3 Stacked Problem Statements */}
           <motion.div
-            variants={containerVariants}
+            variants={stagger}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
+            viewport={VIEWPORT}
             className="lg:col-span-5 space-y-8 pt-4 lg:pt-8"
           >
             {problems.map((problem, i) => (
               <motion.div
                 key={i}
-                variants={itemVariants}
+                variants={fadeUp}
                 className="pt-5 border-t border-[var(--border)]"
               >
                 <h3 className="text-[14px] font-bold text-[var(--text-1)] mb-2 font-display">

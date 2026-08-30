@@ -4,6 +4,13 @@ import { CheckCircle2 } from 'lucide-react';
 import MagneticButton from './MagneticButton';
 import { EASE } from '../lib/animations';
 
+const VIEWPORT = { once: true, margin: "-90px" };
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.7, delay: 0.6, ease: EASE } }
+};
+
 export default function CTASection() {
   const prefersReduced = useReducedMotion();
   const [email, setEmail] = useState('');
@@ -26,10 +33,16 @@ export default function CTASection() {
   return (
     <section className="relative min-h-[100svh] w-full bg-[var(--bg)] border-t border-[var(--border)] flex flex-col justify-center items-center px-6 sm:px-8 overflow-hidden py-24">
       
-      {/* Giant Watermark 01 Behind */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-mono font-bold text-[clamp(200px,28vw,420px)] text-white/[0.018] select-none pointer-events-none z-0 leading-none">
+      {/* Giant Watermark 01 with Scale/Opacity Animation */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.7 }}
+        whileInView={{ opacity: 0.018, scale: 1 }}
+        viewport={VIEWPORT}
+        transition={{ duration: 1.5, ease: EASE }}
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-mono font-bold text-[clamp(200px,28vw,420px)] text-white select-none pointer-events-none z-0 leading-none"
+      >
         01
-      </div>
+      </motion.div>
 
       <div className="relative z-10 max-w-4xl mx-auto text-center flex flex-col items-center">
         
@@ -38,7 +51,7 @@ export default function CTASection() {
           // 03 — EDITORIAL FINALE
         </div>
 
-        {/* Word-by-Word Reveal Headline */}
+        {/* Word-by-Word Reveal Headline (Faster 0.04s stagger) */}
         <h2 className="text-[clamp(48px,7vw,100px)] font-display font-bold text-[var(--text-1)] tracking-[-0.04em] leading-[0.92] select-none">
           {/* Line 1 */}
           <div className="block">
@@ -48,10 +61,10 @@ export default function CTASection() {
                   style={{ display: "inline-block" }}
                   initial={{ y: prefersReduced ? "0%" : "115%" }}
                   whileInView={{ y: "0%" }}
-                  viewport={{ once: true, margin: "-100px" }}
+                  viewport={VIEWPORT}
                   transition={{
-                    duration: prefersReduced ? 0.01 : 0.7,
-                    delay: prefersReduced ? 0 : i * 0.05,
+                    duration: prefersReduced ? 0.01 : 0.6,
+                    delay: prefersReduced ? 0 : i * 0.04,
                     ease: EASE,
                   }}
                 >
@@ -69,10 +82,10 @@ export default function CTASection() {
                   style={{ display: "inline-block" }}
                   initial={{ y: prefersReduced ? "0%" : "115%" }}
                   whileInView={{ y: "0%" }}
-                  viewport={{ once: true, margin: "-100px" }}
+                  viewport={VIEWPORT}
                   transition={{
-                    duration: prefersReduced ? 0.01 : 0.7,
-                    delay: prefersReduced ? 0 : (line1.length + i) * 0.05,
+                    duration: prefersReduced ? 0.01 : 0.6,
+                    delay: prefersReduced ? 0 : (line1.length + i) * 0.04,
                     ease: EASE,
                   }}
                   className={i === line2.length - 1 ? "text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-violet-400 to-indigo-300" : ""}
@@ -95,11 +108,11 @@ export default function CTASection() {
             {!submitted ? (
               <motion.form
                 key="form"
-                initial={{ opacity: 0, y: 15 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                variants={fadeUp}
+                initial="hidden"
+                whileInView="visible"
                 exit={{ opacity: 0, scale: 0.95 }}
-                viewport={{ once: true, margin: "-80px" }}
-                transition={{ duration: 0.5 }}
+                viewport={VIEWPORT}
                 onSubmit={handleSubmit}
                 className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full"
               >
@@ -125,8 +138,8 @@ export default function CTASection() {
             ) : (
               <motion.div
                 key="success"
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
+                initial={{ opacity: 0, scale: 0.85, y: 10 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
                 transition={{ type: "spring", stiffness: 200 }}
                 className="p-4 rounded-[4px] border border-emerald-500/30 bg-emerald-500/[0.05] text-emerald-400 font-mono text-xs flex items-center justify-center gap-2"
               >

@@ -3,6 +3,28 @@ import { motion, useReducedMotion } from 'framer-motion';
 import GlowCard from './GlowCard';
 import { EASE } from '../lib/animations';
 
+const VIEWPORT = { once: true, margin: "-90px" };
+
+const stagger = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.12, delayChildren: 0.05 } }
+};
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: EASE } }
+};
+
+const slideLeft = {
+  hidden: { opacity: 0, x: -60 },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.8, ease: EASE } }
+};
+
+const slideRight = {
+  hidden: { opacity: 0, x: 60 },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.8, ease: EASE } }
+};
+
 export default function FeaturesSection() {
   const prefersReduced = useReducedMotion();
 
@@ -70,16 +92,42 @@ export default function FeaturesSection() {
     <section id="features" className="relative py-28 sm:py-36 px-6 sm:px-8 bg-[var(--bg)] border-t border-[var(--border)] overflow-hidden">
       <div className="max-w-6xl mx-auto">
         
-        {/* Section Top Label */}
-        <div className="font-mono text-[10px] text-[var(--text-2)] tracking-[0.2em] uppercase mb-16">
-          // CAPABILITY MATRIX — 04 CORE ENGINES
-        </div>
+        {/* Section Top Label + Headline with Stagger */}
+        <motion.div
+          variants={stagger}
+          initial="hidden"
+          whileInView="visible"
+          viewport={VIEWPORT}
+          className="relative pl-3 mb-16"
+        >
+          <motion.span
+            initial={{ scaleY: 0 }}
+            whileInView={{ scaleY: 1 }}
+            viewport={VIEWPORT}
+            transition={{ duration: 0.6, ease: EASE }}
+            style={{ transformOrigin: "top" }}
+            className="absolute left-0 top-0 w-[2px] h-full bg-[var(--accent)]"
+          />
+          <motion.p variants={fadeUp} className="font-mono text-[10px] text-[var(--text-2)] tracking-[0.2em] uppercase mb-2">
+            CAPABILITY MATRIX — 04 CORE ENGINES
+          </motion.p>
+          <motion.h2 variants={fadeUp} className="text-[clamp(28px,3.5vw,48px)] font-display font-bold text-[var(--text-1)] tracking-[-0.03em] leading-tight">
+            High-Precision Neural Instruments
+          </motion.h2>
+        </motion.div>
 
         {/* Asymmetric Hairline Grid */}
         <div className="bg-[var(--border)] p-[1px] rounded-[6px] grid grid-cols-1 lg:grid-cols-12 gap-[1px]">
           
           {/* ================= PANEL A: Large Left (7 Cols, 2 Rows) ================= */}
-          <div className="lg:col-span-7 bg-[var(--bg-2)] flex flex-col justify-between overflow-hidden">
+          <motion.div 
+            variants={slideLeft}
+            initial="hidden"
+            whileInView="visible"
+            viewport={VIEWPORT}
+            whileHover={{ y: -4, transition: { duration: 0.25 } }}
+            className="lg:col-span-7 bg-[var(--bg-2)] flex flex-col justify-between overflow-hidden"
+          >
             <GlowCard className="p-8 sm:p-12 h-full flex flex-col justify-between">
               <div>
                 <span className="font-mono text-[9px] text-[var(--text-3)] tracking-widest uppercase block mb-3">
@@ -123,13 +171,20 @@ export default function FeaturesSection() {
                 </div>
               </div>
             </GlowCard>
-          </div>
+          </motion.div>
 
           {/* ================= RIGHT COLUMN (5 Cols, 2 Rows Stacked) ================= */}
           <div className="lg:col-span-5 grid grid-rows-2 gap-[1px] bg-[var(--border)]">
             
             {/* PANEL B: Top Right (Smart Issue Tagging) */}
-            <div className="bg-[var(--bg-2)] overflow-hidden">
+            <motion.div 
+              variants={slideRight}
+              initial="hidden"
+              whileInView="visible"
+              viewport={VIEWPORT}
+              whileHover={{ y: -4, transition: { duration: 0.25 } }}
+              className="bg-[var(--bg-2)] overflow-hidden"
+            >
               <GlowCard className="p-8 sm:p-10 h-full flex flex-col justify-between">
                 <div>
                   <span className="font-mono text-[9px] text-[var(--text-3)] tracking-widest uppercase block mb-2">
@@ -145,14 +200,14 @@ export default function FeaturesSection() {
                   </p>
                 </div>
 
-                {/* Dynamic Typing Tag Visual */}
+                {/* Dynamic Typing Tag Visual with Spring Entrance */}
                 <div className="space-y-1.5 font-mono text-[11px]">
                   {visibleTags.map((tag, i) => (
                     <motion.div
                       key={tag.label + i}
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.3 }}
+                      initial={{ scale: 0.7, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      transition={{ type: "spring", stiffness: 200, delay: i * 0.08 }}
                       className="flex items-center justify-between p-2 rounded-[4px] bg-black/40 border border-[var(--border)]"
                     >
                       <span className="text-slate-200">{tag.label}</span>
@@ -161,10 +216,17 @@ export default function FeaturesSection() {
                   ))}
                 </div>
               </GlowCard>
-            </div>
+            </motion.div>
 
             {/* PANEL C: Bottom Right (Urgency Flagging) */}
-            <div className="bg-[var(--bg-2)] overflow-hidden">
+            <motion.div 
+              variants={slideRight}
+              initial="hidden"
+              whileInView="visible"
+              viewport={VIEWPORT}
+              whileHover={{ y: -4, transition: { duration: 0.25 } }}
+              className="bg-[var(--bg-2)] overflow-hidden"
+            >
               <GlowCard className="p-8 sm:p-10 h-full flex flex-col justify-between">
                 <div>
                   <span className="font-mono text-[9px] text-[var(--text-3)] tracking-widest uppercase block mb-2">
@@ -180,18 +242,26 @@ export default function FeaturesSection() {
                   </p>
                 </div>
 
-                {/* Minimal Alert UI */}
+                {/* Minimal Alert UI with Continuous Pulse */}
                 <div className="p-3.5 rounded-[4px] border border-rose-500/30 bg-rose-500/[0.04]">
-                  <div className="flex items-center gap-2 font-mono text-[11px] text-rose-300 font-bold">
-                    <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping" />
+                  <motion.div 
+                    animate={{ opacity: [0.6, 1, 0.6] }}
+                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                    className="flex items-center gap-2 font-mono text-[11px] text-rose-300 font-bold"
+                  >
+                    <motion.span 
+                      animate={{ scale: [1, 1.4, 1] }}
+                      transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                      className="w-2 h-2 rounded-full bg-rose-500" 
+                    />
                     <span>HIGH PRIORITY — Refund demand detected</span>
-                  </div>
+                  </motion.div>
                   <p className="text-[10px] font-mono text-slate-400 mt-1">
                     Leadership SMS alert triggered in 1.4s
                   </p>
                 </div>
               </GlowCard>
-            </div>
+            </motion.div>
 
           </div>
 
@@ -214,7 +284,7 @@ export default function FeaturesSection() {
                   </p>
                 </div>
 
-                {/* Horizontal Minimal Hairline Bar Chart */}
+                {/* Horizontal Minimal Hairline Bar Chart with Staggered Widths */}
                 <div className="lg:col-span-7 space-y-4 font-mono text-[11px]">
                   
                   {/* Row 1 */}
@@ -227,8 +297,8 @@ export default function FeaturesSection() {
                       <motion.div
                         initial={{ width: "0%" }}
                         whileInView={{ width: "78%" }}
-                        viewport={{ once: true, margin: "-100px" }}
-                        transition={{ duration: prefersReduced ? 0.01 : 1.1, ease: EASE }}
+                        viewport={VIEWPORT}
+                        transition={{ duration: 1.4, ease: EASE, delay: 0.3 }}
                         className="h-full bg-[var(--accent)]"
                       />
                     </div>
@@ -244,8 +314,8 @@ export default function FeaturesSection() {
                       <motion.div
                         initial={{ width: "0%" }}
                         whileInView={{ width: "45%" }}
-                        viewport={{ once: true, margin: "-100px" }}
-                        transition={{ duration: prefersReduced ? 0.01 : 1.1, delay: prefersReduced ? 0 : 0.1, ease: EASE }}
+                        viewport={VIEWPORT}
+                        transition={{ duration: 1.4, ease: EASE, delay: 0.45 }}
                         className="h-full bg-violet-400"
                       />
                     </div>
@@ -261,8 +331,8 @@ export default function FeaturesSection() {
                       <motion.div
                         initial={{ width: "0%" }}
                         whileInView={{ width: "23%" }}
-                        viewport={{ once: true, margin: "-100px" }}
-                        transition={{ duration: prefersReduced ? 0.01 : 1.1, delay: prefersReduced ? 0 : 0.2, ease: EASE }}
+                        viewport={VIEWPORT}
+                        transition={{ duration: 1.4, ease: EASE, delay: 0.6 }}
                         className="h-full bg-cyan-400"
                       />
                     </div>

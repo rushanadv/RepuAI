@@ -7,6 +7,7 @@ import ScrollTicker from './components/ScrollTicker';
 import ProblemSection from './components/ProblemSection';
 import HowItWorks from './components/HowItWorks';
 import FeaturesSection from './components/FeaturesSection';
+import ReviewCarousel from './components/ReviewCarousel';
 import DemoSection from './components/DemoSection';
 import AnalyticsDashboard from './components/AnalyticsDashboard';
 import CTASection from './components/CTASection';
@@ -41,6 +42,7 @@ export default function App() {
         <ProblemSection />
         <HowItWorks />
         <FeaturesSection />
+        <ReviewCarousel />
         <DemoSection />
         <AnalyticsDashboard />
         <CTASection />
