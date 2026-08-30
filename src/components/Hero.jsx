@@ -48,8 +48,8 @@ export default function Hero() {
     }
   };
 
-  const headlineRow1 = "Never let a review".split(" ");
-  const headlineRow2 = "cost you a customer.".split(" ");
+  const headlineRow1 = "Never Let a Review".split(" ");
+  const headlineRow2 = "Go Unanswered.".split(" ");
 
   return (
     <section 
