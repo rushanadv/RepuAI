@@ -15,26 +15,8 @@ export default function App() {
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            e.target.classList.add('visible');
-          }
-        });
-      },
-      { threshold: 0.15 }
-    );
-
-    const elements = document.querySelectorAll('.fade-in-section');
-    elements.forEach((el) => observer.observe(el));
-
-    return () => observer.disconnect();
-  }, []);
-
   return (
-    <div className="min-h-screen bg-[#080810] text-[#f1f5f9] flex flex-col font-['Inter',sans-serif] relative selection:bg-purple-500/30 selection:text-white">
+    <div className="min-h-screen bg-[#080808] text-[#f0f0f0] font-['Space_Grotesk',sans-serif] flex flex-col relative selection:bg-purple-600/30 selection:text-white">
       {/* Scroll Progress Bar at very top */}
       <motion.div
         style={{
@@ -43,8 +25,8 @@ export default function App() {
           top: 0,
           left: 0,
           right: 0,
-          height: "2px",
-          background: "linear-gradient(90deg, #7c3aed, #06b6d4)",
+          height: "1px",
+          background: "var(--accent)",
           transformOrigin: "0%",
           zIndex: 9999,
         }}

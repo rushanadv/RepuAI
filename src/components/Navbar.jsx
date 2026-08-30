@@ -1,31 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { motion, useScroll } from 'framer-motion';
-import { Sparkles, Menu, X, ChevronRight } from 'lucide-react';
 
 export default function Navbar() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { scrollY } = useScroll();
 
   useEffect(() => {
     return scrollY.onChange((latest) => {
-      setScrolled(latest > 60);
+      setScrolled(latest > 40);
     });
   }, [scrollY]);
 
   const navLinks = [
-    { name: 'Features', href: '#features' },
-    { name: 'Workflow', href: '#how-it-works' },
-    { name: 'Live Demo', href: '#demo' },
-    { name: 'Analytics', href: '#analytics' },
+    { name: 'FEATURES', href: '#features' },
+    { name: 'WORKFLOW', href: '#how-it-works' },
+    { name: 'DEMO', href: '#demo' },
+    { name: 'ANALYTICS', href: '#analytics' },
   ];
 
   const handleScrollTo = (e, href) => {
     e.preventDefault();
-    setMobileMenuOpen(false);
     const element = document.querySelector(href);
     if (element) {
-      const offset = 90;
+      const offset = 60;
       const elementPosition = element.getBoundingClientRect().top;
       const offsetPosition = elementPosition + window.pageYOffset - offset;
       window.scrollTo({
@@ -35,110 +32,73 @@ export default function Navbar() {
     }
   };
 
-  return (
-    <header className="fixed top-3 sm:top-5 left-0 right-0 z-50 flex justify-center px-4 pointer-events-none">
-      <motion.nav 
-        animate={{
-          height: scrolled ? 58 : 68,
-          backgroundColor: scrolled ? "rgba(8, 8, 16, 0.92)" : "rgba(11, 11, 18, 0.6)",
-          backdropFilter: scrolled ? "blur(20px)" : "blur(8px)",
-          borderColor: scrolled ? "rgba(255, 255, 255, 0.15)" : "rgba(255, 255, 255, 0.08)",
-        }}
-        transition={{ duration: 0.3, ease: "easeOut" }}
-        className="pointer-events-auto w-full max-w-4xl rounded-full border px-4 sm:px-6 flex items-center justify-between shadow-[0_15px_35px_-10px_rgba(0,0,0,0.8),0_0_20px_rgba(124,58,237,0.1)]"
-      >
-        {/* Brand Logo */}
-        <motion.a 
-          href="#" 
-          animate={{ scale: scrolled ? 0.92 : 1 }}
-          transition={{ duration: 0.3, ease: "easeOut" }}
-          className="flex items-center gap-2.5 group"
-        >
-          <div className="w-8 h-8 rounded-full bg-violet-500/10 border border-violet-500/30 flex items-center justify-center text-violet-400 group-hover:border-violet-400/60 group-hover:scale-105 transition-all duration-300">
-            <Sparkles className="w-4 h-4 text-violet-400" />
-          </div>
-          <span className="text-base font-bold tracking-tight text-white flex items-center">
-            Repu<span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-300 via-purple-300 to-cyan-300 ml-0.5 font-black">AI</span>
-          </span>
-        </motion.a>
+  const marqueeText = "SENTIMENT ANALYSIS — REVIEW INTELLIGENCE — PATTERN DETECTION — RESPONSE DRAFTING — ";
 
-        {/* Desktop Navigation Links with animated sliding underline */}
-        <div className="hidden md:flex items-center gap-1 bg-white/[0.02] border border-white/[0.05] p-1 rounded-full">
+  return (
+    <motion.header
+      animate={{
+        backgroundColor: scrolled ? "rgba(8, 8, 8, 0.92)" : "rgba(8, 8, 8, 0)",
+        borderBottomColor: scrolled ? "rgba(255, 255, 255, 0.06)" : "rgba(255, 255, 255, 0)",
+        backdropFilter: scrolled ? "blur(20px)" : "blur(0px)",
+      }}
+      transition={{ duration: 0.25, ease: "easeOut" }}
+      className="fixed top-0 left-0 right-0 z-50 h-[52px] px-6 sm:px-8 border-b border-transparent flex items-center justify-between pointer-events-auto"
+    >
+      {/* LEFT CLUSTER */}
+      <div className="flex items-center gap-4 sm:gap-6 z-20">
+        <a 
+          href="#" 
+          className="font-display font-bold text-[15px] tracking-[-0.02em] text-white hover:text-purple-300 transition-colors"
+        >
+          REPU<span className="text-[var(--accent)] font-extrabold ml-0.5">AI</span>
+        </a>
+
+        <div className="h-4 w-[1px] bg-[var(--border)] hidden sm:block" />
+
+        <div className="hidden sm:flex items-center gap-2 font-mono text-[10px] text-[var(--text-2)] tracking-wider">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+          <span>AI ACTIVE</span>
+        </div>
+      </div>
+
+      {/* CENTER MARQUEE TEXT (Absolute Centered) */}
+      <div className="hidden lg:block absolute left-1/2 -translate-x-1/2 max-w-sm xl:max-w-md overflow-hidden pointer-events-none z-10 opacity-70">
+        <div className="animate-marquee font-mono text-[9px] text-[var(--text-3)] whitespace-nowrap tracking-widest uppercase">
+          <span>{marqueeText}</span>
+          <span>{marqueeText}</span>
+          <span>{marqueeText}</span>
+          <span>{marqueeText}</span>
+        </div>
+      </div>
+
+      {/* RIGHT CLUSTER */}
+      <div className="flex items-center gap-4 sm:gap-5 z-20">
+        <nav className="hidden md:flex items-center gap-5">
           {navLinks.map((link) => (
             <a
               key={link.name}
               href={link.href}
               onClick={(e) => handleScrollTo(e, link.href)}
-              className="relative px-3.5 py-1 text-xs font-medium text-slate-300 hover:text-white transition-colors duration-200 group"
+              className="relative py-1 font-mono text-[10px] tracking-[0.1em] text-[var(--text-2)] hover:text-[var(--text-1)] transition-colors duration-200 group"
             >
               <span>{link.name}</span>
-              <span className="absolute bottom-0 left-3.5 right-3.5 h-[1.5px] bg-gradient-to-r from-violet-500 to-cyan-400 scale-x-0 group-hover:scale-x-100 transition-transform duration-250 ease-out origin-left rounded-full" />
+              <span className="absolute bottom-0 left-0 w-full h-[1px] bg-[var(--accent)] scale-x-0 group-hover:scale-x-100 transition-transform duration-250 ease-out origin-left" />
             </a>
           ))}
-        </div>
+        </nav>
 
-        {/* Desktop CTA */}
-        <div className="hidden md:flex items-center gap-3">
-          <div className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-[11px] font-medium text-emerald-400">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            <span>v2.4 Live</span>
-          </div>
-          
-          <motion.a
-            href="#demo"
-            onClick={(e) => handleScrollTo(e, '#demo')}
-            whileHover={{ scale: 1.04 }}
-            whileTap={{ scale: 0.97 }}
-            className="btn-primary group px-4 py-1.5 rounded-full text-xs font-semibold text-white flex items-center gap-1.5 cursor-pointer shadow-md"
-          >
-            <span>Try Live Demo</span>
-            <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform duration-200" />
-          </motion.a>
-        </div>
+        <div className="h-4 w-[1px] bg-[var(--border)] hidden md:block" />
 
-        {/* Mobile Menu Trigger */}
-        <div className="flex md:hidden items-center">
-          <button
-            type="button"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-1.5 rounded-full bg-white/5 border border-white/10 text-slate-300 hover:text-white focus:outline-none"
-            aria-label="Toggle navigation"
-          >
-            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </button>
-        </div>
-      </motion.nav>
-
-      {/* Mobile Expandable Drawer */}
-      {mobileMenuOpen && (
-        <motion.div 
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="fixed top-20 left-4 right-4 bg-[#0b0b14]/95 backdrop-blur-2xl border border-white/10 rounded-2xl p-4 shadow-2xl pointer-events-auto md:hidden"
+        <motion.a
+          href="#demo"
+          onClick={(e) => handleScrollTo(e, '#demo')}
+          whileHover={{ scale: 1.03 }}
+          whileTap={{ scale: 0.97 }}
+          className="bg-[var(--accent)] hover:bg-violet-600 text-white font-mono text-[11px] font-bold tracking-[0.05em] px-4 py-2 rounded-[4px] transition-colors shadow-sm whitespace-nowrap"
         >
-          <div className="flex flex-col space-y-1">
-            {navLinks.map((link) => (
-              <a
-                key={link.name}
-                href={link.href}
-                onClick={(e) => handleScrollTo(e, link.href)}
-                className="px-3.5 py-2 rounded-xl text-sm font-medium text-slate-300 hover:text-white hover:bg-white/5 transition-colors"
-              >
-                {link.name}
-              </a>
-            ))}
-          </div>
-          <div className="pt-3 border-t border-white/[0.08] mt-2">
-            <a
-              href="#demo"
-              onClick={(e) => handleScrollTo(e, '#demo')}
-              className="btn-primary w-full py-2.5 rounded-xl font-semibold text-white text-xs text-center block shadow-lg"
-            >
-              Try Live Demo →
-            </a>
-          </div>
-        </motion.div>
-      )}
-    </header>
+          TRY DEMO →
+        </motion.a>
+      </div>
+    </motion.header>
   );
 }

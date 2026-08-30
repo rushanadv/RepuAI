@@ -1,18 +1,33 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { 
-  Star, 
-  ArrowRight, 
-  Sparkles, 
-  CheckCircle2, 
-  Layers
-} from 'lucide-react';
-import { useCounter } from '../hooks/useCounter';
+import { ArrowRight } from 'lucide-react';
+import HeroCanvas from './HeroCanvas';
 import MagneticButton from './MagneticButton';
-import { fadeIn, fadeUp, getVariants } from '../lib/animations';
+import { useCounter } from '../hooks/useCounter';
+import { EASE } from '../lib/animations';
 
 export default function Hero() {
   const prefersReduced = useReducedMotion();
+  const [timeStr, setTimeStr] = useState("");
+
+  // Live GMT+5:30 Clock in Corner
+  useEffect(() => {
+    const updateTime = () => {
+      const now = new Date();
+      const options = {
+        timeZone: 'Asia/Kolkata',
+        hour12: false,
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      };
+      const formatted = new Intl.DateTimeFormat('en-GB', options).format(now);
+      setTimeStr(`${formatted} GMT+5:30`);
+    };
+    updateTime();
+    const interval = setInterval(updateTime, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   const stat1 = useCounter(2300000);
   const stat2 = useCounter(94);
@@ -22,7 +37,7 @@ export default function Hero() {
     e.preventDefault();
     const element = document.querySelector(id);
     if (element) {
-      const offset = 90;
+      const offset = 52;
       const elementPosition = element.getBoundingClientRect().top;
       const offsetPosition = elementPosition + window.pageYOffset - offset;
       window.scrollTo({
@@ -32,320 +47,215 @@ export default function Hero() {
     }
   };
 
-  const headlineRow1 = "Never Let a Review".split(" ");
-  const headlineRow2 = "Go Unanswered.".split(" ");
+  const line1 = "NEVER LET A".split(" ");
+  const line2 = "REVIEW".split(" ");
+  const line3 = "GO UNANSWERED".split(" ");
 
   return (
-    <section 
-      className="relative min-h-screen pt-32 sm:pt-36 pb-20 flex flex-col justify-between items-center overflow-hidden bg-transparent"
-    >
+    <section className="relative min-h-[100svh] w-full bg-[var(--bg)] flex flex-col justify-center items-center overflow-hidden pt-20 pb-28">
       
-      {/* NOISE TEXTURE OVERLAY */}
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
-          opacity: 0.03,
-          pointerEvents: "none",
-          zIndex: 0,
-        }}
-      />
+      {/* STEP 1: ANIMATED CANVAS BACKGROUND */}
+      <HeroCanvas />
 
-      <div className="absolute inset-0 bg-grid-pattern opacity-25 pointer-events-none" />
+      {/* STEP 4: RULER TICK MARKS */}
+      <div className="absolute top-[52px] left-0 w-full h-[1px] ruler-ticks pointer-events-none z-10 opacity-40">
+        <div className="relative w-full h-full">
+          {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20].map((num) => (
+            <span
+              key={num}
+              style={{ left: `${num * 80}px` }}
+              className="absolute -top-3.5 font-mono text-[7px] text-[var(--text-3)] select-none hidden sm:inline-block"
+            >
+              {num}
+            </span>
+          ))}
+        </div>
+      </div>
 
-      {/* HERO MAIN HEADER */}
-      <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 text-center flex flex-col items-center">
-        
-        {/* Eyebrow Text (Animated with fadeIn) */}
-        <motion.div 
-          initial="hidden"
-          animate="visible"
-          variants={getVariants(fadeIn, prefersReduced)}
-          className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/[0.03] border border-white/[0.08] text-xs font-mono text-slate-300 mb-8 shadow-sm"
+      {/* STEP 3: CORNER METADATA */}
+      {/* Top Left */}
+      <div className="absolute top-20 left-6 sm:left-8 font-mono text-[9px] text-[var(--text-3)] tracking-widest uppercase pointer-events-none z-10 hidden sm:block">
+        <p>V 2.4.1</p>
+        <p className="mt-0.5">REPUAI INTELLIGENCE</p>
+      </div>
+
+      {/* Top Right */}
+      <div className="absolute top-20 right-6 sm:right-8 font-mono text-[9px] text-[var(--text-3)] tracking-widest uppercase pointer-events-none z-10 hidden sm:block">
+        <p>{timeStr || "00:00:00 GMT+5:30"}</p>
+        <p className="mt-0.5 text-right text-emerald-500/80">LATENCY: 1.4s</p>
+      </div>
+
+      {/* Bottom Left: Scroll Indicator */}
+      <div className="absolute bottom-8 left-6 sm:left-8 font-mono text-[9px] text-[var(--text-3)] tracking-widest uppercase flex items-center gap-1.5 z-10">
+        <motion.span
+          animate={{ y: [0, 5, 0] }}
+          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
         >
-          <span className="w-2 h-2 rounded-full bg-violet-400 animate-pulse" />
-          <span className="text-slate-300 uppercase tracking-widest text-[11px]">AUTONOMOUS REVIEW RESOLUTION</span>
-          <span className="text-slate-600">/</span>
-          <span className="text-violet-400 font-mono text-[11px]">v2.4 NEURAL KERNEL</span>
+          ↓
+        </motion.span>
+        <span>SCROLL</span>
+      </div>
+
+      {/* Bottom Right: Copyright */}
+      <div className="absolute bottom-8 right-6 sm:right-8 font-mono text-[9px] text-[var(--text-3)] tracking-widest uppercase pointer-events-none z-10">
+        © 2026 REPUAI
+      </div>
+
+      {/* STEP 5: MAIN HEADLINE (Editorial Stacking) */}
+      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 text-center flex flex-col items-center">
+        
+        {/* Eyebrow */}
+        <motion.div
+          initial={{ opacity: 0, y: prefersReduced ? 0 : 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2, ease: EASE }}
+          className="font-mono text-[10px] text-[var(--text-2)] tracking-[0.2em] mb-6 uppercase"
+        >
+          AI-POWERED REVIEW INTELLIGENCE
         </motion.div>
 
         {/* Word-by-Word Mask Reveal Headline */}
-        <h1 className="text-5xl sm:text-7xl lg:text-[5.75rem] font-display font-extrabold text-white leading-[0.9] max-w-5xl tracking-[-0.045em] select-none">
-          <span className="block mb-2">
-            {headlineRow1.map((word, i) => (
-              <span key={i} style={{ overflow: "hidden", display: "inline-block", marginRight: "0.25em" }} className="align-bottom">
+        <h1 className="text-[clamp(52px,9vw,120px)] font-display font-bold text-[var(--text-1)] leading-[0.9] tracking-[-0.04em] select-none">
+          {/* Line 1 */}
+          <div className="block">
+            {line1.map((word, i) => (
+              <span key={i} style={{ overflow: "hidden", display: "inline-block", marginRight: "0.22em" }} className="align-bottom">
                 <motion.span
                   style={{ display: "inline-block" }}
-                  initial={{ y: prefersReduced ? "0%" : "110%" }}
+                  initial={{ y: prefersReduced ? "0%" : "115%" }}
                   animate={{ y: "0%" }}
                   transition={{
-                    duration: prefersReduced ? 0.01 : 0.7,
-                    delay: prefersReduced ? 0 : i * 0.06,
-                    ease: [0.22, 1, 0.36, 1],
+                    duration: prefersReduced ? 0.01 : 0.8,
+                    delay: prefersReduced ? 0 : 0.4 + i * 0.065,
+                    ease: EASE,
                   }}
                 >
                   {word}
                 </motion.span>
               </span>
             ))}
-          </span>
+          </div>
 
-          <span className="block text-transparent bg-clip-text bg-gradient-to-b from-white via-slate-200 to-violet-300">
-            {headlineRow2.map((word, i) => (
-              <span key={i} style={{ overflow: "hidden", display: "inline-block", marginRight: "0.25em" }} className="align-bottom">
+          {/* Line 2 (Accent Gradient) */}
+          <div className="block my-1 sm:my-2">
+            {line2.map((word, i) => (
+              <span key={i} style={{ overflow: "hidden", display: "inline-block", marginRight: "0.22em" }} className="align-bottom">
                 <motion.span
                   style={{ display: "inline-block" }}
-                  initial={{ y: prefersReduced ? "0%" : "110%" }}
+                  initial={{ y: prefersReduced ? "0%" : "115%" }}
                   animate={{ y: "0%" }}
                   transition={{
-                    duration: prefersReduced ? 0.01 : 0.7,
-                    delay: prefersReduced ? 0 : (headlineRow1.length + i) * 0.06,
-                    ease: [0.22, 1, 0.36, 1],
+                    duration: prefersReduced ? 0.01 : 0.8,
+                    delay: prefersReduced ? 0 : 0.4 + (line1.length + i) * 0.065,
+                    ease: EASE,
+                  }}
+                  className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-violet-400 to-indigo-300"
+                >
+                  {word}
+                </motion.span>
+              </span>
+            ))}
+          </div>
+
+          {/* Line 3 */}
+          <div className="block">
+            {line3.map((word, i) => (
+              <span key={i} style={{ overflow: "hidden", display: "inline-block", marginRight: "0.22em" }} className="align-bottom">
+                <motion.span
+                  style={{ display: "inline-block" }}
+                  initial={{ y: prefersReduced ? "0%" : "115%" }}
+                  animate={{ y: "0%" }}
+                  transition={{
+                    duration: prefersReduced ? 0.01 : 0.8,
+                    delay: prefersReduced ? 0 : 0.4 + (line1.length + line2.length + i) * 0.065,
+                    ease: EASE,
                   }}
                 >
                   {word}
                 </motion.span>
               </span>
             ))}
-          </span>
+          </div>
         </h1>
 
-        {/* Subheadline (opacity 0->1, y 20->0, delay 0.5s) */}
-        <motion.p 
+        {/* Subheadline */}
+        <motion.p
           initial={{ opacity: 0, y: prefersReduced ? 0 : 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: prefersReduced ? 0.01 : 0.7, delay: prefersReduced ? 0 : 0.5, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-7 text-base sm:text-lg lg:text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed font-normal"
+          transition={{ duration: 0.7, delay: 1.2, ease: EASE }}
+          className="mt-8 text-base text-[var(--text-2)] max-w-lg mx-auto font-normal leading-[1.6]"
         >
-          RepuAI continuously monitors public customer feedback, isolates operational defects, 
-          and synthesizes on-brand owner responses in under two seconds.
+          RepuAI reads every review, detects what's broken, and drafts the perfect response.
         </motion.p>
 
-        {/* CTA Buttons (fadeUp, delay 0.7s) */}
-        <motion.div 
-          initial="hidden"
-          animate="visible"
-          variants={getVariants(fadeUp, prefersReduced)}
-          custom={7}
-          className="mt-9 flex flex-col sm:flex-row gap-3.5 justify-center items-center w-full sm:w-auto"
+        {/* CTA Buttons */}
+        <motion.div
+          initial={{ opacity: 0, y: prefersReduced ? 0 : 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 1.4, ease: EASE }}
+          className="mt-9 flex flex-col sm:flex-row gap-3 justify-center items-center w-full sm:w-auto"
         >
           <MagneticButton
             onClick={(e) => handleScrollTo(e, '#demo')}
-            className="btn-primary group px-8 py-3.5 rounded-full font-semibold text-white text-sm flex items-center justify-center gap-2 w-full sm:w-auto cursor-pointer shadow-xl"
+            className="bg-[var(--accent)] hover:bg-violet-600 text-white px-7 py-3.5 rounded-[6px] font-semibold text-sm tracking-[0.02em] shadow-lg flex items-center justify-center gap-2 cursor-pointer w-full sm:w-auto"
           >
-            <span>Try Live Demo</span>
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" />
+            <span>Analyze a Review →</span>
           </MagneticButton>
-          
+
           <a
             href="#how-it-works"
             onClick={(e) => handleScrollTo(e, '#how-it-works')}
-            className="btn-secondary px-7 py-3.5 rounded-full font-medium text-slate-300 hover:text-white text-sm w-full sm:w-auto text-center"
+            className="border border-[var(--border)] hover:border-[var(--text-3)] text-[var(--text-2)] hover:text-[var(--text-1)] px-7 py-3.5 rounded-[6px] text-sm tracking-[0.02em] transition-colors w-full sm:w-auto text-center font-medium"
           >
-            How it Works
+            See How It Works
           </a>
         </motion.div>
 
-      </div>
-
-      {/* OVERSIZED COMMAND-CENTER CANVAS */}
-      <motion.div 
-        initial={{ opacity: 0, scale: 0.95, y: prefersReduced ? 0 : 40 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{ duration: prefersReduced ? 0.01 : 0.8, delay: prefersReduced ? 0 : 0.8, ease: [0.22, 1, 0.36, 1] }}
-        className="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 mt-16 perspective-1200"
-      >
-        <div className="hero-canvas studio-chassis rounded-2xl p-4 sm:p-6 overflow-hidden">
-          
-          {/* Top Hardware Bezel */}
-          <div className="flex items-center justify-between pb-3.5 mb-5 border-b border-white/[0.07]">
-            <div className="flex items-center gap-2.5">
-              <div className="flex items-center gap-1.5">
-                <div className="w-2.5 h-2.5 rounded-full bg-rose-500/90" />
-                <div className="w-2.5 h-2.5 rounded-full bg-amber-500/90" />
-                <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/90" />
-              </div>
-              <span className="text-[11px] font-mono text-slate-400 ml-2 hidden sm:inline">
-                repuai-node // live-triage.stream
-              </span>
-            </div>
-
-            <div className="flex items-center gap-3 font-mono text-[11px]">
-              <span className="flex items-center gap-1.5 text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                <span>100% Neural Sync</span>
-              </span>
-              <span className="text-slate-500 hidden md:inline">Latency: 1.4s</span>
-            </div>
+        {/* STEP 6: STATS ROW */}
+        <div className="mt-16 sm:mt-20 pt-8 border-t border-[var(--border)] w-full max-w-3xl flex flex-wrap justify-between items-center gap-6">
+          <div className="flex flex-col text-left">
+            <span ref={stat1.ref} className="text-[clamp(26px,2.5vw,36px)] font-bold text-[var(--text-1)] tracking-[-0.03em] leading-tight font-display">
+              {(stat1.count / 1000000).toFixed(1)}M+
+            </span>
+            <span className="font-mono text-[9px] text-[var(--text-2)] tracking-[0.1em] mt-1 uppercase">
+              Reviews Analyzed
+            </span>
           </div>
 
-          {/* 3-Column Layered Interactive Workflow Cards with framer-motion floating & hover */}
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-stretch">
-            
-            {/* Column 1: Floating Card 1 */}
-            <motion.div 
-              animate={prefersReduced ? {} : { y: [0, -16, 0] }}
-              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-              whileHover={{ scale: 1.03, rotate: 1 }}
-              className="md:col-span-4 bg-black/50 rounded-xl p-4 border border-rose-500/25 flex flex-col justify-between shadow-inner cursor-pointer"
-            >
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center gap-2">
-                    <span className="w-6 h-6 rounded-md bg-blue-500/20 border border-blue-500/30 text-blue-400 text-xs font-bold font-mono flex items-center justify-center">G</span>
-                    <span className="text-xs font-bold text-slate-200">Rahul M.</span>
-                  </div>
-                  <div className="flex text-rose-500">
-                    <Star className="w-3 h-3 fill-current" />
-                    <Star className="w-3 h-3 text-slate-800" />
-                    <Star className="w-3 h-3 text-slate-800" />
-                    <Star className="w-3 h-3 text-slate-800" />
-                    <Star className="w-3 h-3 text-slate-800" />
-                  </div>
-                </div>
-                <p className="text-xs text-slate-300 leading-relaxed italic bg-black/30 p-2.5 rounded-lg border border-white/[0.04]">
-                  "Ordered biryani at 7pm. It arrived at 9:15pm completely cold and the portion was half of what I expected for ₹350. Unacceptable."
-                </p>
-              </div>
+          <div className="h-8 w-[1px] bg-[var(--border)] hidden sm:block" />
 
-              <div className="mt-4 pt-3 border-t border-white/[0.06] flex items-center justify-between text-[11px] font-mono">
-                <span className="text-slate-500">Google Reviews</span>
-                <span className="text-rose-400 font-semibold">Flagged: Urgent Risk</span>
-              </div>
-            </motion.div>
-
-            {/* Column 2: Floating Card 2 */}
-            <motion.div 
-              animate={prefersReduced ? {} : { y: [0, -16, 0] }}
-              transition={{ duration: 7, delay: 1, repeat: Infinity, ease: "easeInOut" }}
-              whileHover={{ scale: 1.03, rotate: 1 }}
-              className="md:col-span-3 bg-black/40 rounded-xl p-4 border border-white/[0.07] flex flex-col justify-between cursor-pointer"
-            >
-              <div>
-                <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 block mb-2.5">
-                  Extracted Operational Entities
-                </span>
-                <div className="space-y-1.5">
-                  <div className="px-2.5 py-1.5 rounded-md bg-rose-500/10 border border-rose-500/20 text-xs font-medium text-rose-300 flex items-center justify-between">
-                    <span>⏱️ Delivery Delay</span>
-                    <span className="text-rose-400 font-mono text-[10px] font-bold">98%</span>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-md bg-amber-500/10 border border-amber-500/20 text-xs font-medium text-amber-300 flex items-center justify-between">
-                    <span>🍕 Cold Food</span>
-                    <span className="text-amber-400 font-mono text-[10px] font-bold">94%</span>
-                  </div>
-                  <div className="px-2.5 py-1.5 rounded-md bg-violet-500/10 border border-violet-500/20 text-xs font-medium text-violet-300 flex items-center justify-between">
-                    <span>💰 Portion Value</span>
-                    <span className="text-violet-400 font-mono text-[10px] font-bold">81%</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-3 pt-2.5 border-t border-white/[0.05] flex items-center justify-between text-xs font-mono">
-                <span className="text-slate-400">Sentiment Score:</span>
-                <span className="text-rose-400 font-bold">1.8 / 10</span>
-              </div>
-            </motion.div>
-
-            {/* Column 3: Floating Card 3 */}
-            <motion.div 
-              animate={prefersReduced ? {} : { y: [0, -16, 0] }}
-              transition={{ duration: 6, delay: 0.5, repeat: Infinity, ease: "easeInOut" }}
-              whileHover={{ scale: 1.03, rotate: 1 }}
-              className="md:col-span-5 bg-gradient-to-b from-violet-950/30 to-black/50 rounded-xl p-4 border border-violet-500/35 flex flex-col justify-between shadow-inner cursor-pointer"
-            >
-              <div>
-                <div className="flex items-center justify-between mb-2.5">
-                  <div className="flex items-center gap-1.5 text-xs font-bold text-violet-300">
-                    <Sparkles className="w-3.5 h-3.5 text-violet-400" />
-                    <span>Synthesized Owner Response</span>
-                  </div>
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-violet-500/20 text-violet-300 font-semibold">
-                    Ready to Post
-                  </span>
-                </div>
-                <p className="text-xs text-slate-200 leading-relaxed font-normal bg-black/60 p-3 rounded-lg border border-white/[0.06] italic">
-                  "Hi Rahul, this is unacceptable and completely misses our standard. Waiting over two hours for cold food is something we take very seriously. I've personally spoken with our dispatch manager to ensure phone coverage and would like to refund your order immediately..."
-                </p>
-              </div>
-
-              <div className="mt-3 pt-2.5 border-t border-white/[0.06] flex items-center justify-between text-[11px]">
-                <span className="text-slate-400 font-mono">Tone: Empathetic Owner</span>
-                <span className="text-emerald-400 font-semibold flex items-center gap-1">
-                  <CheckCircle2 className="w-3.5 h-3.5" /> No 'inconvenience' clichés
-                </span>
-              </div>
-            </motion.div>
-
+          <div className="flex flex-col text-left">
+            <span ref={stat2.ref} className="text-[clamp(26px,2.5vw,36px)] font-bold text-violet-300 tracking-[-0.03em] leading-tight font-display">
+              {stat2.count}%
+            </span>
+            <span className="font-mono text-[9px] text-[var(--text-2)] tracking-[0.1em] mt-1 uppercase">
+              Customer Retention
+            </span>
           </div>
 
+          <div className="h-8 w-[1px] bg-[var(--border)] hidden sm:block" />
+
+          <div className="flex flex-col text-left">
+            <span ref={stat3.ref} className="text-[clamp(26px,2.5vw,36px)] font-bold text-cyan-300 tracking-[-0.03em] leading-tight font-display">
+              {stat3.count}x
+            </span>
+            <span className="font-mono text-[9px] text-[var(--text-2)] tracking-[0.1em] mt-1 uppercase">
+              Resolution Speed
+            </span>
+          </div>
+
+          <div className="h-8 w-[1px] bg-[var(--border)] hidden sm:block" />
+
+          <div className="flex flex-col text-left">
+            <span className="text-[clamp(26px,2.5vw,36px)] font-bold text-emerald-400 tracking-[-0.03em] leading-tight font-display">
+              &lt; 2s
+            </span>
+            <span className="font-mono text-[9px] text-[var(--text-2)] tracking-[0.1em] mt-1 uppercase">
+              Neural Latency
+            </span>
+          </div>
         </div>
-      </motion.div>
 
-      {/* TELEMETRY METRIC STRIP WITH STAGGERED FADEUP */}
-      <div className="relative z-10 w-full max-w-5xl mx-auto px-4 sm:px-6 mt-16 pt-8 border-t border-white/[0.08] flex flex-wrap justify-between items-center gap-6">
-        <motion.div 
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-80px" }}
-          variants={getVariants(fadeUp, prefersReduced)}
-          custom={0}
-          className="flex flex-col"
-        >
-          <span ref={stat1.ref} className="text-3xl sm:text-4xl font-extrabold text-white font-mono tracking-tight">
-            {(stat1.count / 1000000).toFixed(1)}M+
-          </span>
-          <span className="text-xs text-slate-400 mt-1 font-mono uppercase tracking-wider">Reviews Analyzed</span>
-        </motion.div>
-
-        <div className="hidden sm:block h-8 w-[1px] bg-white/[0.08]" />
-
-        <motion.div 
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-80px" }}
-          variants={getVariants(fadeUp, prefersReduced)}
-          custom={1}
-          className="flex flex-col"
-        >
-          <span ref={stat2.ref} className="text-3xl sm:text-4xl font-extrabold text-violet-300 font-mono tracking-tight">
-            {stat2.count}%
-          </span>
-          <span className="text-xs text-slate-400 mt-1 font-mono uppercase tracking-wider">Retention Rate</span>
-        </motion.div>
-
-        <div className="hidden sm:block h-8 w-[1px] bg-white/[0.08]" />
-
-        <motion.div 
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-80px" }}
-          variants={getVariants(fadeUp, prefersReduced)}
-          custom={2}
-          className="flex flex-col"
-        >
-          <span ref={stat3.ref} className="text-3xl sm:text-4xl font-extrabold text-cyan-300 font-mono tracking-tight">
-            {stat3.count}x
-          </span>
-          <span className="text-xs text-slate-400 mt-1 font-mono uppercase tracking-wider">Turnaround Speed</span>
-        </motion.div>
-
-        <div className="hidden sm:block h-8 w-[1px] bg-white/[0.08]" />
-
-        <motion.div 
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-80px" }}
-          variants={getVariants(fadeUp, prefersReduced)}
-          custom={3}
-          className="flex flex-col"
-        >
-          <span className="text-3xl sm:text-4xl font-extrabold text-emerald-400 font-mono tracking-tight">
-            &lt; 2s
-          </span>
-          <span className="text-xs text-slate-400 mt-1 font-mono uppercase tracking-wider">Neural Latency</span>
-        </motion.div>
       </div>
 
     </section>

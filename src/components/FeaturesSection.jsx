@@ -1,351 +1,278 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { 
-  Zap, 
-  Tag, 
-  Siren, 
-  BarChart3, 
-  Copy, 
-  CheckCircle2, 
-  Cpu
-} from 'lucide-react';
-import { scaleIn, fadeUp, getVariants } from '../lib/animations';
 import GlowCard from './GlowCard';
+import { EASE } from '../lib/animations';
 
 export default function FeaturesSection() {
   const prefersReduced = useReducedMotion();
-  const [activeSentimentDemo, setActiveSentimentDemo] = useState('sarcasm');
 
-  const sentimentDemos = {
-    positive: {
-      label: '😊 Genuine Praise',
-      score: '9.6 / 10',
-      color: 'text-emerald-400',
-      border: 'border-emerald-500/30',
-      bg: 'bg-emerald-500/10',
-      snippet: '"The butter chicken was unbelievable and our waiter Priya made us feel like family. 10/10!"',
-      analysis: 'High advocacy probability (99%) • Suggested: Customer retention reward trigger'
+  // Dynamic typing tag cloud for Panel B
+  const allTags = [
+    { label: "🍕 Cold Food", confidence: "98%" },
+    { label: "⏱️ Delivery Delay", confidence: "94%" },
+    { label: "👨‍🍳 Staff Hospitality", confidence: "88%" },
+    { label: "💰 Value Ratio", confidence: "82%" },
+    { label: "📦 Damaged Package", confidence: "91%" },
+  ];
+
+  const [visibleTags, setVisibleTags] = useState(allTags.slice(0, 3));
+
+  useEffect(() => {
+    let index = 3;
+    const interval = setInterval(() => {
+      setVisibleTags((prev) => {
+        const next = [...prev];
+        next.push(allTags[index % allTags.length]);
+        if (next.length > 4) next.shift();
+        return next;
+      });
+      index++;
+    }, 2200);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const scrollingReviews = [
+    {
+      badge: "POSITIVE",
+      color: "border-l-emerald-500 text-emerald-400",
+      text: "The truffle pasta was exceptional and service was remarkably fast."
     },
-    sarcasm: {
-      label: '😐 Sarcasm / Polite Passive Complaint',
-      score: '3.8 / 10',
-      color: 'text-amber-400',
-      border: 'border-amber-500/30',
-      bg: 'bg-amber-500/10',
-      snippet: '"Loved waiting 50 minutes for cold pasta. Truly a wonderful anniversary dinner."',
-      analysis: 'High sarcasm probability (97%) • Hidden negative review isolated & escalated'
+    {
+      badge: "SARCASM / NEGATIVE",
+      color: "border-l-amber-500 text-amber-400",
+      text: "Loved waiting 50 minutes for cold soup. Truly a memorable night."
     },
-    critical: {
-      label: '😤 Severe Critical Hazard',
-      score: '1.2 / 10',
-      color: 'text-rose-400',
-      border: 'border-rose-500/30',
-      bg: 'bg-rose-500/10',
-      snippet: '"Found foreign plastic inside the meal. Refused to refund on spot. Reporting to food safety."',
-      analysis: 'Critical brand hazard • Instant founder & store manager SMS alert dispatched'
-    }
-  };
+    {
+      badge: "HIGH RISK",
+      color: "border-l-rose-500 text-rose-400",
+      text: "Found broken glass in the salad. Manager refused to speak with us."
+    },
+    // duplicated for seamless infinite scroll
+    {
+      badge: "POSITIVE",
+      color: "border-l-emerald-500 text-emerald-400",
+      text: "The truffle pasta was exceptional and service was remarkably fast."
+    },
+    {
+      badge: "SARCASM / NEGATIVE",
+      color: "border-l-amber-500 text-amber-400",
+      text: "Loved waiting 50 minutes for cold soup. Truly a memorable night."
+    },
+    {
+      badge: "HIGH RISK",
+      color: "border-l-rose-500 text-rose-400",
+      text: "Found broken glass in the salad. Manager refused to speak with us."
+    },
+  ];
 
   return (
-    <section id="features" className="relative py-32 px-4 sm:px-6 bg-[#050508] border-t border-white/[0.05] overflow-hidden">
-      
-      {/* Background ambient lighting */}
-      <div 
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[750px] h-[380px] rounded-full pointer-events-none blur-[170px]"
-        style={{ background: 'radial-gradient(circle, rgba(124, 58, 237, 0.07) 0%, transparent 70%)' }}
-      />
-
-      <div className="max-w-6xl mx-auto relative z-10">
+    <section id="features" className="relative py-28 sm:py-36 px-6 sm:px-8 bg-[var(--bg)] border-t border-[var(--border)] overflow-hidden">
+      <div className="max-w-6xl mx-auto">
         
-        {/* Editorial Section Header */}
-        <motion.div 
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-80px" }}
-          variants={getVariants(fadeUp, prefersReduced)}
-          className="max-w-3xl mb-16"
-        >
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-xs font-mono font-semibold text-violet-400 mb-6">
-            <Cpu className="w-3.5 h-3.5" />
-            <span>INSTRUMENT SUITE // NEURAL_CAPABILITIES</span>
-          </div>
+        {/* Section Top Label */}
+        <div className="font-mono text-[10px] text-[var(--text-2)] tracking-[0.2em] uppercase mb-16">
+          // CAPABILITY MATRIX — 04 CORE ENGINES
+        </div>
 
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-display font-extrabold text-white tracking-[-0.04em] leading-[0.95]">
-            Engineered as high-precision <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-violet-300">
-              software instruments.
-            </span>
-          </h2>
-          <p className="mt-6 text-base sm:text-lg text-slate-400 max-w-2xl font-normal leading-relaxed">
-            Built specifically for multi-location operators, direct-to-consumer brands, and customer-first founders.
-          </p>
-        </motion.div>
+        {/* Asymmetric Hairline Grid */}
+        <div className="bg-[var(--border)] p-[1px] rounded-[6px] grid grid-cols-1 lg:grid-cols-12 gap-[1px]">
+          
+          {/* ================= PANEL A: Large Left (7 Cols, 2 Rows) ================= */}
+          <div className="lg:col-span-7 bg-[var(--bg-2)] flex flex-col justify-between overflow-hidden">
+            <GlowCard className="p-8 sm:p-12 h-full flex flex-col justify-between">
+              <div>
+                <span className="font-mono text-[9px] text-[var(--text-3)] tracking-widest uppercase block mb-3">
+                  01 // REALTIME_SEMANTIC_RADAR
+                </span>
 
-        {/* Asymmetric Instrument Bento */}
-        <div className="space-y-6">
+                <h3 className="text-[clamp(24px,2.5vw,36px)] font-display font-bold text-[var(--text-1)] tracking-[-0.02em] leading-tight mb-4">
+                  Instant Sentiment Analysis
+                </h3>
 
-          {/* ROW 1: 70% Large Instrument + 30% Small Instrument */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-            
-            {/* BIG CARD 1 (70% -> 8 cols): Sarcasm & Semantic Dial */}
-            <motion.div 
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-80px" }}
-              variants={getVariants(scaleIn, prefersReduced)}
-              custom={0}
-              className="lg:col-span-8"
-            >
-              <GlowCard className="hairline-card p-7 sm:p-8 rounded-2xl flex flex-col justify-between group shadow-xl h-full">
-                <div>
-                  <div className="flex items-center justify-between mb-4 font-mono text-xs">
-                    <div className="flex items-center gap-2 text-cyan-400">
-                      <Zap className="w-4 h-4" />
-                      <span className="font-bold">SEMANTIC_RADAR // SUB-SURFACE_TONE</span>
-                    </div>
-                    <span className="text-slate-500">Meta LLaMA 3.3 70B</span>
-                  </div>
+                <p className="text-[14px] text-[var(--text-2)] leading-relaxed max-w-md font-normal mb-8">
+                  Deconstructs emotional polarity and sub-surface sarcasm beneath polite customer remarks in single-digit milliseconds.
+                </p>
+              </div>
 
-                  <h3 className="text-2xl sm:text-3xl font-bold text-white mb-2">
-                    Sub-Surface Tone & Sarcasm Extraction
-                  </h3>
-                  <p className="text-sm text-slate-400 max-w-xl leading-relaxed font-normal">
-                    Catches polite complaints, ironic phrasing, and hidden customer resentment that naive keyword filters miss entirely.
-                  </p>
-
-                  {/* Interactive Demo Toggles inside Instrument */}
-                  <div className="mt-6 flex flex-wrap gap-2">
-                    {Object.keys(sentimentDemos).map((key) => (
-                      <button
-                        key={key}
-                        type="button"
-                        onClick={() => setActiveSentimentDemo(key)}
-                        className={`px-3.5 py-1.5 rounded-lg text-xs font-mono font-semibold transition-all cursor-pointer ${
-                          activeSentimentDemo === key
-                            ? 'bg-violet-600/30 border border-violet-500/60 text-violet-200 shadow-md'
-                            : 'bg-black/40 border border-white/[0.06] text-slate-400 hover:text-white'
-                        }`}
+              {/* LIVE DEMO: Upward Scrolling Review Stream */}
+              <div className="mt-4 pt-6 border-t border-[var(--border)]">
+                <span className="font-mono text-[9px] text-[var(--text-3)] tracking-wider uppercase block mb-3">
+                  LIVE INGESTION BUFFER
+                </span>
+                
+                <div className="h-[160px] overflow-hidden relative">
+                  <div className="animate-scroll-up space-y-2.5">
+                    {scrollingReviews.map((rev, i) => (
+                      <div
+                        key={i}
+                        className={`p-3 bg-black/40 border border-white/[0.04] border-l-2 ${rev.color} rounded-[4px]`}
                       >
-                        {key.toUpperCase()} DEMO
-                      </button>
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="font-mono text-[9px] font-bold tracking-wider uppercase">
+                            {rev.badge}
+                          </span>
+                          <span className="font-mono text-[8px] text-[var(--text-3)]">INGESTED 1.2s AGO</span>
+                        </div>
+                        <p className="text-[12px] text-slate-300 line-clamp-1 italic">
+                          "{rev.text}"
+                        </p>
+                      </div>
                     ))}
                   </div>
                 </div>
-
-                {/* Dynamic Live Result Box */}
-                <div className="mt-6 pt-5 border-t border-white/[0.06]">
-                  <div className={`p-4 rounded-xl ${sentimentDemos[activeSentimentDemo].bg} border ${sentimentDemos[activeSentimentDemo].border}`}>
-                    <div className="flex items-center justify-between mb-2">
-                      <span className={`text-xs font-bold font-mono ${sentimentDemos[activeSentimentDemo].color}`}>
-                        {sentimentDemos[activeSentimentDemo].label}
-                      </span>
-                      <span className="text-xs font-mono font-bold text-white">
-                        Score: {sentimentDemos[activeSentimentDemo].score}
-                      </span>
-                    </div>
-                    <p className="text-xs text-slate-200 italic mb-2">
-                      {sentimentDemos[activeSentimentDemo].snippet}
-                    </p>
-                    <p className="text-[11px] text-slate-400 font-mono">
-                      ✓ {sentimentDemos[activeSentimentDemo].analysis}
-                    </p>
-                  </div>
-                </div>
-              </GlowCard>
-            </motion.div>
-
-            {/* SMALL CARD 1 (30% -> 4 cols): Smart Entity Taxonomy */}
-            <motion.div 
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-80px" }}
-              variants={getVariants(fadeUp, prefersReduced)}
-              custom={1.5}
-              className="lg:col-span-4"
-            >
-              <GlowCard className="hairline-card p-7 rounded-2xl flex flex-col justify-between group shadow-xl h-full">
-                <div>
-                  <div className="flex items-center gap-2 text-xs font-mono text-violet-400 mb-3">
-                    <Tag className="w-4 h-4" />
-                    <span className="font-bold">ENTITY_TAGGER</span>
-                  </div>
-                  <h3 className="text-xl font-bold text-white mb-2">
-                    Zero-Config Entity Tagging
-                  </h3>
-                  <p className="text-xs text-slate-400 leading-relaxed mb-6 font-normal">
-                    Extracts root cause failure modes without brittle manual rules or regex scripts.
-                  </p>
-                </div>
-
-                <div className="space-y-2 font-mono text-xs">
-                  <div className="flex items-center justify-between p-2.5 rounded-lg bg-black/50 border border-white/[0.05]">
-                    <span className="text-slate-300">🍕 Food Freshness</span>
-                    <span className="text-emerald-400 text-[11px]">98% Confidence</span>
-                  </div>
-                  <div className="flex items-center justify-between p-2.5 rounded-lg bg-black/50 border border-white/[0.05]">
-                    <span className="text-slate-300">⏱️ Courier Delay</span>
-                    <span className="text-rose-400 text-[11px]">94% Confidence</span>
-                  </div>
-                  <div className="flex items-center justify-between p-2.5 rounded-lg bg-black/50 border border-white/[0.05]">
-                    <span className="text-slate-300">👨‍🍳 Staff Hospitality</span>
-                    <span className="text-amber-400 text-[11px]">88% Confidence</span>
-                  </div>
-                </div>
-              </GlowCard>
-            </motion.div>
-
-          </div>
-
-          {/* ROW 2: 30% Small Instrument + 70% Large Instrument */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-            
-            {/* SMALL CARD 2 (30% -> 4 cols): Real-Time Urgency Triage */}
-            <motion.div 
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-80px" }}
-              variants={getVariants(fadeUp, prefersReduced)}
-              custom={2.5}
-              className="lg:col-span-4"
-            >
-              <GlowCard className="hairline-card p-7 rounded-2xl flex flex-col justify-between group shadow-xl h-full">
-                <div>
-                  <div className="flex items-center gap-2 text-xs font-mono text-rose-400 mb-3">
-                    <Siren className="w-4 h-4" />
-                    <span className="font-bold">CRISIS_TRIAGE</span>
-                  </div>
-                  <h3 className="text-xl font-bold text-white mb-2">
-                    Automated Urgency Triage
-                  </h3>
-                  <p className="text-xs text-slate-400 leading-relaxed mb-5 font-normal">
-                    Differentiates routine feedback from catastrophic public escalations in real time.
-                  </p>
-                </div>
-
-                <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/25">
-                  <div className="flex items-center gap-2 mb-1.5">
-                    <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping" />
-                    <span className="text-xs font-bold text-rose-400 font-mono">PRIORITY ESCALATION</span>
-                  </div>
-                  <p className="text-[11px] text-slate-300 leading-relaxed">
-                    SLO guaranteed: alerted to leadership Slack & mobile under 10 seconds.
-                  </p>
-                </div>
-              </GlowCard>
-            </motion.div>
-
-            {/* BIG CARD 2 (70% -> 8 cols): Macro Pattern Defect Analyzer */}
-            <motion.div 
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-80px" }}
-              variants={getVariants(scaleIn, prefersReduced)}
-              custom={1}
-              className="lg:col-span-8"
-            >
-              <GlowCard className="hairline-card p-7 sm:p-8 rounded-2xl flex flex-col justify-between group shadow-xl h-full">
-                <div>
-                  <div className="flex items-center justify-between mb-4 font-mono text-xs">
-                    <div className="flex items-center gap-2 text-violet-400">
-                      <BarChart3 className="w-4 h-4" />
-                      <span className="font-bold">MACRO_CLUSTERING // RECURRENCE_ANALYZER</span>
-                    </div>
-                    <span className="text-slate-500">Cross-Channel Synthesis</span>
-                  </div>
-
-                  <h3 className="text-2xl sm:text-3xl font-bold text-white mb-2">
-                    Macro Pattern Detection Across 100+ Reviews
-                  </h3>
-                  <p className="text-sm text-slate-400 max-w-xl leading-relaxed font-normal">
-                    Aggregates fragmented customer complaints into overarching operational themes so founders fix the kitchen line, not just write isolated apologies.
-                  </p>
-                </div>
-
-                {/* Dynamic Bar Chart Display */}
-                <div className="mt-6 pt-5 border-t border-white/[0.06] space-y-3 font-mono">
-                  <div>
-                    <div className="flex justify-between text-xs text-slate-300 mb-1">
-                      <span>Food Quality & Temperature Consistency</span>
-                      <span className="text-cyan-400 font-bold">78%</span>
-                    </div>
-                    <div className="w-full h-2 bg-white/5 rounded-full overflow-hidden">
-                      <motion.div 
-                        initial={{ width: "0%" }}
-                        whileInView={{ width: "78%" }}
-                        viewport={{ once: true, margin: "-80px" }}
-                        transition={{ duration: prefersReduced ? 0.01 : 1.2, ease: [0.22, 1, 0.36, 1] }}
-                        className="h-full bg-gradient-to-r from-cyan-500 to-violet-500 rounded-full" 
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <div className="flex justify-between text-xs text-slate-300 mb-1">
-                      <span>Wait & Delivery Duration</span>
-                      <span className="text-violet-400 font-bold">45%</span>
-                    </div>
-                    <div className="w-full h-2 bg-white/5 rounded-full overflow-hidden">
-                      <motion.div 
-                        initial={{ width: "0%" }}
-                        whileInView={{ width: "45%" }}
-                        viewport={{ once: true, margin: "-80px" }}
-                        transition={{ duration: prefersReduced ? 0.01 : 1.2, delay: prefersReduced ? 0 : 0.15, ease: [0.22, 1, 0.36, 1] }}
-                        className="h-full bg-violet-500 rounded-full" 
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <div className="flex justify-between text-xs text-slate-300 mb-1">
-                      <span>Staff Attentiveness & Hospitality</span>
-                      <span className="text-emerald-400 font-bold">23%</span>
-                    </div>
-                    <div className="w-full h-2 bg-white/5 rounded-full overflow-hidden">
-                      <motion.div 
-                        initial={{ width: "0%" }}
-                        whileInView={{ width: "23%" }}
-                        viewport={{ once: true, margin: "-80px" }}
-                        transition={{ duration: prefersReduced ? 0.01 : 1.2, delay: prefersReduced ? 0 : 0.3, ease: [0.22, 1, 0.36, 1] }}
-                        className="h-full bg-emerald-500 rounded-full" 
-                      />
-                    </div>
-                  </div>
-                </div>
-              </GlowCard>
-            </motion.div>
-
-          </div>
-
-          {/* ROW 3: Full Width Multi-Channel Bridge */}
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-80px" }}
-            variants={getVariants(fadeUp, prefersReduced)}
-            custom={2}
-          >
-            <GlowCard className="hairline-card p-6 sm:p-7 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-6 group shadow-xl">
-              <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 flex-shrink-0">
-                  <Copy className="w-5 h-5" />
-                </div>
-                <div>
-                  <h4 className="text-base font-bold text-white mb-0.5">
-                    Universal Multi-Platform Bridge
-                  </h4>
-                  <p className="text-xs text-slate-400 max-w-xl">
-                    Outputs pre-formatted, character-constrained responses ready for immediate clipboard paste or direct webhook sync to Google, Zomato, Amazon, and App Stores.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-2 font-mono">
-                <span className="text-xs px-3 py-1.5 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-medium flex items-center gap-1.5">
-                  <CheckCircle2 className="w-3.5 h-3.5" /> 100% Platform Compliant
-                </span>
               </div>
             </GlowCard>
-          </motion.div>
+          </div>
+
+          {/* ================= RIGHT COLUMN (5 Cols, 2 Rows Stacked) ================= */}
+          <div className="lg:col-span-5 grid grid-rows-2 gap-[1px] bg-[var(--border)]">
+            
+            {/* PANEL B: Top Right (Smart Issue Tagging) */}
+            <div className="bg-[var(--bg-2)] overflow-hidden">
+              <GlowCard className="p-8 sm:p-10 h-full flex flex-col justify-between">
+                <div>
+                  <span className="font-mono text-[9px] text-[var(--text-3)] tracking-widest uppercase block mb-2">
+                    02 // ZERO_CONFIG_TAXONOMY
+                  </span>
+
+                  <h3 className="text-[20px] sm:text-[22px] font-display font-bold text-[var(--text-1)] mb-2">
+                    Smart Issue Tagging
+                  </h3>
+
+                  <p className="text-[12px] text-[var(--text-2)] leading-relaxed font-normal mb-5">
+                    Clusters recurring failure modes without rigid manual keyword maintenance.
+                  </p>
+                </div>
+
+                {/* Dynamic Typing Tag Visual */}
+                <div className="space-y-1.5 font-mono text-[11px]">
+                  {visibleTags.map((tag, i) => (
+                    <motion.div
+                      key={tag.label + i}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="flex items-center justify-between p-2 rounded-[4px] bg-black/40 border border-[var(--border)]"
+                    >
+                      <span className="text-slate-200">{tag.label}</span>
+                      <span className="text-purple-400 text-[10px]">{tag.confidence}</span>
+                    </motion.div>
+                  ))}
+                </div>
+              </GlowCard>
+            </div>
+
+            {/* PANEL C: Bottom Right (Urgency Flagging) */}
+            <div className="bg-[var(--bg-2)] overflow-hidden">
+              <GlowCard className="p-8 sm:p-10 h-full flex flex-col justify-between">
+                <div>
+                  <span className="font-mono text-[9px] text-[var(--text-3)] tracking-widest uppercase block mb-2">
+                    03 // ESCALATION_SLO
+                  </span>
+
+                  <h3 className="text-[20px] sm:text-[22px] font-display font-bold text-[var(--text-1)] mb-2">
+                    Urgency Flagging
+                  </h3>
+
+                  <p className="text-[12px] text-[var(--text-2)] leading-relaxed font-normal mb-5">
+                    Isolates critical brand damage before reviews compound publicly.
+                  </p>
+                </div>
+
+                {/* Minimal Alert UI */}
+                <div className="p-3.5 rounded-[4px] border border-rose-500/30 bg-rose-500/[0.04]">
+                  <div className="flex items-center gap-2 font-mono text-[11px] text-rose-300 font-bold">
+                    <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping" />
+                    <span>HIGH PRIORITY — Refund demand detected</span>
+                  </div>
+                  <p className="text-[10px] font-mono text-slate-400 mt-1">
+                    Leadership SMS alert triggered in 1.4s
+                  </p>
+                </div>
+              </GlowCard>
+            </div>
+
+          </div>
+
+          {/* ================= PANEL D: Full Width Bottom (Pattern Detection) ================= */}
+          <div className="lg:col-span-12 bg-[var(--bg-2)] overflow-hidden">
+            <GlowCard className="p-8 sm:p-12">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                
+                <div className="lg:col-span-5">
+                  <span className="font-mono text-[9px] text-[var(--text-3)] tracking-widest uppercase block mb-2">
+                    04 // MACRO_CLUSTERING
+                  </span>
+
+                  <h3 className="text-[clamp(22px,2vw,30px)] font-display font-bold text-[var(--text-1)] tracking-[-0.02em] mb-3">
+                    Pattern Detection Across 100+ Reviews
+                  </h3>
+
+                  <p className="text-[13px] text-[var(--text-2)] leading-relaxed font-normal max-w-sm">
+                    Surfaces root-cause operational blindspots so founders fix the kitchen line rather than repeatedly issuing isolated apologies.
+                  </p>
+                </div>
+
+                {/* Horizontal Minimal Hairline Bar Chart */}
+                <div className="lg:col-span-7 space-y-4 font-mono text-[11px]">
+                  
+                  {/* Row 1 */}
+                  <div>
+                    <div className="flex justify-between text-slate-300 mb-1.5">
+                      <span>Kitchen Dispatch Delay</span>
+                      <span className="text-purple-400 font-bold">78%</span>
+                    </div>
+                    <div className="w-full h-[2px] bg-white/[0.06]">
+                      <motion.div
+                        initial={{ width: "0%" }}
+                        whileInView={{ width: "78%" }}
+                        viewport={{ once: true, margin: "-60px" }}
+                        transition={{ duration: prefersReduced ? 0.01 : 1.1, ease: EASE }}
+                        className="h-full bg-[var(--accent)]"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Row 2 */}
+                  <div>
+                    <div className="flex justify-between text-slate-300 mb-1.5">
+                      <span>Food Temperature Consistency</span>
+                      <span className="text-purple-400 font-bold">45%</span>
+                    </div>
+                    <div className="w-full h-[2px] bg-white/[0.06]">
+                      <motion.div
+                        initial={{ width: "0%" }}
+                        whileInView={{ width: "45%" }}
+                        viewport={{ once: true, margin: "-60px" }}
+                        transition={{ duration: prefersReduced ? 0.01 : 1.1, delay: prefersReduced ? 0 : 0.1, ease: EASE }}
+                        className="h-full bg-violet-400"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Row 3 */}
+                  <div>
+                    <div className="flex justify-between text-slate-300 mb-1.5">
+                      <span>Front Desk Service & Hospitality</span>
+                      <span className="text-purple-400 font-bold">23%</span>
+                    </div>
+                    <div className="w-full h-[2px] bg-white/[0.06]">
+                      <motion.div
+                        initial={{ width: "0%" }}
+                        whileInView={{ width: "23%" }}
+                        viewport={{ once: true, margin: "-60px" }}
+                        transition={{ duration: prefersReduced ? 0.01 : 1.1, delay: prefersReduced ? 0 : 0.2, ease: EASE }}
+                        className="h-full bg-cyan-400"
+                      />
+                    </div>
+                  </div>
+
+                </div>
+
+              </div>
+            </GlowCard>
+          </div>
 
         </div>
 

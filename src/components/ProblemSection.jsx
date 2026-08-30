@@ -1,152 +1,72 @@
 import React from 'react';
-import { motion } from 'framer-motion';
-import { ShieldAlert, Star } from 'lucide-react';
-import { slideLeft, slideRight } from '../lib/animations';
+import { motion, useReducedMotion } from 'framer-motion';
+import { slideLeft, fadeUp, getVariants } from '../lib/animations';
 
 export default function ProblemSection() {
-  return (
-    <section className="relative py-32 px-4 sm:px-6 bg-[#07070b] border-t border-white/[0.05] overflow-hidden">
-      
-      {/* Background ambient lighting */}
-      <div 
-        className="absolute top-1/2 left-0 -translate-y-1/2 w-[550px] h-[350px] rounded-full pointer-events-none blur-[160px]"
-        style={{ background: 'radial-gradient(circle, rgba(244, 63, 94, 0.08) 0%, transparent 70%)' }}
-      />
+  const prefersReduced = useReducedMotion();
 
-      <div className="max-w-6xl mx-auto relative z-10">
+  const problems = [
+    {
+      title: "The 72-Hour Response Void",
+      body: "Unanswered 1-star reviews linger on Google Maps and food delivery apps for days. Every passing hour costs potential new customers who silently choose competitors."
+    },
+    {
+      title: "Generic Apology Fatigue",
+      body: "Copy-pasting 'We apologize for any inconvenience' infuriates already upset customers. Generic robotic templates make your brand look careless and indifferent."
+    },
+    {
+      title: "Unseen Operational Defects",
+      body: "Individual store managers read reviews in isolation. No one connects the dots that 5 different locations experienced kitchen dispatch delays during dinner rushes."
+    }
+  ];
+
+  return (
+    <section className="relative py-28 sm:py-36 px-6 sm:px-8 bg-[var(--bg)] border-t border-[var(--border)] overflow-hidden">
+      <div className="max-w-6xl mx-auto">
         
-        {/* Asymmetric Split Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
           
-          {/* Left Editorial Anchor (5 Cols) */}
+          {/* LEFT COLUMN (60% -> 7 Cols): Giant 01 & Editorial Headline */}
           <motion.div 
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-80px" }}
-            variants={slideLeft}
-            className="lg:col-span-5 lg:sticky lg:top-28"
+            variants={getVariants(slideLeft, prefersReduced)}
+            className="lg:col-span-7 relative"
           >
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-500/10 border border-rose-500/20 text-xs font-mono font-semibold text-rose-400 mb-6">
-              <ShieldAlert className="w-3.5 h-3.5" />
-              <span>THE SILENT ATTRITION MODEL</span>
+            <div className="font-mono text-[100px] sm:text-[130px] font-bold text-[var(--text-3)] leading-[0.8] select-none opacity-40 -ml-1 sm:-ml-2">
+              01
             </div>
 
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-display font-extrabold text-white tracking-[-0.04em] leading-[0.95]">
-              Silence is the loudest message you can send.
+            <h2 className="text-[clamp(32px,4.5vw,56px)] font-display font-bold text-[var(--text-1)] tracking-[-0.03em] leading-[1.02] mt-4 max-w-xl">
+              Reviews Are Killing Your Reputation.
             </h2>
 
-            <p className="mt-6 text-base text-slate-400 leading-relaxed font-normal">
-              When a negative review goes unanswered on Google or Zomato, 84% of prospective diners and buyers conclude management is indifferent. Competitor poaching risk spikes 4.2x within six hours.
+            <p className="mt-6 text-sm text-[var(--text-2)] font-mono tracking-wide uppercase max-w-md">
+              // SILENT CUSTOMER ATTRITION IN NUMBERS
             </p>
-
-            {/* Micro Arithmetic Breakdown */}
-            <div className="mt-8 p-4 rounded-xl bg-black/60 border border-white/[0.08] space-y-3 font-mono text-xs shadow-inner">
-              <div className="flex items-center justify-between pb-2 border-b border-white/[0.05]">
-                <span className="text-slate-400">Industry Avg Response Delay:</span>
-                <span className="text-rose-400 font-bold">48 - 72 Hours</span>
-              </div>
-              <div className="flex items-center justify-between pb-2 border-b border-white/[0.05]">
-                <span className="text-slate-400">Prospective Views / 48h:</span>
-                <span className="text-slate-200">~140 Potential Buyers</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-slate-400">Revenue Impact:</span>
-                <span className="text-rose-400 font-bold">-₹42,000 / Review</span>
-              </div>
-            </div>
           </motion.div>
 
-          {/* Right: Comparative Incident Pathway (7 Cols) */}
-          <div className="lg:col-span-7 space-y-6">
-            
-            {/* Pathway 1: The Traditional Unattended Decay */}
-            <motion.div 
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-80px" }}
-              variants={slideRight}
-              custom={0}
-              whileHover={{ y: -3, transition: { duration: 0.25 } }}
-              className="hairline-card p-6 sm:p-7 rounded-2xl border-l-[3px] border-l-rose-500/80 bg-[#0c0c14]/80 shadow-lg"
-            >
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-rose-500" />
-                  <span className="text-xs font-mono font-bold uppercase tracking-wider text-rose-400">
-                    PATHWAY A // TRADITIONAL UNATTENDED DECAY
-                  </span>
-                </div>
-                <span className="text-[11px] font-mono text-rose-400/80">Permanent Churn</span>
-              </div>
-
-              <div className="space-y-3 font-mono text-xs">
-                <div className="p-3 rounded-lg bg-black/40 border border-white/[0.04] flex items-start gap-3">
-                  <span className="text-rose-400 font-bold shrink-0">T+0h</span>
-                  <p className="text-slate-300 font-sans font-normal">
-                    Customer posts 1-star review: <em className="text-slate-200">"Food was completely cold, 2-hour wait."</em>
-                  </p>
-                </div>
-
-                <div className="p-3 rounded-lg bg-black/40 border border-white/[0.04] flex items-start gap-3">
-                  <span className="text-rose-400 font-bold shrink-0">T+24h</span>
-                  <p className="text-slate-300 font-sans font-normal">
-                    Staff doesn't check notifications. 80+ local prospects search for dining options, see the unanswered complaint, and pick a competitor.
-                  </p>
-                </div>
-
-                <div className="p-3 rounded-lg bg-black/40 border border-white/[0.04] flex items-start gap-3">
-                  <span className="text-rose-400 font-bold shrink-0">T+72h</span>
-                  <p className="text-slate-300 font-sans font-normal">
-                    Copy-pasted generic reply is posted: <em className="text-slate-400">"Sorry for the inconvenience."</em> Aggravates customer further.
-                  </p>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Pathway 2: The RepuAI Autonomous Resolution Intercept */}
-            <motion.div 
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-80px" }}
-              variants={slideRight}
-              custom={1}
-              whileHover={{ y: -3, transition: { duration: 0.25 } }}
-              className="hairline-card p-6 sm:p-7 rounded-2xl border-l-[3px] border-l-emerald-500 bg-gradient-to-b from-violet-950/20 to-black/60 shadow-xl"
-            >
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                  <span className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-400">
-                    PATHWAY B // REPUAI AUTONOMOUS RESOLUTION INTERCEPT
-                  </span>
-                </div>
-                <span className="text-[11px] font-mono text-emerald-400">94% Retention</span>
-              </div>
-
-              <div className="space-y-3 font-mono text-xs">
-                <div className="p-3 rounded-lg bg-black/50 border border-white/[0.06] flex items-start gap-3">
-                  <span className="text-emerald-400 font-bold shrink-0">T+0.0s</span>
-                  <p className="text-slate-300 font-sans font-normal">
-                    Webhook intercepts incoming review instantly via Google My Business / Zomato API.
-                  </p>
-                </div>
-
-                <div className="p-3 rounded-lg bg-black/50 border border-white/[0.06] flex items-start gap-3">
-                  <span className="text-emerald-400 font-bold shrink-0">T+1.4s</span>
-                  <p className="text-slate-300 font-sans font-normal">
-                    Neural engine isolates root defect (Cold Food + Courier Latency), calculates severity score (1.8/10), and triggers immediate team triage.
-                  </p>
-                </div>
-
-                <div className="p-3 rounded-lg bg-black/50 border border-white/[0.06] flex items-start gap-3">
-                  <span className="text-emerald-400 font-bold shrink-0">T+30s</span>
-                  <p className="text-slate-300 font-sans font-normal">
-                    A personalized, highly empathetic, owner-grade resolution is drafted and published. Customer returns following weekend.
-                  </p>
-                </div>
-              </div>
-            </motion.div>
-
+          {/* RIGHT COLUMN (40% -> 5 Cols): 3 Stacked Problem Statements */}
+          <div className="lg:col-span-5 space-y-8 pt-4 lg:pt-8">
+            {problems.map((problem, i) => (
+              <motion.div
+                key={i}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-80px" }}
+                variants={getVariants(fadeUp, prefersReduced)}
+                custom={i}
+                className="pt-5 border-t border-[var(--border)]"
+              >
+                <h3 className="text-[14px] font-bold text-[var(--text-1)] mb-2 font-display">
+                  {problem.title}
+                </h3>
+                <p className="text-[13px] text-[var(--text-2)] leading-[1.7] font-normal">
+                  {problem.body}
+                </p>
+              </motion.div>
+            ))}
           </div>
 
         </div>

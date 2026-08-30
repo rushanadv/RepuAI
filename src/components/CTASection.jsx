@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import { CheckCircle2, Sparkles, ArrowRight } from 'lucide-react';
+import { CheckCircle2 } from 'lucide-react';
 import MagneticButton from './MagneticButton';
-import { fadeUp, getVariants } from '../lib/animations';
+import { EASE } from '../lib/animations';
 
 export default function CTASection() {
   const prefersReduced = useReducedMotion();
@@ -13,108 +13,95 @@ export default function CTASection() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!email || !email.includes('@')) {
-      setErrorMsg('Please enter a valid business email address.');
+      setErrorMsg('PLEASE ENTER A VALID BUSINESS EMAIL.');
       return;
     }
     setErrorMsg('');
     setSubmitted(true);
   };
 
-  const headlineRow1 = "Never lose another customer".split(" ");
-  const headlineRow2 = "to silence.".split(" ");
+  const line1 = "Start Responding".split(" ");
+  const line2 = "Smarter Today.".split(" ");
 
   return (
-    <section className="relative py-36 px-4 sm:px-6 overflow-hidden border-t border-white/[0.06] bg-[#050508]">
+    <section className="relative min-h-[100svh] w-full bg-[var(--bg)] border-t border-[var(--border)] flex flex-col justify-center items-center px-6 sm:px-8 overflow-hidden py-24">
       
-      {/* Breathing Ambient Backlighting */}
-      <motion.div 
-        animate={{ opacity: [0.35, 0.7, 0.35] }}
-        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[750px] h-[380px] rounded-full pointer-events-none blur-[160px]"
-        style={{ background: 'radial-gradient(circle, rgba(124, 58, 237, 0.22) 0%, rgba(6, 182, 212, 0.07) 50%, transparent 70%)' }}
-      />
+      {/* Giant Watermark 01 Behind */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-mono font-bold text-[clamp(200px,28vw,420px)] text-white/[0.018] select-none pointer-events-none z-0 leading-none">
+        01
+      </div>
 
-      <div className="max-w-4xl mx-auto text-center relative z-10">
+      <div className="relative z-10 max-w-4xl mx-auto text-center flex flex-col items-center">
         
-        {/* Eyebrow */}
-        <motion.div 
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-80px" }}
-          variants={getVariants(fadeUp, prefersReduced)}
-          className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/[0.03] border border-white/[0.08] text-xs font-mono font-semibold text-slate-300 mb-8"
-        >
-          <Sparkles className="w-3.5 h-3.5 text-violet-400" />
-          <span>EARLY ACCESS INVITATION</span>
-        </motion.div>
+        {/* Top Metadata */}
+        <div className="font-mono text-[10px] text-[var(--text-2)] tracking-[0.2em] uppercase mb-8">
+          // 03 — EDITORIAL FINALE
+        </div>
 
-        {/* Word-by-Word Mask Reveal Headline (Faster 0.04s stagger) */}
-        <h2 className="text-4xl sm:text-6xl lg:text-7xl font-display font-extrabold text-white tracking-[-0.04em] leading-[0.98] select-none">
-          <span className="block mb-2">
-            {headlineRow1.map((word, i) => (
-              <span key={i} style={{ overflow: "hidden", display: "inline-block", marginRight: "0.25em" }} className="align-bottom">
+        {/* Word-by-Word Reveal Headline */}
+        <h2 className="text-[clamp(48px,7vw,100px)] font-display font-bold text-[var(--text-1)] tracking-[-0.04em] leading-[0.92] select-none">
+          {/* Line 1 */}
+          <div className="block">
+            {line1.map((word, i) => (
+              <span key={i} style={{ overflow: "hidden", display: "inline-block", marginRight: "0.22em" }} className="align-bottom">
                 <motion.span
                   style={{ display: "inline-block" }}
-                  initial={{ y: prefersReduced ? "0%" : "110%" }}
+                  initial={{ y: prefersReduced ? "0%" : "115%" }}
                   whileInView={{ y: "0%" }}
                   viewport={{ once: true, margin: "-80px" }}
                   transition={{
-                    duration: prefersReduced ? 0.01 : 0.6,
-                    delay: prefersReduced ? 0 : i * 0.04,
-                    ease: [0.22, 1, 0.36, 1],
+                    duration: prefersReduced ? 0.01 : 0.7,
+                    delay: prefersReduced ? 0 : i * 0.05,
+                    ease: EASE,
                   }}
                 >
                   {word}
                 </motion.span>
               </span>
             ))}
-          </span>
+          </div>
 
-          <span className="block text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-violet-300">
-            {headlineRow2.map((word, i) => (
-              <span key={i} style={{ overflow: "hidden", display: "inline-block", marginRight: "0.25em" }} className="align-bottom">
+          {/* Line 2 (Accent Gradient on Today.) */}
+          <div className="block mt-2">
+            {line2.map((word, i) => (
+              <span key={i} style={{ overflow: "hidden", display: "inline-block", marginRight: "0.22em" }} className="align-bottom">
                 <motion.span
                   style={{ display: "inline-block" }}
-                  initial={{ y: prefersReduced ? "0%" : "110%" }}
+                  initial={{ y: prefersReduced ? "0%" : "115%" }}
                   whileInView={{ y: "0%" }}
                   viewport={{ once: true, margin: "-80px" }}
                   transition={{
-                    duration: prefersReduced ? 0.01 : 0.6,
-                    delay: prefersReduced ? 0 : (headlineRow1.length + i) * 0.04,
-                    ease: [0.22, 1, 0.36, 1],
+                    duration: prefersReduced ? 0.01 : 0.7,
+                    delay: prefersReduced ? 0 : (line1.length + i) * 0.05,
+                    ease: EASE,
                   }}
+                  className={i === line2.length - 1 ? "text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-violet-400 to-indigo-300" : ""}
                 >
                   {word}
                 </motion.span>
               </span>
             ))}
-          </span>
+          </div>
         </h2>
 
-        {/* Short Copy */}
-        <motion.p 
-          initial={{ opacity: 0, y: prefersReduced ? 0 : 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: prefersReduced ? 0.01 : 0.6, delay: prefersReduced ? 0 : 0.35 }}
-          className="mt-6 text-base sm:text-lg text-slate-400 max-w-xl mx-auto leading-relaxed font-normal"
-        >
-          Join forward-thinking founders and operators protecting customer goodwill on autopilot.
-        </motion.p>
+        {/* Subtext */}
+        <p className="font-mono text-[11px] text-[var(--text-2)] tracking-wider uppercase mt-8">
+          Join 500+ businesses. No credit card required.
+        </p>
 
-        {/* Email Capture Form & AnimatePresence Success Message */}
-        <div className="mt-10 max-w-md mx-auto">
+        {/* Email Capture & AnimatePresence Success */}
+        <div className="mt-12 w-full max-w-md">
           <AnimatePresence mode="wait">
             {!submitted ? (
-              <motion.form 
+              <motion.form
                 key="form"
-                initial={{ opacity: 0, y: prefersReduced ? 0 : 20 }}
+                initial={{ opacity: 0, y: 15 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95, y: -10 }}
+                exit={{ opacity: 0, scale: 0.95 }}
                 viewport={{ once: true, margin: "-80px" }}
-                transition={{ duration: prefersReduced ? 0.01 : 0.6, delay: prefersReduced ? 0 : 0.5 }}
-                onSubmit={handleSubmit} 
-                className="flex flex-col sm:flex-row gap-2 items-stretch"
+                transition={{ duration: 0.5 }}
+                onSubmit={handleSubmit}
+                className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full"
               >
                 <input
                   type="email"
@@ -125,39 +112,35 @@ export default function CTASection() {
                   }}
                   placeholder="founder@business.com"
                   required
-                  className="flex-1 bg-black/60 border border-white/[0.1] px-4 py-3.5 rounded-xl text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-violet-500 focus:ring-1 focus:ring-violet-500 transition-all shadow-inner font-sans"
+                  className="w-full sm:w-[280px] bg-transparent border-0 border-b border-[var(--border)] focus:border-b-[var(--accent)] text-[var(--text-1)] placeholder-[var(--text-3)] py-3.5 px-1 text-sm font-sans focus:outline-none transition-colors"
                 />
+
                 <MagneticButton
                   onClick={handleSubmit}
-                  className="btn-primary px-6 py-3.5 rounded-xl font-semibold text-white text-sm whitespace-nowrap shadow-xl flex items-center justify-center gap-2 cursor-pointer"
+                  className="bg-[var(--accent)] hover:bg-violet-600 text-white font-mono text-[11px] font-bold tracking-[0.06em] uppercase px-6 py-3.5 rounded-[4px] shadow-lg transition-colors whitespace-nowrap cursor-pointer w-full sm:w-auto"
                 >
-                  <span>Get Early Access</span>
-                  <ArrowRight className="w-4 h-4" />
+                  JOIN WAITLIST →
                 </MagneticButton>
               </motion.form>
             ) : (
-              <motion.div 
+              <motion.div
                 key="success"
-                initial={{ opacity: 0, scale: 0.9, y: 10 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
                 transition={{ type: "spring", stiffness: 200 }}
-                className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 flex items-center justify-center gap-2.5 text-sm font-semibold shadow-inner"
+                className="p-4 rounded-[4px] border border-emerald-500/30 bg-emerald-500/[0.05] text-emerald-400 font-mono text-xs flex items-center justify-center gap-2"
               >
-                <CheckCircle2 className="w-5 h-5 text-emerald-400 flex-shrink-0" />
-                <span>You're on the priority queue! We'll reach out shortly 🎉</span>
+                <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+                <span>PRIORITY ACCESS GRANTED. WE WILL BE IN TOUCH.</span>
               </motion.div>
             )}
           </AnimatePresence>
 
           {errorMsg && (
-            <p className="mt-2 text-xs text-rose-400 font-medium font-mono">{errorMsg}</p>
+            <p className="font-mono text-[10px] text-rose-400 mt-2 text-center">
+              {errorMsg}
+            </p>
           )}
-
-          <div className="mt-5 flex items-center justify-center gap-4 text-[11px] text-slate-500 font-mono">
-            <span>🔒 Enterprise encrypted</span>
-            <span>•</span>
-            <span>No credit card required</span>
-          </div>
         </div>
 
       </div>
