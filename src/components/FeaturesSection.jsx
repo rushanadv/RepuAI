@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { 
   Zap, 
   Tag, 
@@ -9,10 +9,11 @@ import {
   CheckCircle2, 
   Cpu
 } from 'lucide-react';
-import { scaleIn, fadeUp } from '../lib/animations';
-import { GlowCard } from './GlowCard';
+import { scaleIn, fadeUp, getVariants } from '../lib/animations';
+import GlowCard from './GlowCard';
 
 export default function FeaturesSection() {
+  const prefersReduced = useReducedMotion();
   const [activeSentimentDemo, setActiveSentimentDemo] = useState('sarcasm');
 
   const sentimentDemos = {
@@ -58,10 +59,10 @@ export default function FeaturesSection() {
         
         {/* Editorial Section Header */}
         <motion.div 
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial="hidden"
+          whileInView="visible"
           viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          variants={getVariants(fadeUp, prefersReduced)}
           className="max-w-3xl mb-16"
         >
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-xs font-mono font-semibold text-violet-400 mb-6">
@@ -91,12 +92,11 @@ export default function FeaturesSection() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-80px" }}
-              variants={scaleIn}
+              variants={getVariants(scaleIn, prefersReduced)}
               custom={0}
-              whileHover={{ y: -4, transition: { duration: 0.25 } }}
               className="lg:col-span-8"
             >
-              <GlowCard className="hairline-card p-7 sm:p-8 rounded-2xl flex flex-col justify-between group shadow-xl">
+              <GlowCard className="hairline-card p-7 sm:p-8 rounded-2xl flex flex-col justify-between group shadow-xl h-full">
                 <div>
                   <div className="flex items-center justify-between mb-4 font-mono text-xs">
                     <div className="flex items-center gap-2 text-cyan-400">
@@ -159,12 +159,11 @@ export default function FeaturesSection() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-80px" }}
-              variants={fadeUp}
+              variants={getVariants(fadeUp, prefersReduced)}
               custom={1.5}
-              whileHover={{ y: -4, transition: { duration: 0.25 } }}
               className="lg:col-span-4"
             >
-              <GlowCard className="hairline-card p-7 rounded-2xl flex flex-col justify-between group shadow-xl">
+              <GlowCard className="hairline-card p-7 rounded-2xl flex flex-col justify-between group shadow-xl h-full">
                 <div>
                   <div className="flex items-center gap-2 text-xs font-mono text-violet-400 mb-3">
                     <Tag className="w-4 h-4" />
@@ -205,12 +204,11 @@ export default function FeaturesSection() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-80px" }}
-              variants={fadeUp}
+              variants={getVariants(fadeUp, prefersReduced)}
               custom={2.5}
-              whileHover={{ y: -4, transition: { duration: 0.25 } }}
               className="lg:col-span-4"
             >
-              <GlowCard className="hairline-card p-7 rounded-2xl flex flex-col justify-between group shadow-xl">
+              <GlowCard className="hairline-card p-7 rounded-2xl flex flex-col justify-between group shadow-xl h-full">
                 <div>
                   <div className="flex items-center gap-2 text-xs font-mono text-rose-400 mb-3">
                     <Siren className="w-4 h-4" />
@@ -241,12 +239,11 @@ export default function FeaturesSection() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-80px" }}
-              variants={scaleIn}
+              variants={getVariants(scaleIn, prefersReduced)}
               custom={1}
-              whileHover={{ y: -4, transition: { duration: 0.25 } }}
               className="lg:col-span-8"
             >
-              <GlowCard className="hairline-card p-7 sm:p-8 rounded-2xl flex flex-col justify-between group shadow-xl">
+              <GlowCard className="hairline-card p-7 sm:p-8 rounded-2xl flex flex-col justify-between group shadow-xl h-full">
                 <div>
                   <div className="flex items-center justify-between mb-4 font-mono text-xs">
                     <div className="flex items-center gap-2 text-violet-400">
@@ -275,8 +272,8 @@ export default function FeaturesSection() {
                       <motion.div 
                         initial={{ width: "0%" }}
                         whileInView={{ width: "78%" }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+                        viewport={{ once: true, margin: "-80px" }}
+                        transition={{ duration: prefersReduced ? 0.01 : 1.2, ease: [0.22, 1, 0.36, 1] }}
                         className="h-full bg-gradient-to-r from-cyan-500 to-violet-500 rounded-full" 
                       />
                     </div>
@@ -291,8 +288,8 @@ export default function FeaturesSection() {
                       <motion.div 
                         initial={{ width: "0%" }}
                         whileInView={{ width: "45%" }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 1.2, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+                        viewport={{ once: true, margin: "-80px" }}
+                        transition={{ duration: prefersReduced ? 0.01 : 1.2, delay: prefersReduced ? 0 : 0.15, ease: [0.22, 1, 0.36, 1] }}
                         className="h-full bg-violet-500 rounded-full" 
                       />
                     </div>
@@ -307,8 +304,8 @@ export default function FeaturesSection() {
                       <motion.div 
                         initial={{ width: "0%" }}
                         whileInView={{ width: "23%" }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 1.2, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                        viewport={{ once: true, margin: "-80px" }}
+                        transition={{ duration: prefersReduced ? 0.01 : 1.2, delay: prefersReduced ? 0 : 0.3, ease: [0.22, 1, 0.36, 1] }}
                         className="h-full bg-emerald-500 rounded-full" 
                       />
                     </div>
@@ -324,9 +321,8 @@ export default function FeaturesSection() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-80px" }}
-            variants={fadeUp}
+            variants={getVariants(fadeUp, prefersReduced)}
             custom={2}
-            whileHover={{ y: -4, transition: { duration: 0.25 } }}
           >
             <GlowCard className="hairline-card p-6 sm:p-7 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-6 group shadow-xl">
               <div className="flex items-center gap-4">

@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { CheckCircle2, Sparkles, ArrowRight } from 'lucide-react';
-import { MagneticButton } from './MagneticButton';
-import { fadeUp } from '../lib/animations';
+import MagneticButton from './MagneticButton';
+import { fadeUp, getVariants } from '../lib/animations';
 
 export default function CTASection() {
+  const prefersReduced = useReducedMotion();
   const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
@@ -37,29 +38,29 @@ export default function CTASection() {
         
         {/* Eyebrow */}
         <motion.div 
-          initial={{ opacity: 0, y: 15 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial="hidden"
+          whileInView="visible"
           viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.5 }}
+          variants={getVariants(fadeUp, prefersReduced)}
           className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/[0.03] border border-white/[0.08] text-xs font-mono font-semibold text-slate-300 mb-8"
         >
           <Sparkles className="w-3.5 h-3.5 text-violet-400" />
           <span>EARLY ACCESS INVITATION</span>
         </motion.div>
 
-        {/* Word-by-Word Mask Reveal Headline */}
+        {/* Word-by-Word Mask Reveal Headline (Faster 0.04s stagger) */}
         <h2 className="text-4xl sm:text-6xl lg:text-7xl font-display font-extrabold text-white tracking-[-0.04em] leading-[0.98] select-none">
           <span className="block mb-2">
             {headlineRow1.map((word, i) => (
-              <span key={i} className="inline-block overflow-hidden mr-[0.25em] align-bottom">
+              <span key={i} style={{ overflow: "hidden", display: "inline-block", marginRight: "0.25em" }} className="align-bottom">
                 <motion.span
-                  className="inline-block"
-                  initial={{ y: "110%" }}
+                  style={{ display: "inline-block" }}
+                  initial={{ y: prefersReduced ? "0%" : "110%" }}
                   whileInView={{ y: "0%" }}
                   viewport={{ once: true, margin: "-80px" }}
                   transition={{
-                    duration: 0.7,
-                    delay: i * 0.04,
+                    duration: prefersReduced ? 0.01 : 0.6,
+                    delay: prefersReduced ? 0 : i * 0.04,
                     ease: [0.22, 1, 0.36, 1],
                   }}
                 >
@@ -71,15 +72,15 @@ export default function CTASection() {
 
           <span className="block text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-violet-300">
             {headlineRow2.map((word, i) => (
-              <span key={i} className="inline-block overflow-hidden mr-[0.25em] align-bottom">
+              <span key={i} style={{ overflow: "hidden", display: "inline-block", marginRight: "0.25em" }} className="align-bottom">
                 <motion.span
-                  className="inline-block"
-                  initial={{ y: "110%" }}
+                  style={{ display: "inline-block" }}
+                  initial={{ y: prefersReduced ? "0%" : "110%" }}
                   whileInView={{ y: "0%" }}
                   viewport={{ once: true, margin: "-80px" }}
                   transition={{
-                    duration: 0.7,
-                    delay: (headlineRow1.length + i) * 0.04,
+                    duration: prefersReduced ? 0.01 : 0.6,
+                    delay: prefersReduced ? 0 : (headlineRow1.length + i) * 0.04,
                     ease: [0.22, 1, 0.36, 1],
                   }}
                 >
@@ -92,10 +93,10 @@ export default function CTASection() {
 
         {/* Short Copy */}
         <motion.p 
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: prefersReduced ? 0 : 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.6, delay: 0.35 }}
+          transition={{ duration: prefersReduced ? 0.01 : 0.6, delay: prefersReduced ? 0 : 0.35 }}
           className="mt-6 text-base sm:text-lg text-slate-400 max-w-xl mx-auto leading-relaxed font-normal"
         >
           Join forward-thinking founders and operators protecting customer goodwill on autopilot.
@@ -107,11 +108,11 @@ export default function CTASection() {
             {!submitted ? (
               <motion.form 
                 key="form"
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: prefersReduced ? 0 : 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: -10 }}
                 viewport={{ once: true, margin: "-80px" }}
-                transition={{ duration: 0.6, delay: 0.5 }}
+                transition={{ duration: prefersReduced ? 0.01 : 0.6, delay: prefersReduced ? 0 : 0.5 }}
                 onSubmit={handleSubmit} 
                 className="flex flex-col sm:flex-row gap-2 items-stretch"
               >
@@ -127,7 +128,7 @@ export default function CTASection() {
                   className="flex-1 bg-black/60 border border-white/[0.1] px-4 py-3.5 rounded-xl text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-violet-500 focus:ring-1 focus:ring-violet-500 transition-all shadow-inner font-sans"
                 />
                 <MagneticButton
-                  type="submit"
+                  onClick={handleSubmit}
                   className="btn-primary px-6 py-3.5 rounded-xl font-semibold text-white text-sm whitespace-nowrap shadow-xl flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <span>Get Early Access</span>

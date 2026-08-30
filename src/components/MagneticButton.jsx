@@ -1,23 +1,19 @@
 import React, { useRef } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 
-export function MagneticButton({ children, className, onClick, type = "button", style = {} }) {
+export default function MagneticButton({ children, className = "", onClick, type = "button", style = {} }) {
   const ref = useRef(null);
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const springX = useSpring(x, { stiffness: 150, damping: 15 });
-  const springY = useSpring(y, { stiffness: 150, damping: 15 });
+  const x = useSpring(useMotionValue(0), { stiffness: 150, damping: 15 });
+  const y = useSpring(useMotionValue(0), { stiffness: 150, damping: 15 });
 
-  const handleMouseMove = (e) => {
+  const onMove = (e) => {
     if (!ref.current) return;
     const rect = ref.current.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-    x.set((e.clientX - centerX) * 0.25);
-    y.set((e.clientY - centerY) * 0.25);
+    x.set((e.clientX - rect.left - rect.width / 2) * 0.28);
+    y.set((e.clientY - rect.top - rect.height / 2) * 0.28);
   };
 
-  const handleMouseLeave = () => {
+  const onLeave = () => {
     x.set(0);
     y.set(0);
   };
@@ -28,9 +24,10 @@ export function MagneticButton({ children, className, onClick, type = "button", 
       type={type}
       className={className}
       onClick={onClick}
-      style={{ x: springX, y: springY, ...style }}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
+      style={{ ...style, x, y }}
+      onMouseMove={onMove}
+      onMouseLeave={onLeave}
+      whileHover={{ scale: 1.03 }}
       whileTap={{ scale: 0.96 }}
     >
       {children}
@@ -38,4 +35,4 @@ export function MagneticButton({ children, className, onClick, type = "button", 
   );
 }
 
-export default MagneticButton;
+export { MagneticButton };

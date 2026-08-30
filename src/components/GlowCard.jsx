@@ -1,47 +1,46 @@
 import React, { useRef, useState } from "react";
+import { motion } from "framer-motion";
 
-export function GlowCard({ children, className = "", style = {} }) {
+export default function GlowCard({ children, className = "", style = {} }) {
   const ref = useRef(null);
   const [pos, setPos] = useState({ x: 0, y: 0 });
   const [hovered, setHovered] = useState(false);
 
-  const handleMouseMove = (e) => {
+  const onMove = (e) => {
     if (!ref.current) return;
     const rect = ref.current.getBoundingClientRect();
     setPos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
   };
 
   return (
-    <div
+    <motion.div
       ref={ref}
       className={className}
-      onMouseMove={handleMouseMove}
+      onMouseMove={onMove}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
+      whileHover={{ y: -4, transition: { duration: 0.25 } }}
       style={{ position: "relative", overflow: "hidden", ...style }}
     >
       {hovered && (
-        <div
-          style={{
-            position: "absolute",
-            width: "350px",
-            height: "350px",
-            borderRadius: "50%",
-            background: "radial-gradient(circle, rgba(124,58,237,0.14) 0%, transparent 70%)",
-            transform: "translate(-50%, -50%)",
-            left: pos.x,
-            top: pos.y,
-            pointerEvents: "none",
-            transition: "opacity 0.2s ease",
-            zIndex: 0,
-          }}
-        />
+        <div style={{
+          position: "absolute",
+          width: 280, 
+          height: 280,
+          borderRadius: "50%",
+          background: "radial-gradient(circle, rgba(124,58,237,0.13) 0%, transparent 70%)",
+          transform: "translate(-50%, -50%)",
+          left: pos.x, 
+          top: pos.y,
+          pointerEvents: "none",
+          zIndex: 0,
+        }} />
       )}
-      <div style={{ position: "relative", zIndex: 1, height: "100%", width: "100%" }}>
+      <div style={{ position: "relative", zIndex: 1, width: "100%", height: "100%" }}>
         {children}
       </div>
-    </div>
+    </motion.div>
   );
 }
 
-export default GlowCard;
+export { GlowCard };

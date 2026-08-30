@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import React from 'react';
+import { motion, useReducedMotion } from 'framer-motion';
 import { 
   Inbox, 
   Brain, 
   AlertTriangle, 
   PenTool, 
   Radio, 
-  Sparkles,
-  ArrowRight,
   ChevronRight
 } from 'lucide-react';
-import { slideLeft } from '../lib/animations';
-import { GlowCard } from './GlowCard';
+import { slideLeft, getVariants } from '../lib/animations';
+import GlowCard from './GlowCard';
 
 export default function HowItWorks() {
+  const prefersReduced = useReducedMotion();
+
   const steps = [
     {
       id: 0,
@@ -70,10 +70,10 @@ export default function HowItWorks() {
         
         {/* Section Header */}
         <motion.div 
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial="hidden"
+          whileInView="visible"
           viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          variants={getVariants(slideLeft, prefersReduced)}
           className="max-w-3xl mb-20"
         >
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-xs font-mono font-semibold text-violet-400 mb-6">
@@ -99,11 +99,10 @@ export default function HowItWorks() {
             return (
               <motion.div
                 key={step.id}
-                initial={{ opacity: 0, x: -50 }}
+                initial={{ opacity: 0, x: prefersReduced ? 0 : -50 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true, margin: "-80px" }}
-                transition={{ duration: 0.8, delay: idx * 0.12, ease: [0.22, 1, 0.36, 1] }}
-                whileHover={{ y: -4, transition: { duration: 0.25 } }}
+                transition={{ duration: prefersReduced ? 0.01 : 0.7, delay: prefersReduced ? 0 : idx * 0.12, ease: [0.22, 1, 0.36, 1] }}
                 className="h-full relative"
               >
                 <GlowCard className="hairline-card p-6 rounded-2xl h-full flex flex-col justify-between group shadow-xl">
@@ -141,13 +140,13 @@ export default function HowItWorks() {
                   </div>
                 </GlowCard>
 
-                {/* Connecting Laser Arrow (Visible between cards on large screens) */}
+                {/* Connecting Laser Arrow (Visible between cards on desktop) */}
                 {idx < 3 && (
                   <motion.div
                     initial={{ scaleX: 0 }}
                     whileInView={{ scaleX: 1 }}
                     viewport={{ once: true, margin: "-80px" }}
-                    transition={{ duration: 0.6, delay: 0.2 + idx * 0.12, ease: "easeOut" }}
+                    transition={{ duration: prefersReduced ? 0.01 : 0.6, delay: prefersReduced ? 0 : 0.1 + idx * 0.12, ease: "easeOut" }}
                     style={{ transformOrigin: "left" }}
                     className="hidden lg:block absolute -right-3 top-1/2 -translate-y-1/2 w-6 h-[1.5px] bg-gradient-to-r from-violet-500 to-cyan-400 z-20 pointer-events-none"
                   />

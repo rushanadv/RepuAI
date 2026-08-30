@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { 
   Sparkles, 
   Star, 
@@ -13,9 +13,11 @@ import {
   Terminal
 } from 'lucide-react';
 import { sampleReviews } from '../data/sampleReviews';
-import { fadeUp, slideRight } from '../lib/animations';
+import { slideLeft, slideRight, getVariants } from '../lib/animations';
+import MagneticButton from './MagneticButton';
 
 export default function DemoSection() {
+  const prefersReduced = useReducedMotion();
   const [selectedCategory, setSelectedCategory] = useState('restaurant');
   const [selectedReviewText, setSelectedReviewText] = useState(sampleReviews.restaurant[0].text);
   const [reviewInput, setReviewInput] = useState(sampleReviews.restaurant[0].text);
@@ -212,10 +214,10 @@ export default function DemoSection() {
         
         {/* Section Header */}
         <motion.div 
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial="hidden"
+          whileInView="visible"
           viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          variants={getVariants(slideLeft, prefersReduced)}
           className="max-w-3xl mb-14"
         >
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-xs font-mono font-semibold text-violet-400 mb-6">
@@ -254,12 +256,12 @@ export default function DemoSection() {
           {/* 2-Column Console Layout */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
 
-            {/* ================= LEFT CONSOLE: Review Input & Presets (5 Cols) ================= */}
+            {/* ================= LEFT CONSOLE: Review Input & Presets (5 Cols) with slideLeft ================= */}
             <motion.div 
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-80px" }}
-              variants={fadeUp}
+              variants={getVariants(slideLeft, prefersReduced)}
               custom={0}
               className="lg:col-span-5 flex flex-col justify-between space-y-6"
             >
@@ -366,14 +368,10 @@ export default function DemoSection() {
                 </div>
               </div>
 
-              {/* 4. Action Button with Framer Hover Glow */}
+              {/* 4. Action Button with MagneticButton */}
               <div className="pt-3 border-t border-white/[0.06]">
-                <motion.button
-                  type="button"
+                <MagneticButton
                   onClick={handleAnalyze}
-                  disabled={loading || isStreaming}
-                  whileHover={{ scale: 1.02, boxShadow: "0 0 30px rgba(124,58,237,0.5)" }}
-                  whileTap={{ scale: 0.97 }}
                   className={`w-full py-3.5 px-6 rounded-xl font-semibold text-white flex items-center justify-center gap-2.5 transition-all text-sm shadow-xl ${
                     loading || isStreaming
                       ? 'bg-violet-950/60 cursor-not-allowed opacity-80' 
@@ -398,18 +396,18 @@ export default function DemoSection() {
                       <span>Execute Neural Analysis</span>
                     </>
                   )}
-                </motion.button>
+                </MagneticButton>
               </div>
 
             </motion.div>
 
 
-            {/* ================= RIGHT CONSOLE: Workspace Inspector & Token Stream (7 Cols) ================= */}
+            {/* ================= RIGHT CONSOLE: Workspace Inspector (7 Cols) with slideRight ================= */}
             <motion.div 
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-80px" }}
-              variants={slideRight}
+              variants={getVariants(slideRight, prefersReduced)}
               custom={0.2}
               className="lg:col-span-7 bg-black/60 rounded-xl p-5 sm:p-6 border border-white/[0.07] flex flex-col justify-center min-h-[460px] shadow-inner relative"
             >
@@ -524,9 +522,9 @@ export default function DemoSection() {
                     
                     {/* CARD 1: SENTIMENT & SCORE */}
                     <motion.div 
-                      initial={{ opacity: 0, y: 20 }}
+                      initial={{ opacity: 0, y: prefersReduced ? 0 : 20 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                      transition={{ delay: prefersReduced ? 0 : 0, duration: prefersReduced ? 0.01 : 0.5, ease: [0.22, 1, 0.36, 1] }}
                       className="p-3.5 rounded-xl bg-black/60 border border-white/[0.08] flex items-center justify-between"
                     >
                       <div>
@@ -542,7 +540,7 @@ export default function DemoSection() {
                           <motion.span 
                             initial={{ scale: 0.5, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
-                            transition={{ type: "spring", stiffness: 300, damping: 20, delay: 0.1 }}
+                            transition={{ type: "spring", stiffness: 300, damping: 20, delay: prefersReduced ? 0 : 0.1 }}
                             className="px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-xs font-bold font-mono flex items-center gap-1.5"
                           >
                             <span>😊 Positive</span>
@@ -552,7 +550,7 @@ export default function DemoSection() {
                           <motion.span 
                             initial={{ scale: 0.5, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
-                            transition={{ type: "spring", stiffness: 300, damping: 20, delay: 0.1 }}
+                            transition={{ type: "spring", stiffness: 300, damping: 20, delay: prefersReduced ? 0 : 0.1 }}
                             className="px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-400 text-xs font-bold font-mono flex items-center gap-1.5"
                           >
                             <span>😐 Neutral</span>
@@ -562,7 +560,7 @@ export default function DemoSection() {
                           <motion.span 
                             initial={{ scale: 0.5, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
-                            transition={{ type: "spring", stiffness: 300, damping: 20, delay: 0.1 }}
+                            transition={{ type: "spring", stiffness: 300, damping: 20, delay: prefersReduced ? 0 : 0.1 }}
                             className="px-3 py-1 rounded-full bg-rose-500/15 border border-rose-500/30 text-rose-400 text-xs font-bold font-mono flex items-center gap-1.5"
                           >
                             <span>😤 Negative</span>
@@ -573,9 +571,9 @@ export default function DemoSection() {
 
                     {/* CARD 2: EXTRACTED ISSUES */}
                     <motion.div 
-                      initial={{ opacity: 0, y: 20 }}
+                      initial={{ opacity: 0, y: prefersReduced ? 0 : 20 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.12, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                      transition={{ delay: prefersReduced ? 0 : 0.12, duration: prefersReduced ? 0.01 : 0.5, ease: [0.22, 1, 0.36, 1] }}
                       className="p-3.5 rounded-xl bg-black/60 border border-white/[0.08]"
                     >
                       <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 block mb-2">
@@ -588,7 +586,7 @@ export default function DemoSection() {
                               key={idx}
                               initial={{ opacity: 0, scale: 0.8 }}
                               animate={{ opacity: 1, scale: 1 }}
-                              transition={{ delay: 0.2 + idx * 0.05 }}
+                              transition={{ delay: prefersReduced ? 0 : 0.2 + idx * 0.05 }}
                               className="px-2.5 py-0.5 rounded-md bg-violet-500/15 border border-violet-500/30 text-violet-300 text-xs font-medium font-mono flex items-center gap-1"
                             >
                               <span>{getIssueEmoji(issue)}</span>
@@ -603,9 +601,9 @@ export default function DemoSection() {
 
                     {/* CARD 3: URGENCY LEVEL */}
                     <motion.div 
-                      initial={{ opacity: 0, y: 20 }}
+                      initial={{ opacity: 0, y: prefersReduced ? 0 : 20 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.24, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                      transition={{ delay: prefersReduced ? 0 : 0.24, duration: prefersReduced ? 0.01 : 0.5, ease: [0.22, 1, 0.36, 1] }}
                       className="p-3.5 rounded-xl bg-black/60 border border-white/[0.08]"
                     >
                       <div className="flex items-center justify-between mb-1">
@@ -639,9 +637,9 @@ export default function DemoSection() {
 
                     {/* CARD 4: DRAFTED EMPATHETIC RESOLUTION */}
                     <motion.div 
-                      initial={{ opacity: 0, y: 20 }}
+                      initial={{ opacity: 0, y: prefersReduced ? 0 : 20 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.36, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                      transition={{ delay: prefersReduced ? 0 : 0.36, duration: prefersReduced ? 0.01 : 0.5, ease: [0.22, 1, 0.36, 1] }}
                       className="p-4 rounded-xl bg-gradient-to-b from-violet-950/30 to-black/70 border border-violet-500/35"
                     >
                       <div className="flex items-center justify-between mb-2">

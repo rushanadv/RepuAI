@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import React from 'react';
+import { motion, useReducedMotion } from 'framer-motion';
 import { 
   Star, 
   ArrowRight, 
@@ -8,27 +8,11 @@ import {
   Layers
 } from 'lucide-react';
 import { useCounter } from '../hooks/useCounter';
-import { MagneticButton } from './MagneticButton';
-import { fadeIn, fadeUp } from '../lib/animations';
+import MagneticButton from './MagneticButton';
+import { fadeIn, fadeUp, getVariants } from '../lib/animations';
 
 export default function Hero() {
-  const [btnHovered, setBtnHovered] = useState(false);
-
-  // Mouse-reactive background spotlight
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-  const springMouseX = useSpring(mouseX, { stiffness: 80, damping: 25 });
-  const springMouseY = useSpring(mouseY, { stiffness: 80, damping: 25 });
-
-  const bgX = useTransform(springMouseX, (val) => `${val}px`);
-  const bgY = useTransform(springMouseY, (val) => `${val}px`);
-
-  const handleMouseMove = (e) => {
-    const { clientX, clientY } = e;
-    const { innerWidth, innerHeight } = window;
-    mouseX.set((clientX - innerWidth / 2) * 0.08);
-    mouseY.set((clientY - innerHeight / 2) * 0.08);
-  };
+  const prefersReduced = useReducedMotion();
 
   const stat1 = useCounter(2300000);
   const stat2 = useCounter(94);
@@ -53,11 +37,10 @@ export default function Hero() {
 
   return (
     <section 
-      onMouseMove={handleMouseMove}
       className="relative min-h-screen pt-32 sm:pt-36 pb-20 flex flex-col justify-between items-center overflow-hidden bg-transparent"
     >
       
-      {/* 5. NOISE TEXTURE OVERLAY */}
+      {/* NOISE TEXTURE OVERLAY */}
       <div
         style={{
           position: "absolute",
@@ -65,24 +48,6 @@ export default function Hero() {
           backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
           opacity: 0.03,
           pointerEvents: "none",
-          zIndex: 0,
-        }}
-      />
-
-      {/* Dynamic Cursor-Moving Radial Gradient Spotlight */}
-      <motion.div 
-        style={{
-          x: bgX,
-          y: bgY,
-          position: "absolute",
-          top: "15%",
-          left: "50%",
-          width: "900px",
-          height: "550px",
-          transform: "translate(-50%, -50%)",
-          background: "radial-gradient(ellipse at center, rgba(124, 58, 237, 0.16) 0%, transparent 65%)",
-          pointerEvents: "none",
-          filter: "blur(140px)",
           zIndex: 0,
         }}
       />
@@ -96,7 +61,7 @@ export default function Hero() {
         <motion.div 
           initial="hidden"
           animate="visible"
-          variants={fadeIn}
+          variants={getVariants(fadeIn, prefersReduced)}
           className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/[0.03] border border-white/[0.08] text-xs font-mono text-slate-300 mb-8 shadow-sm"
         >
           <span className="w-2 h-2 rounded-full bg-violet-400 animate-pulse" />
@@ -109,14 +74,14 @@ export default function Hero() {
         <h1 className="text-5xl sm:text-7xl lg:text-[5.75rem] font-display font-extrabold text-white leading-[0.9] max-w-5xl tracking-[-0.045em] select-none">
           <span className="block mb-2">
             {headlineRow1.map((word, i) => (
-              <span key={i} className="inline-block overflow-hidden mr-[0.25em] align-bottom">
+              <span key={i} style={{ overflow: "hidden", display: "inline-block", marginRight: "0.25em" }} className="align-bottom">
                 <motion.span
-                  className="inline-block"
-                  initial={{ y: "110%" }}
+                  style={{ display: "inline-block" }}
+                  initial={{ y: prefersReduced ? "0%" : "110%" }}
                   animate={{ y: "0%" }}
                   transition={{
-                    duration: 0.8,
-                    delay: i * 0.06,
+                    duration: prefersReduced ? 0.01 : 0.7,
+                    delay: prefersReduced ? 0 : i * 0.06,
                     ease: [0.22, 1, 0.36, 1],
                   }}
                 >
@@ -128,14 +93,14 @@ export default function Hero() {
 
           <span className="block text-transparent bg-clip-text bg-gradient-to-b from-white via-slate-200 to-violet-300">
             {headlineRow2.map((word, i) => (
-              <span key={i} className="inline-block overflow-hidden mr-[0.25em] align-bottom">
+              <span key={i} style={{ overflow: "hidden", display: "inline-block", marginRight: "0.25em" }} className="align-bottom">
                 <motion.span
-                  className="inline-block"
-                  initial={{ y: "110%" }}
+                  style={{ display: "inline-block" }}
+                  initial={{ y: prefersReduced ? "0%" : "110%" }}
                   animate={{ y: "0%" }}
                   transition={{
-                    duration: 0.8,
-                    delay: (headlineRow1.length + i) * 0.06,
+                    duration: prefersReduced ? 0.01 : 0.7,
+                    delay: prefersReduced ? 0 : (headlineRow1.length + i) * 0.06,
                     ease: [0.22, 1, 0.36, 1],
                   }}
                 >
@@ -146,32 +111,28 @@ export default function Hero() {
           </span>
         </h1>
 
-        {/* Subheadline (Animated with fadeUp, delay 0.5s) */}
+        {/* Subheadline (opacity 0->1, y 20->0, delay 0.5s) */}
         <motion.p 
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: prefersReduced ? 0 : 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: prefersReduced ? 0.01 : 0.7, delay: prefersReduced ? 0 : 0.5, ease: [0.22, 1, 0.36, 1] }}
           className="mt-7 text-base sm:text-lg lg:text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed font-normal"
         >
           RepuAI continuously monitors public customer feedback, isolates operational defects, 
           and synthesizes on-brand owner responses in under two seconds.
         </motion.p>
 
-        {/* CTA Buttons (Animated with fadeUp, delay 0.7s, with Magnetic Button) */}
+        {/* CTA Buttons (fadeUp, delay 0.7s) */}
         <motion.div 
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          initial="hidden"
+          animate="visible"
+          variants={getVariants(fadeUp, prefersReduced)}
+          custom={7}
           className="mt-9 flex flex-col sm:flex-row gap-3.5 justify-center items-center w-full sm:w-auto"
         >
           <MagneticButton
             onClick={(e) => handleScrollTo(e, '#demo')}
             className="btn-primary group px-8 py-3.5 rounded-full font-semibold text-white text-sm flex items-center justify-center gap-2 w-full sm:w-auto cursor-pointer shadow-xl"
-            style={
-              btnHovered
-                ? { boxShadow: "0 0 30px rgba(124, 58, 237, 0.6), 0 0 60px rgba(124, 58, 237, 0.2)" }
-                : {}
-            }
           >
             <span>Try Live Demo</span>
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" />
@@ -190,9 +151,9 @@ export default function Hero() {
 
       {/* OVERSIZED COMMAND-CENTER CANVAS */}
       <motion.div 
-        initial={{ opacity: 0, scale: 0.95, y: 40 }}
+        initial={{ opacity: 0, scale: 0.95, y: prefersReduced ? 0 : 40 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{ duration: 0.9, delay: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: prefersReduced ? 0.01 : 0.8, delay: prefersReduced ? 0 : 0.8, ease: [0.22, 1, 0.36, 1] }}
         className="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 mt-16 perspective-1200"
       >
         <div className="hero-canvas studio-chassis rounded-2xl p-4 sm:p-6 overflow-hidden">
@@ -219,15 +180,15 @@ export default function Hero() {
             </div>
           </div>
 
-          {/* 3-Column Layered Interactive Workflow Cards with Framer Motion Floating & Hover */}
+          {/* 3-Column Layered Interactive Workflow Cards with framer-motion floating & hover */}
           <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-stretch">
             
             {/* Column 1: Floating Card 1 */}
             <motion.div 
-              animate={{ y: [0, -10, 0] }}
+              animate={prefersReduced ? {} : { y: [0, -16, 0] }}
               transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-              whileHover={{ scale: 1.02, rotate: 0.5 }}
-              className="md:col-span-4 bg-black/50 rounded-xl p-4 border border-rose-500/25 flex flex-col justify-between shadow-inner"
+              whileHover={{ scale: 1.03, rotate: 1 }}
+              className="md:col-span-4 bg-black/50 rounded-xl p-4 border border-rose-500/25 flex flex-col justify-between shadow-inner cursor-pointer"
             >
               <div>
                 <div className="flex items-center justify-between mb-3">
@@ -256,10 +217,10 @@ export default function Hero() {
 
             {/* Column 2: Floating Card 2 */}
             <motion.div 
-              animate={{ y: [0, -14, 0] }}
+              animate={prefersReduced ? {} : { y: [0, -16, 0] }}
               transition={{ duration: 7, delay: 1, repeat: Infinity, ease: "easeInOut" }}
-              whileHover={{ scale: 1.02, rotate: -0.5 }}
-              className="md:col-span-3 bg-black/40 rounded-xl p-4 border border-white/[0.07] flex flex-col justify-between"
+              whileHover={{ scale: 1.03, rotate: 1 }}
+              className="md:col-span-3 bg-black/40 rounded-xl p-4 border border-white/[0.07] flex flex-col justify-between cursor-pointer"
             >
               <div>
                 <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 block mb-2.5">
@@ -289,10 +250,10 @@ export default function Hero() {
 
             {/* Column 3: Floating Card 3 */}
             <motion.div 
-              animate={{ y: [0, -12, 0] }}
+              animate={prefersReduced ? {} : { y: [0, -16, 0] }}
               transition={{ duration: 6, delay: 0.5, repeat: Infinity, ease: "easeInOut" }}
-              whileHover={{ scale: 1.02, rotate: 0.5 }}
-              className="md:col-span-5 bg-gradient-to-b from-violet-950/30 to-black/50 rounded-xl p-4 border border-violet-500/35 flex flex-col justify-between shadow-inner"
+              whileHover={{ scale: 1.03, rotate: 1 }}
+              className="md:col-span-5 bg-gradient-to-b from-violet-950/30 to-black/50 rounded-xl p-4 border border-violet-500/35 flex flex-col justify-between shadow-inner cursor-pointer"
             >
               <div>
                 <div className="flex items-center justify-between mb-2.5">
@@ -325,10 +286,11 @@ export default function Hero() {
       {/* TELEMETRY METRIC STRIP WITH STAGGERED FADEUP */}
       <div className="relative z-10 w-full max-w-5xl mx-auto px-4 sm:px-6 mt-16 pt-8 border-t border-white/[0.08] flex flex-wrap justify-between items-center gap-6">
         <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial="hidden"
+          whileInView="visible"
           viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.6, delay: 0 }}
+          variants={getVariants(fadeUp, prefersReduced)}
+          custom={0}
           className="flex flex-col"
         >
           <span ref={stat1.ref} className="text-3xl sm:text-4xl font-extrabold text-white font-mono tracking-tight">
@@ -340,10 +302,11 @@ export default function Hero() {
         <div className="hidden sm:block h-8 w-[1px] bg-white/[0.08]" />
 
         <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial="hidden"
+          whileInView="visible"
           viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.6, delay: 0.1 }}
+          variants={getVariants(fadeUp, prefersReduced)}
+          custom={1}
           className="flex flex-col"
         >
           <span ref={stat2.ref} className="text-3xl sm:text-4xl font-extrabold text-violet-300 font-mono tracking-tight">
@@ -355,10 +318,11 @@ export default function Hero() {
         <div className="hidden sm:block h-8 w-[1px] bg-white/[0.08]" />
 
         <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial="hidden"
+          whileInView="visible"
           viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.6, delay: 0.2 }}
+          variants={getVariants(fadeUp, prefersReduced)}
+          custom={2}
           className="flex flex-col"
         >
           <span ref={stat3.ref} className="text-3xl sm:text-4xl font-extrabold text-cyan-300 font-mono tracking-tight">
@@ -370,10 +334,11 @@ export default function Hero() {
         <div className="hidden sm:block h-8 w-[1px] bg-white/[0.08]" />
 
         <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial="hidden"
+          whileInView="visible"
           viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.6, delay: 0.3 }}
+          variants={getVariants(fadeUp, prefersReduced)}
+          custom={3}
           className="flex flex-col"
         >
           <span className="text-3xl sm:text-4xl font-extrabold text-emerald-400 font-mono tracking-tight">

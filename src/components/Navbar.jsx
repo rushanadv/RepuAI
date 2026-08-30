@@ -37,7 +37,7 @@ export default function Navbar() {
 
   return (
     <header className="fixed top-3 sm:top-5 left-0 right-0 z-50 flex justify-center px-4 pointer-events-none">
-      <motion.div 
+      <motion.nav 
         animate={{
           height: scrolled ? 58 : 68,
           backgroundColor: scrolled ? "rgba(8, 8, 16, 0.92)" : "rgba(11, 11, 18, 0.6)",
@@ -63,7 +63,7 @@ export default function Navbar() {
         </motion.a>
 
         {/* Desktop Navigation Links with animated sliding underline */}
-        <nav className="hidden md:flex items-center gap-1 bg-white/[0.02] border border-white/[0.05] p-1 rounded-full">
+        <div className="hidden md:flex items-center gap-1 bg-white/[0.02] border border-white/[0.05] p-1 rounded-full">
           {navLinks.map((link) => (
             <a
               key={link.name}
@@ -75,7 +75,7 @@ export default function Navbar() {
               <span className="absolute bottom-0 left-3.5 right-3.5 h-[1.5px] bg-gradient-to-r from-violet-500 to-cyan-400 scale-x-0 group-hover:scale-x-100 transition-transform duration-250 ease-out origin-left rounded-full" />
             </a>
           ))}
-        </nav>
+        </div>
 
         {/* Desktop CTA */}
         <div className="hidden md:flex items-center gap-3">
@@ -107,7 +107,7 @@ export default function Navbar() {
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         </div>
-      </motion.div>
+      </motion.nav>
 
       {/* Mobile Expandable Drawer */}
       {mobileMenuOpen && (

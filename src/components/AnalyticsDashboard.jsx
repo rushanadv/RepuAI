@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { 
   TrendingUp, 
   ArrowUpRight, 
@@ -7,10 +7,12 @@ import {
   CheckCircle2, 
   BarChart2
 } from 'lucide-react';
-import { slideLeft, slideRight, fadeUp } from '../lib/animations';
-import { GlowCard } from './GlowCard';
+import { slideLeft, slideRight, getVariants } from '../lib/animations';
+import GlowCard from './GlowCard';
 
 export default function AnalyticsDashboard() {
+  const prefersReduced = useReducedMotion();
+
   const urgentReviews = [
     {
       platform: 'G',
@@ -56,10 +58,10 @@ export default function AnalyticsDashboard() {
         
         {/* Section Header */}
         <motion.div 
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial="hidden"
+          whileInView="visible"
           viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          variants={getVariants(slideLeft, prefersReduced)}
           className="max-w-3xl mb-16"
         >
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-xs font-mono font-semibold text-cyan-400 mb-6">
@@ -81,14 +83,13 @@ export default function AnalyticsDashboard() {
         {/* 2x2 Command Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
-          {/* CARD 1: Top-left (slideLeft, delay 0s) */}
+          {/* CARD 1: Top-left (slideLeft) */}
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-80px" }}
-            variants={slideLeft}
+            variants={getVariants(slideLeft, prefersReduced)}
             custom={0}
-            whileHover={{ y: -4, transition: { duration: 0.25 } }}
           >
             <GlowCard className="hairline-card p-7 rounded-2xl flex flex-col justify-between shadow-xl h-full">
               <div>
@@ -117,8 +118,8 @@ export default function AnalyticsDashboard() {
                       <motion.div 
                         initial={{ width: "0%" }}
                         whileInView={{ width: "58%" }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 1.2, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                        viewport={{ once: true, margin: "-80px" }}
+                        transition={{ duration: prefersReduced ? 0.01 : 1.2, delay: prefersReduced ? 0 : 0.3, ease: [0.22, 1, 0.36, 1] }}
                         className="h-full bg-emerald-500 rounded-full" 
                       />
                     </div>
@@ -136,8 +137,8 @@ export default function AnalyticsDashboard() {
                       <motion.div 
                         initial={{ width: "0%" }}
                         whileInView={{ width: "22%" }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 1.2, delay: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                        viewport={{ once: true, margin: "-80px" }}
+                        transition={{ duration: prefersReduced ? 0.01 : 1.2, delay: prefersReduced ? 0 : 0.45, ease: [0.22, 1, 0.36, 1] }}
                         className="h-full bg-amber-400 rounded-full" 
                       />
                     </div>
@@ -155,8 +156,8 @@ export default function AnalyticsDashboard() {
                       <motion.div 
                         initial={{ width: "0%" }}
                         whileInView={{ width: "20%" }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 1.2, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                        viewport={{ once: true, margin: "-80px" }}
+                        transition={{ duration: prefersReduced ? 0.01 : 1.2, delay: prefersReduced ? 0 : 0.6, ease: [0.22, 1, 0.36, 1] }}
                         className="h-full bg-rose-500 rounded-full" 
                       />
                     </div>
@@ -172,14 +173,13 @@ export default function AnalyticsDashboard() {
           </motion.div>
 
 
-          {/* CARD 2: Top-right (slideRight, delay 0.1s) */}
+          {/* CARD 2: Top-right (slideRight) */}
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-80px" }}
-            variants={slideRight}
+            variants={getVariants(slideRight, prefersReduced)}
             custom={0.1}
-            whileHover={{ y: -4, transition: { duration: 0.25 } }}
           >
             <GlowCard className="hairline-card p-7 rounded-2xl flex flex-col justify-between shadow-xl h-full">
               <div>
@@ -255,14 +255,13 @@ export default function AnalyticsDashboard() {
           </motion.div>
 
 
-          {/* CARD 3: Bottom-left (slideLeft, delay 0.2s) */}
+          {/* CARD 3: Bottom-left (slideLeft) */}
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-80px" }}
-            variants={slideLeft}
+            variants={getVariants(slideLeft, prefersReduced)}
             custom={0.2}
-            whileHover={{ y: -4, transition: { duration: 0.25 } }}
           >
             <GlowCard className="hairline-card p-7 rounded-2xl flex flex-col justify-between shadow-xl h-full">
               <div>
@@ -281,12 +280,8 @@ export default function AnalyticsDashboard() {
 
                 <div className="space-y-2.5 mt-4">
                   {urgentReviews.map((rev, idx) => (
-                    <motion.div 
+                    <div 
                       key={idx}
-                      initial={{ opacity: 0, y: 10 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: 0.1 * idx, duration: 0.4 }}
                       className="p-3 rounded-xl bg-black/40 border border-white/[0.05] hover:border-white/15 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 group"
                     >
                       <div className="flex items-start gap-3">
@@ -314,7 +309,7 @@ export default function AnalyticsDashboard() {
                         <span>Draft Reply</span>
                         <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-1 group-hover:-translate-y-0.5 transition-transform" />
                       </a>
-                    </motion.div>
+                    </div>
                   ))}
                 </div>
               </div>
@@ -326,14 +321,13 @@ export default function AnalyticsDashboard() {
           </motion.div>
 
 
-          {/* CARD 4: Bottom-right (slideRight, delay 0.3s) */}
+          {/* CARD 4: Bottom-right (slideRight) */}
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-80px" }}
-            variants={slideRight}
+            variants={getVariants(slideRight, prefersReduced)}
             custom={0.3}
-            whileHover={{ y: -4, transition: { duration: 0.25 } }}
           >
             <GlowCard className="hairline-card p-7 rounded-2xl flex flex-col justify-between shadow-xl h-full">
               <div>
