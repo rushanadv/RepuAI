@@ -55,7 +55,13 @@ export default function AnalyticsDashboard() {
       <div className="max-w-6xl mx-auto relative z-10">
         
         {/* Section Header */}
-        <div className="max-w-3xl mb-16">
+        <motion.div 
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          className="max-w-3xl mb-16"
+        >
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-xs font-mono font-semibold text-cyan-400 mb-6">
             <BarChart2 className="w-3.5 h-3.5" />
             <span>OPERATIONAL TELEMETRY // REALTIME_ANALYTICS</span>
@@ -70,7 +76,7 @@ export default function AnalyticsDashboard() {
           <p className="mt-6 text-base sm:text-lg text-slate-400 max-w-2xl font-normal leading-relaxed">
             Real-time cluster tracking, risk score alerts, and continuous brand sentiment index.
           </p>
-        </div>
+        </motion.div>
 
         {/* 2x2 Command Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

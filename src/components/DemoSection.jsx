@@ -211,7 +211,13 @@ export default function DemoSection() {
       <div className="max-w-6xl mx-auto relative z-10">
         
         {/* Section Header */}
-        <div className="max-w-3xl mb-14">
+        <motion.div 
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          className="max-w-3xl mb-14"
+        >
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-xs font-mono font-semibold text-violet-400 mb-6">
             <Terminal className="w-3.5 h-3.5" />
             <span>AI WORKSPACE // STREAMING_CONSOLE</span>
@@ -226,7 +232,7 @@ export default function DemoSection() {
           <p className="mt-6 text-base sm:text-lg text-slate-400 max-w-2xl font-normal leading-relaxed">
             Real-time SSE token stream executing on NVIDIA Nemotron 550B & Meta LLaMA 3.3.
           </p>
-        </div>
+        </motion.div>
 
         {/* Studio-Grade Pro Console Chassis */}
         <div className="studio-chassis rounded-2xl p-5 sm:p-7 shadow-2xl">

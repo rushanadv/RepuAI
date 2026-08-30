@@ -69,7 +69,13 @@ export default function HowItWorks() {
       <div className="max-w-7xl mx-auto relative z-10">
         
         {/* Section Header */}
-        <div className="max-w-3xl mb-20">
+        <motion.div 
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          className="max-w-3xl mb-20"
+        >
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-xs font-mono font-semibold text-violet-400 mb-6">
             <Radio className="w-3.5 h-3.5" />
             <span>ARCHITECTURE // HORIZONTAL_PIPELINE</span>
@@ -84,7 +90,7 @@ export default function HowItWorks() {
           <p className="mt-6 text-base sm:text-lg text-slate-400 max-w-2xl font-normal leading-relaxed">
             From raw customer complaint to published brand resolution in under two seconds.
           </p>
-        </div>
+        </motion.div>
 
         {/* Horizontal Scroll Reveal Steps Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative items-stretch">

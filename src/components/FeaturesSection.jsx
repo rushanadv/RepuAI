@@ -57,7 +57,13 @@ export default function FeaturesSection() {
       <div className="max-w-6xl mx-auto relative z-10">
         
         {/* Editorial Section Header */}
-        <div className="max-w-3xl mb-16">
+        <motion.div 
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          className="max-w-3xl mb-16"
+        >
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-xs font-mono font-semibold text-violet-400 mb-6">
             <Cpu className="w-3.5 h-3.5" />
             <span>INSTRUMENT SUITE // NEURAL_CAPABILITIES</span>
@@ -72,7 +78,7 @@ export default function FeaturesSection() {
           <p className="mt-6 text-base sm:text-lg text-slate-400 max-w-2xl font-normal leading-relaxed">
             Built specifically for multi-location operators, direct-to-consumer brands, and customer-first founders.
           </p>
-        </div>
+        </motion.div>
 
         {/* Asymmetric Instrument Bento */}
         <div className="space-y-6">
