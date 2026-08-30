@@ -3,6 +3,7 @@ import { motion, useScroll } from 'framer-motion';
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState('');
   const { scrollY } = useScroll();
 
   useEffect(() => {
@@ -11,11 +12,39 @@ export default function Navbar() {
     });
   }, [scrollY]);
 
+  // Track active section via IntersectionObserver
+  useEffect(() => {
+    const sectionIds = ['features', 'how-it-works', 'demo', 'analytics'];
+    const observers = [];
+
+    const handleIntersect = (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(handleIntersect, {
+      rootMargin: '-20% 0px -70% 0px'
+    });
+
+    sectionIds.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) {
+        observer.observe(el);
+        observers.push(el);
+      }
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
   const navLinks = [
-    { name: 'FEATURES', href: '#features' },
-    { name: 'WORKFLOW', href: '#how-it-works' },
-    { name: 'DEMO', href: '#demo' },
-    { name: 'ANALYTICS', href: '#analytics' },
+    { name: 'FEATURES', href: '#features', id: 'features' },
+    { name: 'WORKFLOW', href: '#how-it-works', id: 'how-it-works' },
+    { name: 'DEMO', href: '#demo', id: 'demo' },
+    { name: 'ANALYTICS', href: '#analytics', id: 'analytics' },
   ];
 
   const handleScrollTo = (e, href) => {
@@ -74,17 +103,26 @@ export default function Navbar() {
       {/* RIGHT CLUSTER */}
       <div className="flex items-center gap-4 sm:gap-5 z-20">
         <nav className="hidden md:flex items-center gap-5">
-          {navLinks.map((link) => (
-            <a
-              key={link.name}
-              href={link.href}
-              onClick={(e) => handleScrollTo(e, link.href)}
-              className="relative py-1 font-mono text-[10px] tracking-[0.1em] text-[var(--text-2)] hover:text-[var(--text-1)] transition-colors duration-200 group"
-            >
-              <span>{link.name}</span>
-              <span className="absolute bottom-0 left-0 w-full h-[1px] bg-[var(--accent)] scale-x-0 group-hover:scale-x-100 transition-transform duration-250 ease-out origin-left" />
-            </a>
-          ))}
+          {navLinks.map((link) => {
+            const isActive = activeSection === link.id;
+            return (
+              <a
+                key={link.name}
+                href={link.href}
+                onClick={(e) => handleScrollTo(e, link.href)}
+                className={`relative py-1 font-mono text-[10px] tracking-[0.1em] transition-colors duration-200 group ${
+                  isActive ? 'text-[var(--text-1)]' : 'text-[var(--text-2)] hover:text-[var(--text-1)]'
+                }`}
+              >
+                <span>{link.name}</span>
+                <span 
+                  className={`absolute bottom-0 left-0 w-full h-[1px] bg-[var(--accent)] transition-transform duration-250 ease-out origin-left ${
+                    isActive ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
+                  }`} 
+                />
+              </a>
+            );
+          })}
         </nav>
 
         <div className="h-4 w-[1px] bg-[var(--border)] hidden md:block" />
@@ -94,7 +132,7 @@ export default function Navbar() {
           onClick={(e) => handleScrollTo(e, '#demo')}
           whileHover={{ scale: 1.03 }}
           whileTap={{ scale: 0.97 }}
-          className="bg-[var(--accent)] hover:bg-violet-600 text-white font-mono text-[11px] font-bold tracking-[0.05em] px-4 py-2 rounded-[4px] transition-colors shadow-sm whitespace-nowrap"
+          className="bg-[var(--accent)] hover:bg-violet-600 text-white font-mono text-[11px] font-bold tracking-[0.05em] px-4 py-2 rounded-[4px] transition-colors shadow-sm whitespace-nowrap cursor-pointer"
         >
           TRY DEMO →
         </motion.a>

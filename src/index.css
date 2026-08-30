@@ -84,6 +84,22 @@ body {
   animation-play-state: paused;
 }
 
+/* Full-width scroll ticker animation */
+@keyframes ticker {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-33.33%); }
+}
+
+.animate-ticker {
+  display: flex;
+  width: max-content;
+  animation: ticker 18s linear infinite;
+}
+
+.animate-ticker:hover {
+  animation-play-state: paused;
+}
+
 /* Vertical Upward Review Snippet Scroll Animation */
 @keyframes scroll-up {
   0% { transform: translateY(0); }

@@ -71,7 +71,7 @@ export default function AnalyticsDashboard() {
                 <motion.div
                   initial={{ width: "0%" }}
                   whileInView={{ width: "58%" }}
-                  viewport={{ once: true, margin: "-60px" }}
+                  viewport={{ once: true, margin: "-100px" }}
                   transition={{ duration: prefersReduced ? 0.01 : 1.2, ease: EASE }}
                   className="h-full bg-emerald-400"
                 />
@@ -92,7 +92,7 @@ export default function AnalyticsDashboard() {
                 <motion.div
                   initial={{ width: "0%" }}
                   whileInView={{ width: "22%" }}
-                  viewport={{ once: true, margin: "-60px" }}
+                  viewport={{ once: true, margin: "-100px" }}
                   transition={{ duration: prefersReduced ? 0.01 : 1.2, delay: prefersReduced ? 0 : 0.15, ease: EASE }}
                   className="h-full bg-amber-400"
                 />
@@ -113,7 +113,7 @@ export default function AnalyticsDashboard() {
                 <motion.div
                   initial={{ width: "0%" }}
                   whileInView={{ width: "20%" }}
-                  viewport={{ once: true, margin: "-60px" }}
+                  viewport={{ once: true, margin: "-100px" }}
                   transition={{ duration: prefersReduced ? 0.01 : 1.2, delay: prefersReduced ? 0 : 0.3, ease: EASE }}
                   className="h-full bg-rose-500"
                 />

@@ -227,7 +227,7 @@ export default function FeaturesSection() {
                       <motion.div
                         initial={{ width: "0%" }}
                         whileInView={{ width: "78%" }}
-                        viewport={{ once: true, margin: "-60px" }}
+                        viewport={{ once: true, margin: "-100px" }}
                         transition={{ duration: prefersReduced ? 0.01 : 1.1, ease: EASE }}
                         className="h-full bg-[var(--accent)]"
                       />
@@ -244,7 +244,7 @@ export default function FeaturesSection() {
                       <motion.div
                         initial={{ width: "0%" }}
                         whileInView={{ width: "45%" }}
-                        viewport={{ once: true, margin: "-60px" }}
+                        viewport={{ once: true, margin: "-100px" }}
                         transition={{ duration: prefersReduced ? 0.01 : 1.1, delay: prefersReduced ? 0 : 0.1, ease: EASE }}
                         className="h-full bg-violet-400"
                       />
@@ -261,7 +261,7 @@ export default function FeaturesSection() {
                       <motion.div
                         initial={{ width: "0%" }}
                         whileInView={{ width: "23%" }}
-                        viewport={{ once: true, margin: "-60px" }}
+                        viewport={{ once: true, margin: "-100px" }}
                         transition={{ duration: prefersReduced ? 0.01 : 1.1, delay: prefersReduced ? 0 : 0.2, ease: EASE }}
                         className="h-full bg-cyan-400"
                       />

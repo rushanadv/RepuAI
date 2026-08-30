@@ -13,7 +13,7 @@ export default function Footer() {
         <motion.div
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: "-80px" }}
+          viewport={{ once: true, margin: "-100px" }}
           variants={getVariants(fadeUp, prefersReduced)}
           className="flex flex-col md:flex-row justify-between items-start gap-12"
         >

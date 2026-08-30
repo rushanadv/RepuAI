@@ -44,7 +44,7 @@ export default function HowItWorks() {
               key={step.num}
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true, margin: "-60px" }}
+              viewport={{ once: true, margin: "-100px" }}
               variants={getVariants(clipWipe, prefersReduced)}
               custom={idx}
               className="py-8 sm:py-12 border-b border-[var(--border)] grid grid-cols-1 md:grid-cols-12 gap-6 sm:gap-8 items-center group transition-colors hover:bg-white/[0.01]"

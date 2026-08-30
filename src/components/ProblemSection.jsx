@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { slideLeft, fadeUp, getVariants } from '../lib/animations';
+import { slideLeft, containerVariants, itemVariants, getVariants } from '../lib/animations';
 
 export default function ProblemSection() {
   const prefersReduced = useReducedMotion();
@@ -30,7 +30,7 @@ export default function ProblemSection() {
           <motion.div 
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: "-80px" }}
+            viewport={{ once: true, margin: "-100px" }}
             variants={getVariants(slideLeft, prefersReduced)}
             className="lg:col-span-7 relative"
           >
@@ -47,16 +47,18 @@ export default function ProblemSection() {
             </p>
           </motion.div>
 
-          {/* RIGHT COLUMN (40% -> 5 Cols): 3 Stacked Problem Statements */}
-          <div className="lg:col-span-5 space-y-8 pt-4 lg:pt-8">
+          {/* RIGHT COLUMN (40% -> 5 Cols): 3 Stacked Problem Statements with Stagger */}
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            className="lg:col-span-5 space-y-8 pt-4 lg:pt-8"
+          >
             {problems.map((problem, i) => (
               <motion.div
                 key={i}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, margin: "-80px" }}
-                variants={getVariants(fadeUp, prefersReduced)}
-                custom={i}
+                variants={itemVariants}
                 className="pt-5 border-t border-[var(--border)]"
               >
                 <h3 className="text-[14px] font-bold text-[var(--text-1)] mb-2 font-display">
@@ -67,7 +69,7 @@ export default function ProblemSection() {
                 </p>
               </motion.div>
             ))}
-          </div>
+          </motion.div>
 
         </div>
 

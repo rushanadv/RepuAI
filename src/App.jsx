@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useScroll, useSpring, motion } from "framer-motion";
 import Navbar from './components/Navbar';
 import SpotlightCursor from './components/SpotlightCursor';
 import Hero from './components/Hero';
+import ScrollTicker from './components/ScrollTicker';
 import ProblemSection from './components/ProblemSection';
 import HowItWorks from './components/HowItWorks';
 import FeaturesSection from './components/FeaturesSection';
@@ -36,6 +37,7 @@ export default function App() {
       <main className="flex-1 relative">
         <SpotlightCursor />
         <Hero />
+        <ScrollTicker />
         <ProblemSection />
         <HowItWorks />
         <FeaturesSection />

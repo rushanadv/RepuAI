@@ -48,7 +48,7 @@ export default function CTASection() {
                   style={{ display: "inline-block" }}
                   initial={{ y: prefersReduced ? "0%" : "115%" }}
                   whileInView={{ y: "0%" }}
-                  viewport={{ once: true, margin: "-80px" }}
+                  viewport={{ once: true, margin: "-100px" }}
                   transition={{
                     duration: prefersReduced ? 0.01 : 0.7,
                     delay: prefersReduced ? 0 : i * 0.05,
@@ -69,7 +69,7 @@ export default function CTASection() {
                   style={{ display: "inline-block" }}
                   initial={{ y: prefersReduced ? "0%" : "115%" }}
                   whileInView={{ y: "0%" }}
-                  viewport={{ once: true, margin: "-80px" }}
+                  viewport={{ once: true, margin: "-100px" }}
                   transition={{
                     duration: prefersReduced ? 0.01 : 0.7,
                     delay: prefersReduced ? 0 : (line1.length + i) * 0.05,

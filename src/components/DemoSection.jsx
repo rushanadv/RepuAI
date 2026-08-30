@@ -209,7 +209,7 @@ export default function DemoSection() {
           <motion.div
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: "-80px" }}
+            viewport={{ once: true, margin: "-100px" }}
             variants={getVariants(slideLeft, prefersReduced)}
             className="lg:col-span-6 border-l-2 border-[var(--accent)] pl-6 sm:pl-8 space-y-8"
           >
@@ -352,7 +352,7 @@ export default function DemoSection() {
           <motion.div
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: "-80px" }}
+            viewport={{ once: true, margin: "-100px" }}
             variants={getVariants(slideRight, prefersReduced)}
             custom={0.2}
             className="lg:col-span-6 border-l border-[var(--border)] pl-6 sm:pl-8 min-h-[460px] flex flex-col justify-start"
